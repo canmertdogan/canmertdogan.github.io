@@ -1,0 +1,351 @@
+/*Classlar burada */
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap');
+footer{
+    background-color: #121212;
+    color: cyan;
+    padding: 40px;
+}
+body{
+  color: cyan;
+    width:100%;
+    margin: 0px;
+    background-image: url("../assets/images/rain2.gif");
+    background-attachment: fixed;
+    font-family: 'Kode Mono';
+    overflow-x: hidden;
+}
+hr{width: 98.5%; float:left; border-top: solid 1px cyan; color: cyan;}
+a{text-decoration: none; color: cyan;}
+h3{
+    color: cyan;
+    
+    font-weight: 200;
+    font-size: 30px;
+}
+.homeicon{ font-size: 18px; margin-left: 15px; margin-right: 20px;}
+.homepage-title{
+font-size: 30pt;
+font-weight: 100;
+margin-top: 17%;
+margin-bottom: 0;
+
+}
+.swipedown{
+    font-size: 18px; margin-right: 20px;
+    transform: rotate(90deg);
+    position: fixed;
+    bottom: 75px;
+    right: -60px;
+    z-index: 8000;
+    background-color: black;
+    padding: 20px; 
+}
+.homepage-occupation{
+    font-weight: 100;
+    
+    animation: tracking-in-contract-bck 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+}
+.social-icon{
+    font-size: 18px;
+    margin-left: 10px;
+}
+.edubox {
+    padding: 30px;
+    background-color: #252525;
+    width: 25%;
+    height: 400px;
+    margin: 10px;
+    color: #000;
+    float: left;
+    border-radius: 16px;
+}
+@keyframes tracking-in-contract-bck {
+    0% {
+      letter-spacing: 1em;
+      transform: translateZ(10px);
+      opacity: 0;
+    }
+    40% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: translateZ(0);
+      opacity: 1;
+    }
+  }
+#navigation-bar{
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.0);
+    backdrop-filter: blur(3px);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+#socials{
+    float: right;
+    padding-right: 60px;
+    z-index: 3;
+}
+
+#homepage{
+    width: 100%;
+    height: 100%;
+    padding-bottom: 30%;
+    background-image: url("../assets/images/rain.gif");
+    background-attachment: fixed;
+    
+
+   
+}
+@media only screen and (max-width: 768px) {
+  #homepage{
+    width: 100%;
+    height: 100%;
+    padding-top: 50%;
+    padding-bottom: 70%;
+    background-image: url("../assets/images/rain.gif");
+    background-attachment: fixed;
+    
+
+   
+}
+#rain{
+  width:100%;
+  height: 220px;
+  background-image: url("../assets/images/rain.gif");
+  background-attachment: fixed;
+}
+}
+#biography{
+    width: 100%;
+
+    padding-top: 5%;
+    Padding-bottom: 10%;
+   
+    color: cyan !important;
+    
+}
+#modalmenu{
+  display: flex;
+  justify-content: center;
+  margin-right: 0px;
+  
+}
+
+
+#art{
+ margin:0;
+
+
+}
+
+#container{
+  display:flex;
+  padding-left: 20%;
+  padding-right: 20%;
+
+}
+#container2{
+  margin-left: 15%;
+  margin-right: 15%;
+  
+}
+#design{
+  margin:0;
+
+  height: 680px;
+ }
+div.gallery {
+  margin: 5px;
+  background-color: #000;
+  
+  border: 2px solid #000;
+  float: left;
+  width: 320px;
+  overflow: hidden;
+
+}
+.modal{
+  background-color: black !important;}
+
+div.gallery img {
+  width: 320px;
+  height: 240px;
+  z-index: 1;
+}
+
+div.desc {
+  padding-top:8px;
+  padding-bottom: 12px;
+  
+  text-align: center;
+  color: cyan;
+  
+}
+
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: darkcyan;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: cyan;
+}
+
+#container{
+  display:flex;
+  padding-left: 20%;
+  padding-right: 20%;
+  
+}
+@media only screen and (max-width: 768px) {
+  #container{
+  display: block; 
+  }/* Or another desicyan display */
+}
+ 
+
+.range {
+  
+  position: relative;
+  background-color: #212121;
+  color: white !important;
+  width: 300px;
+  height: 15px;
+  margin-top: 20px;
+  margin-right: 10px;
+  transform: skew(30deg);
+  font-family: "Orbitron", monospace;
+}
+@media only screen and (max-width: 768px) {
+ .range{ width: 250px; margin-right: 20px;}
+}
+
+.range:before {
+  --width: calc(100%);
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: cyan;
+  z-index: 0;
+  -webkit-animation: load 0.5s forwards linear;
+          animation: load 0.5s forwards linear;
+}
+.range:after {
+  counter-reset: calc(100%);
+  content: "";
+  color: #000;
+  position: absolute;
+  left: 5%;
+  top: 50%;
+  transform: translateY(-50%) skewX(-30deg);
+  z-index: 1;
+}
+.range__label {
+  transform: skew(-30deg) translateY(-100%);
+  line-height: 1.5;
+}
+
+@-webkit-keyframes load {
+  to {
+    width: var(--width);
+  }
+}
+
+@keyframes load {
+  to {
+    width: var(--width);
+  }
+}
+@-webkit-keyframes glitch {
+  0%, 5% {
+    transform: translate(0, 0);
+  }
+  1% {
+    transform: translate(-5%, -10%);
+  }
+  2% {
+    transform: translate(10%, 30%);
+  }
+  3% {
+    transform: translate(-43%, 10%);
+  }
+  4% {
+    transform: translate(2%, -23%);
+  }
+}
+@keyframes glitch {
+  0%, 5% {
+    transform: translate(0, 0);
+  }
+  1% {
+    transform: translate(-5%, -10%);
+  }
+  2% {
+    transform: translate(10%, 30%);
+  }
+  3% {
+    transform: translate(-43%, 10%);
+  }
+  4% {
+    transform: translate(2%, -23%);
+  }
+}
+
+#headforcv{
+  
+  width: 100%;
+  border: 1px cyan solid;
+  margin: 10px;
+  margin-right: -20px ;
+}
+#headforcontact{
+  
+  width: 570px;
+  border: 2px cyan solid;
+  margin: 10px;
+  padding: 20px;
+  margin-right: -20px ;
+}
+@media only screen and (max-width: 768px) {
+  #headforcv{
+  margin-left: -5px;
+  width: 100%;
+  }
+  .biography-link{
+    display: none;
+  }
+  .art-link{
+    display:none;
+  }
+  button{
+    width: 287px !important;
+  }
+  .swipedown{ display:none;}
+ }
+
+#contact{
+  background-image: url("../assets/images/rain3.gif");
+  background-attachment: fixed;
+  padding-top: 10%;
+  padding-bottom: 20%;
+}
+
