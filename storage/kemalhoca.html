@@ -81,14 +81,30 @@
         }
     </style>
 </head>
-<body class="flex flex-col md:flex-row min-h-screen">
+<body class="flex flex-col md:flex-row min-h-screen relative bg-[#fbfbf9]">
 
-    <aside class="w-full md:w-64 bg-white border-r border-gray-200 flex-shrink-0 h-auto md:h-screen sticky top-0 overflow-y-auto sidebar-scroll shadow-sm z-10">
-        <div class="p-6 border-b border-gray-100">
-            <h1 class="text-xl font-bold text-[#8b7355] flex items-center gap-2">
-                <span>📚</span> Sarf Notları
-            </h1>
-            <p class="text-xs text-gray-500 mt-1">Arapça Kelime Türetimi</p>
+    <!-- Mobil Üst Menü -->
+    <div class="md:hidden bg-white border-b border-gray-200 p-4 flex justify-between items-center sticky top-0 z-40 shadow-sm">
+        <h1 class="text-lg font-bold text-[#8b7355] flex items-center gap-2">
+            <span>📚</span> Sarf Notları
+        </h1>
+        <button id="mobile-menu-btn" class="text-gray-600 focus:outline-none bg-gray-100 px-3 py-2 rounded-lg font-bold">
+            ☰ Menü
+        </button>
+    </div>
+
+    <!-- Mobil için arkaplan karartması -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
+
+    <aside id="sidebar" class="fixed md:sticky top-0 left-0 h-screen w-64 bg-white border-r border-gray-200 flex-shrink-0 overflow-y-auto sidebar-scroll shadow-2xl md:shadow-sm z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center md:block">
+            <div>
+                <h1 class="text-xl font-bold text-[#8b7355] flex items-center gap-2">
+                    <span>📚</span> Sarf Notları
+                </h1>
+                <p class="text-xs text-gray-500 mt-1">Arapça Kelime Türetimi</p>
+            </div>
+            <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button>
         </div>
         <nav class="p-4 flex flex-col gap-1" id="nav-menu">
             <!-- Nav items injected via JS -->
@@ -549,11 +565,11 @@
                         <div class="space-y-4">
                             <details class="group border border-gray-200 rounded-lg bg-gray-50 cursor-pointer">
                                 <summary class="p-4 font-bold text-slate-800 group-open:border-b border-gray-200 flex justify-between items-center">
-                                    1. Asli (Sarih) Mastar
+                                    1. Aslî (Sarih / Gayr-i Mîmî) Mastar
                                     <span class="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
                                 </summary>
                                 <div class="p-4 bg-white text-sm text-gray-700 leading-relaxed">
-                                    <p>Fiilin sözlükte bulunan asıl mastarıdır. Sülasi fiillerin mastarları <b>semaîdir</b> (kuralsızdır, ezberlenir). Türemiş fiillerin mastarları ise <b>kıyasîdir</b> (kurallıdır, vezne göredir). <br><br>
+                                    <p>Fiilin sözlükte bulunan asıl mastarıdır. Başında fazladan bir "mim (م)" harfi bulunmadığı için buna <b>Gayr-i Mîmî (Mimli Olmayan)</b> mastar da denir. Sülasi fiillerin mastarları <b>semaîdir</b> (kuralsızdır, ezberlenir). Türemiş fiillerin mastarları ise <b>kıyasîdir</b> (kurallıdır, vezne göredir). <br><br>
                                     Örnek: دُخُول (Girmek), خُرُوج (Çıkmak), قِرَاءَة (Okumak).
                                     </p>
                                 </div>
@@ -616,7 +632,7 @@
                     return new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: ['Sarih', 'Sınâî', 'Mimli', 'Bina-i Merra', 'Bina-i Nevi', 'Müevvel (Edatlı)'],
+                            labels: ['Gayr-i Mîmî', 'Sınâî', 'Mimli', 'Bina-i Merra', 'Bina-i Nevi', 'Müevvel (Edatlı)'],
                             datasets: [{
                                 label: 'Kullanım Yoğunluğu',
                                 data: [85, 45, 30, 15, 5, 70],
@@ -637,75 +653,221 @@
             "turemis-fiiller": {
                 title: "Türemiş Fiiller (Mezîd Fiiller)",
                 subtitle: "Sülasi Kökten Yeni Fiiller Elde Etmek",
-                intro: "Arapçada fiillerin anlamını genişletmek, geçişli (nesne alan) veya dönüşlü (kendi kendine olan) yapmak için 3 harfli (sülasi) kök fiile harfler eklenir. Bu yeni kalıplara <b>Bab</b> denir. Aşağıda en yaygın 1 harf ilaveli (Rubâî) mezid bablar verilmiştir.",
+                intro: "Arapçada fiillerin anlamını genişletmek, geçişli (nesne alan) veya dönüşlü (kendi kendine olan) yapmak için 3 harfli (sülasi) kök fiile harfler eklenir. Bu yeni kalıplara <b>Bab</b> denir. Aşağıda en yaygın mezid bablar gruplandırılarak verilmiştir.",
                 content: `
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                        <!-- İf'al Babı -->
-                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
-                            <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">1. İf'âl Babı</h3>
-                            <p class="text-xs text-gray-500 mb-3 text-center">Mazi Başına hemze (أ) eklenir. <br><b>Geçişli (Oldurgan)</b> yapar.</p>
-                            <div class="bg-gray-50 p-3 rounded mb-3 text-center">
-                                <span class="arabic-text font-bold text-lg">أَفْعَلَ - يُفْعِلُ - إِفْعَال</span>
-                            </div>
-                            <div class="text-sm">
-                                <div class="flex justify-between border-b pb-1 mb-1">
-                                    <span class="text-gray-600">Alime (Bildi)</span>
-                                    <span class="arabic-text">عَلِمَ</span>
+                    <!-- 1 Harf İlaveli (Rubaî) Bablar -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-[#8b7355] mb-4 border-b border-gray-200 pb-2 flex items-center gap-2"><span>1️⃣</span> 1 Harf İlaveli (Rubâî - 4 Harfli) Bablar</h3>
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <!-- İf'al Babı -->
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
+                                <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">İf'âl Babı</h3>
+                                <p class="text-xs text-gray-500 mb-3 text-center h-8">Mazi başına hemze (أ) eklenir. <br><b>Geçişli (Oldurgan)</b> yapar.</p>
+                                <div class="bg-gray-50 p-3 rounded mb-3 text-center">
+                                    <span class="arabic-text font-bold text-lg text-indigo-700">أَفْعَلَ - يُفْعِلُ - إِفْعَال</span>
                                 </div>
-                                <div class="flex justify-between font-bold text-[#8b7355]">
-                                    <span>A'leme (Bildirdi)</span>
-                                    <span class="arabic-text">أَعْلَمَ</span>
+                                <div class="text-sm">
+                                    <div class="flex justify-between border-b pb-1 mb-1">
+                                        <span class="text-gray-600">Alime (Bildi)</span>
+                                        <span class="arabic-text">عَلِمَ</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold text-[#8b7355]">
+                                        <span>A'leme (Bildirdi)</span>
+                                        <span class="arabic-text">أَعْلَمَ</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Tef'il Babı -->
-                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
-                            <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">2. Tef'îl Babı</h3>
-                            <p class="text-xs text-gray-500 mb-3 text-center">Orta harf şeddelenir. <br><b>Çokluk, tekrar veya geçişlilik</b> katar.</p>
-                            <div class="bg-gray-50 p-3 rounded mb-3 text-center">
-                                <span class="arabic-text font-bold text-lg">فَعَّلَ - يُفَعِّلُ - تَفْعِيل</span>
-                            </div>
-                            <div class="text-sm">
-                                <div class="flex justify-between border-b pb-1 mb-1">
-                                    <span class="text-gray-600">Keseha (Kesti)</span>
-                                    <span class="arabic-text">قَطَعَ</span>
+                            <!-- Tef'il Babı -->
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
+                                <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">Tef'îl Babı</h3>
+                                <p class="text-xs text-gray-500 mb-3 text-center h-8">Orta harf şeddelenir. <br><b>Çokluk, tekrar veya geçişlilik</b> katar.</p>
+                                <div class="bg-gray-50 p-3 rounded mb-3 text-center">
+                                    <span class="arabic-text font-bold text-lg text-indigo-700">فَعَّلَ - يُفَعِّلُ - تَفْعِيل</span>
                                 </div>
-                                <div class="flex justify-between font-bold text-[#8b7355]">
-                                    <span>Katta'a (Parçaladı)</span>
-                                    <span class="arabic-text">قَطَّعَ</span>
+                                <div class="text-sm">
+                                    <div class="flex justify-between border-b pb-1 mb-1">
+                                        <span class="text-gray-600">Keseha (Kesti)</span>
+                                        <span class="arabic-text">قَطَعَ</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold text-[#8b7355]">
+                                        <span>Katta'a (Parçaladı)</span>
+                                        <span class="arabic-text">قَطَّعَ</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Mufa'ale Babı -->
-                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
-                            <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">3. Mufâ'ale Babı</h3>
-                            <p class="text-xs text-gray-500 mb-3 text-center">1. ile 2. harf arasına Elif (ا) eklenir. <br><b>İşteşlik (Karşılıklı yapma)</b> katar.</p>
-                            <div class="bg-gray-50 p-3 rounded mb-3 text-center">
-                                <span class="arabic-text font-bold text-lg">فَاعَلَ - يُفَاعِلُ - مُفَاعَلَة</span>
-                            </div>
-                            <div class="text-sm">
-                                <div class="flex justify-between border-b pb-1 mb-1">
-                                    <span class="text-gray-600">Katele (Öldürdü)</span>
-                                    <span class="arabic-text">قَتَلَ</span>
+                            <!-- Mufa'ale Babı -->
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
+                                <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">Mufâ'ale Babı</h3>
+                                <p class="text-xs text-gray-500 mb-3 text-center h-8">1. ile 2. harf arasına Elif (ا) eklenir. <br><b>İşteşlik (Karşılıklı yapma)</b> katar.</p>
+                                <div class="bg-gray-50 p-3 rounded mb-3 text-center">
+                                    <span class="arabic-text font-bold text-lg text-indigo-700">فَاعَلَ - يُفَاعِلُ - مُفَاعَلَة</span>
                                 </div>
-                                <div class="flex justify-between font-bold text-[#8b7355]">
-                                    <span>Kâtele (Savaştı)</span>
-                                    <span class="arabic-text">قَاتَلَ</span>
+                                <div class="text-sm">
+                                    <div class="flex justify-between border-b pb-1 mb-1">
+                                        <span class="text-gray-600">Katele (Öldürdü)</span>
+                                        <span class="arabic-text">قَتَلَ</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold text-[#8b7355]">
+                                        <span>Kâtele (Savaştı)</span>
+                                        <span class="arabic-text">قَاتَلَ</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <p class="text-sm text-gray-600 italic">* Not: Bunlar dışında İnfi'âl, İfti'âl, İf'ilâl, Tefa'ul, Tefâ'ul ve İstif'al gibi 2 ve 3 harf ilaveli türemiş bablar da mevcuttur.</p>
+
+                    <!-- 2 Harf İlaveli (Humasi) Bablar -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-[#8b7355] mb-4 border-b border-gray-200 pb-2 flex items-center gap-2"><span>2️⃣</span> 2 Harf İlaveli (Humâsî - 5 Harfli) Bablar</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            
+                            <!-- İnfi'al Babı -->
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
+                                <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">İnfi'âl Babı</h3>
+                                <p class="text-xs text-gray-500 mb-3 text-center h-8">Başa (ان) eklenir. <br><b>Edilgenlik / Dönüşlülük (Kendi kendine olma)</b> bildirir.</p>
+                                <div class="bg-gray-50 p-3 rounded mb-3 text-center">
+                                    <span class="arabic-text font-bold text-lg text-teal-700">انْفَعَلَ - يَنْفَعِلُ - انْفِعَال</span>
+                                </div>
+                                <div class="text-sm">
+                                    <div class="flex justify-between border-b pb-1 mb-1">
+                                        <span class="text-gray-600">Kesera (Kırdı)</span>
+                                        <span class="arabic-text">كَسَرَ</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold text-[#8b7355]">
+                                        <span>İnkesera (Kırıldı)</span>
+                                        <span class="arabic-text">انْكَسَرَ</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- İfti'al Babı -->
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
+                                <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">İfti'âl Babı</h3>
+                                <p class="text-xs text-gray-500 mb-3 text-center h-8">Başa hemze, 1. ile 2. harf arasına te (ت) eklenir. <b>Dönüşlülük, çaba, işteşlik.</b></p>
+                                <div class="bg-gray-50 p-3 rounded mb-3 text-center">
+                                    <span class="arabic-text font-bold text-lg text-teal-700">افْتَعَلَ - يَفْتَعِلُ - افْتِعَال</span>
+                                </div>
+                                <div class="text-sm">
+                                    <div class="flex justify-between border-b pb-1 mb-1">
+                                        <span class="text-gray-600">Cema'a (Topladı)</span>
+                                        <span class="arabic-text">جَمَعَ</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold text-[#8b7355]">
+                                        <span>İctema'a (Toplandı)</span>
+                                        <span class="arabic-text">اجْتَمَعَ</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tefa'ul Babı -->
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
+                                <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">Tefa'ul Babı</h3>
+                                <p class="text-xs text-gray-500 mb-3 text-center h-8">Başa te (ت) eklenir, orta harf şeddelenir. <b>Dönüşlülük (Süreç/Zamanla olma).</b></p>
+                                <div class="bg-gray-50 p-3 rounded mb-3 text-center">
+                                    <span class="arabic-text font-bold text-lg text-teal-700">تَفَعَّلَ - يَتَفَعَّلُ - تَفَعُّل</span>
+                                </div>
+                                <div class="text-sm">
+                                    <div class="flex justify-between border-b pb-1 mb-1">
+                                        <span class="text-gray-600">Alime (Bildi)</span>
+                                        <span class="arabic-text">عَلِمَ</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold text-[#8b7355]">
+                                        <span>Te'alleme (Öğrendi)</span>
+                                        <span class="arabic-text">تَعَلَّمَ</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tefâ'ul Babı -->
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
+                                <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">Tefâ'ul Babı</h3>
+                                <p class="text-xs text-gray-500 mb-3 text-center h-8">Başa te, ortaya elif eklenir (Mufa'alenin başına te). <b>İşteşlik, ...gibi görünme.</b></p>
+                                <div class="bg-gray-50 p-3 rounded mb-3 text-center">
+                                    <span class="arabic-text font-bold text-lg text-teal-700">تَفَاعَلَ - يَتَفَاعَلُ - تَفَاعُل</span>
+                                </div>
+                                <div class="text-sm">
+                                    <div class="flex justify-between border-b pb-1 mb-1">
+                                        <span class="text-gray-600">Arafa (Bildi)</span>
+                                        <span class="arabic-text">عَرَفَ</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold text-[#8b7355]">
+                                        <span>Te'ârafa (Tanıştı/Bilişti)</span>
+                                        <span class="arabic-text">تَعَارَفَ</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- İf'ilal Babı -->
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
+                                <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">İf'ilâl Babı</h3>
+                                <p class="text-xs text-gray-500 mb-3 text-center h-8">Başa hemze, son harfe şedde eklenir. <br><b>Renk ve kusur ifade eder.</b></p>
+                                <div class="bg-gray-50 p-3 rounded mb-3 text-center">
+                                    <span class="arabic-text font-bold text-lg text-teal-700">افْعَلَّ - يَفْعَلُّ - افْعِلَال</span>
+                                </div>
+                                <div class="text-sm">
+                                    <div class="flex justify-between border-b pb-1 mb-1">
+                                        <span class="text-gray-600">Hamura (Kırmızıydı)</span>
+                                        <span class="arabic-text">حَمُرَ</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold text-[#8b7355]">
+                                        <span>İhmerra (Kızardı)</span>
+                                        <span class="arabic-text">احْمَرَّ</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 3 Harf İlaveli (Südasi) Bablar -->
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-[#8b7355] mb-4 border-b border-gray-200 pb-2 flex items-center gap-2"><span>3️⃣</span> 3 Harf İlaveli (Südâsî - 6 Harfli) Bablar</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            
+                            <!-- İstif'al Babı -->
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 hover:shadow-md transition">
+                                <h3 class="font-bold text-lg text-slate-800 text-center border-b pb-2 mb-3">İstif'âl Babı</h3>
+                                <p class="text-xs text-gray-500 mb-3 text-center h-8">Kök harflerinden önce (است) eklenir. <br><b>İstek, talep, bir hale dönüşme.</b></p>
+                                <div class="bg-gray-50 p-3 rounded mb-3 text-center">
+                                    <span class="arabic-text font-bold text-lg text-rose-700">اسْتَفْعَلَ - يَسْتَفْعِلُ - اسْتِفْعَال</span>
+                                </div>
+                                <div class="text-sm">
+                                    <div class="flex justify-between border-b pb-1 mb-1">
+                                        <span class="text-gray-600">Ğafera (Bağışladı)</span>
+                                        <span class="arabic-text">غَفَرَ</span>
+                                    </div>
+                                    <div class="flex justify-between font-bold text-[#8b7355]">
+                                        <span>İstağfera (Bağışlanma diledi)</span>
+                                        <span class="arabic-text">اسْتَغْفَرَ</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 `
             }
         };
 
         const navMenu = document.getElementById('nav-menu');
         const contentArea = document.getElementById('content-area');
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
         let chartInstance = null;
+
+        // Menü Açma/Kapama Fonksiyonları
+        function toggleSidebar() {
+            if(sidebar) sidebar.classList.toggle('-translate-x-full');
+            if(mobileOverlay) mobileOverlay.classList.toggle('hidden');
+        }
+
+        if(mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleSidebar);
+        if(closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
+        if(mobileOverlay) mobileOverlay.addEventListener('click', toggleSidebar);
 
         // Navigation Items Definition
         const navItems = [
@@ -743,6 +905,11 @@
             });
             const activeBtn = document.getElementById(`nav-${topicId}`);
             if(activeBtn) activeBtn.classList.add('active');
+
+            // Mobilde menüden bir şey seçilince menüyü otomatik kapat (böylece içerik görünür)
+            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('-translate-x-full')) {
+                toggleSidebar();
+            }
 
             // Destroy previous chart if exists to prevent overlap
             if (chartInstance) {
