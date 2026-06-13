@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emevî Dönemi Arap Edebiyatı: Tam Kapsamlı Dijital Arşiv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        desert: {
+                            50: '#fbf8f3',
+                            100: '#f5eee1',
+                            800: '#5c482e',
+                            900: '#4a3820',
+                        },
+                        oasis: {
+                            100: '#e0f2fe',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { scroll-behavior: smooth; }
+        
+        /* Custom Scrollbar for sidebar */
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        .nav-item.active {
+            background-color: #f0f9ff;
+            color: #0369a1;
+            border-left: 4px solid #0369a1;
+            font-weight: 600;
+        }
+
+        .comparison-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .comparison-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+        }
+    </style>
+</head>
+<body class="bg-desert-50 text-gray-800 font-sans antialiased flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-full md:w-72 lg:w-80 bg-white border-r border-gray-200 flex-shrink-0 md:h-screen md:sticky top-0 z-40 flex flex-col shadow-sm">
+        <div class="p-6 border-b border-gray-200 bg-desert-900 text-desert-50">
+            <h1 class="text-xl font-bold font-serif mb-1">Emevî Edebiyatı</h1>
+            <p class="text-xs uppercase tracking-widest text-desert-100 opacity-80">Tam Kapsamlı Araştırma Arşivi</p>
+        </div>
+        
+        <nav id="toc" class="flex-1 overflow-y-auto sidebar-scroll p-4 space-y-1">
+            <a href="#sec-1" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors">1. Giriş: Saltanatın Kuruluşu</a>
+            <a href="#sec-2" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors">2. Sosyolojik Katmanlar</a>
+            <a href="#sec-3" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors">3. İlmî ve Dilbilimsel Faaliyetler</a>
+            <a href="#sec-4" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors">4. Edebî Merkezlerin Politiği</a>
+            <a href="#sec-5" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors">5. Şiirsel Formların Evrimi</a>
+            <a href="#sec-6" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors">6. Geleneksel Türlerin Karakteri</a>
+            <a href="#sec-7" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors">7. Gladyatör Arenası: Nakîda</a>
+            <a href="#sec-8" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors">8. Aşkın Sosyolojisi: Gazel</a>
+            <a href="#sec-9" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors">9. Siyasî Şiir ve İdeolojiler</a>
+            <a href="#sec-10" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors">10. Nesrin Kurumsallaşması</a>
+            <a href="#sec-11" class="nav-item block px-4 py-2 text-sm text-gray-600 rounded-r hover:bg-gray-50 transition-colors font-semibold text-oasis-700">11. İnteraktif Bilgi Testi</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 w-full max-w-5xl mx-auto p-4 md:p-8 lg:p-12">
+
+        <!-- BÖLÜM 1: GİRİŞ -->
+        <section id="sec-1" class="mb-16 scroll-mt-8">
+            <h2 class="text-3xl font-serif font-bold text-desert-900 mb-6 border-b-2 border-oasis-600 pb-2 inline-block">1. Giriş: Cahiliye Aristokrasisinden Saltanata</h2>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Ümeyyeoğulları, Cahiliye döneminde de Mekke idaresinde etkiliydi. Hz. Osman dışında önde gelenleri başlarda İslam'a direndi. Süreç, Muaviye'nin Hz. Ali'ye biat etmemesi (Hz. Osman'ın katilleri gerekçesiyle) ve Sıffin'deki <strong>Tahkim Olayı</strong> ile kopma noktasına geldi. Hz. Ali'nin Haricilerce şehit edilmesi ve Hz. Hasan'ın 6 aylık hilafetinden vazgeçmesiyle Emevî saltanatı resmen kuruldu.
+                </p>
+                
+                <h3 class="font-semibold text-lg text-desert-800 mb-4 mt-6">Emevîleri Yıkılışa Götüren 4 Temel Etken</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-desert-50 p-4 rounded-lg border-l-4 border-red-500">
+                        <h4 class="font-bold text-gray-800">1. İsyanlar</h4>
+                        <p class="text-sm text-gray-600 mt-1">Şii, Haricî ve diğer grupların bitmek bilmeyen yıpratıcı ayaklanmaları.</p>
+                    </div>
+                    <div class="bg-desert-50 p-4 rounded-lg border-l-4 border-orange-500">
+                        <h4 class="font-bold text-gray-800">2. Kabile Asabiyeti</h4>
+                        <p class="text-sm text-gray-600 mt-1">Askeri teşkilat ve yönetimde Arap kabileciliği/milliyetçiliğinin ön plana çıkması.</p>
+                    </div>
+                    <div class="bg-desert-50 p-4 rounded-lg border-l-4 border-yellow-500">
+                        <h4 class="font-bold text-gray-800">3. İsraf ve Taht Kavgaları</h4>
+                        <p class="text-sm text-gray-600 mt-1">Lüks yaşam ve veliahtlık sistemi yüzünden hanedan içi kanlı rekabet.</p>
+                    </div>
+                    <div class="bg-desert-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-gray-800">4. Mevâlî Sorunu</h4>
+                        <p class="text-sm text-gray-600 mt-1">Arap olmayan Müslümanların eşit haklardan mahrum kalması (Abbasîleri destekleyeceklerdir).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: SOSYOLOJİ -->
+        <section id="sec-2" class="mb-16 scroll-mt-8">
+            <h2 class="text-3xl font-serif font-bold text-desert-900 mb-6 border-b-2 border-oasis-600 pb-2 inline-block">2. Sosyolojik Katmanlar ve Kültür</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-xl mb-3 text-oasis-900">Aile ve Kadın</h3>
+                    <p class="text-sm text-gray-700">Fetihlerle artan refah ve yabancı esir kadınların (cariyelerin) topluma girmesi çok eşliliği yaygınlaştırdı. Cariyeler 4 eş sınırının dışında tutuldu ve eğlence hayatı değişti.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-xl mb-3 text-oasis-900">Sosyal Sınıflar</h3>
+                    <ul class="text-sm text-gray-700 space-y-2 list-disc pl-4">
+                        <li><strong>Müslümanlar:</strong> Araplar (imtiyazlı), Mevâlî (Arap dışı) ve Köleler.</li>
+                        <li><strong>Zımmîler (Gayrimüslimler):</strong> Hıristiyan, Yahudi ve Mecusiler. Emniyet karşılığı <em>cizye</em> ödeyerek kendi kanunlarıyla yaşadılar.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-xl mb-3 text-oasis-900">Refah ve Kentleşme</h3>
+                    <p class="text-sm text-gray-700">Mali kuvvetin artmasıyla lüks ve konfor yayıldı. Halifeler ihtişamlı saraylarda yaşamaya başladı, bedevi hayattan kente geçiş hızlandı.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-xl mb-3 text-oasis-900">Musiki ve Eğlence</h3>
+                    <p class="text-sm text-gray-700">İlk yıllarda yaygın olmasa da, <strong>Yezid</strong> döneminden itibaren müzik ve eğlence meclisleri devlet eliyle tesis edildi ve kurumsallaştı.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: İLMİ FAALİYETLER -->
+        <section id="sec-3" class="mb-16 scroll-mt-8">
+            <h2 class="text-3xl font-serif font-bold text-desert-900 mb-6 border-b-2 border-oasis-600 pb-2 inline-block">3. İlmî ve Dilbilimsel Faaliyetler</h2>
+            <div class="bg-desert-900 text-white p-8 rounded-2xl shadow-md">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-lg font-bold text-oasis-100 mb-2 border-b border-desert-700 pb-2">Dil Çalışmaları (Nahiv)</h3>
+                        <p class="text-sm text-desert-100">Kuran'ın noktasız/harekesiz olması ve yabancıların İslam'a girmesiyle <strong>"Lahn" (yanlış okuma)</strong> sorunu doğdu. Kuran'ı korumak ve Mevâlî'nin Arapça öğrenmesi için gramer çalışmaları başlatıldı.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-oasis-100 mb-2 border-b border-desert-700 pb-2">Dinî İlimler</h3>
+                        <p class="text-sm text-desert-100">Sadece dil değil; Kıraat, Tefsir, Hadis, Fıkıh ve Kelam ilimlerinde de temel gelişmeler ve çalışmalar bu dönemde ivme kazandı.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-oasis-100 mb-2 border-b border-desert-700 pb-2">Tercüme</h3>
+                        <p class="text-sm text-desert-100">Henüz sistematik ve genelleşmiş bir kurumsal yapı olmasa da, şahısların bireysel istek ve gayretleriyle yabancı kaynaklardan ilk tercümeler yapıldı.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: EDEBİ MERKEZLER -->
+        <section id="sec-4" class="mb-16 scroll-mt-8">
+            <h2 class="text-3xl font-serif font-bold text-desert-900 mb-6 border-b-2 border-oasis-600 pb-2 inline-block">4. Edebî Merkezlerin Sosyo-Politiği</h2>
+            <p class="text-gray-600 mb-6">Her coğrafya, kendi siyasi iklimine uygun edebi türler üretmiştir.</p>
+            
+            <div class="space-y-4">
+                <div class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-xl border border-gray-200">
+                    <div class="w-full md:w-1/4 font-bold text-oasis-700 text-lg">Şam (Başkent)</div>
+                    <div class="w-full md:w-3/4 text-sm text-gray-700">Edebî olmaktan ziyade siyasi merkezdir. Şiir, dışarıdan gelen şairlerin halifeyi <strong>medih (övme)</strong> etmesi üzerine kuruludur.</div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-xl border border-gray-200">
+                    <div class="w-full md:w-1/4 font-bold text-oasis-700 text-lg">Hicaz (Mekke/Medine)</div>
+                    <div class="w-full md:w-3/4 text-sm text-gray-700">Siyasi gücünü kaybeden Medine, Şam yönetiminin halkı politikadan uzak tutma politikasıyla <strong>eğlence merkezine</strong> dönüştü. Temel tür <strong>Gazel'dir</strong>. Bestelenmek için kısa kıtalar yazılır, atlâl (harabeler) yerine doğrudan aşk işlenir.</div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-xl border border-gray-200">
+                    <div class="w-full md:w-1/4 font-bold text-oasis-700 text-lg">Necd ve Taşra</div>
+                    <div class="w-full md:w-3/4 text-sm text-gray-700">Bedevi (göçebe) yaşam devam eder. Hayatta kalma mücadelesi <strong>fahr (övünme) ve hiciv (yergi)</strong> şiirini doğurmuş, yoksulluk onları valilere medhiyeye itmiştir.</div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-xl border border-gray-200">
+                    <div class="w-full md:w-1/4 font-bold text-oasis-700 text-lg">Irak (Kûfe/Basra)</div>
+                    <div class="w-full md:w-3/4 text-sm text-gray-700">İsyanlar merkezidir. <strong>Kûfe:</strong> Şii/Harici isyanları; kabilecilik az olduğu için hiciv/fahr az, devleti öven medih çoktur. <strong>Basra:</strong> Kabile çatışmaları çoktur; medih, fahr ve hiciv zirvededir.</div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-xl border border-gray-200">
+                    <div class="w-full md:w-1/4 font-bold text-oasis-700 text-lg">Horasan</div>
+                    <div class="w-full md:w-3/4 text-sm text-gray-700">Sınır boyları. Haricî isyanlarıyla mücadele edildiği için devlet adamlarına ve komutanlara yönelik medih şiirleri yazılmıştır.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 5: ŞİİR FORMLARI -->
+        <section id="sec-5" class="mb-16 scroll-mt-8">
+            <h2 class="text-3xl font-serif font-bold text-desert-900 mb-6 border-b-2 border-oasis-600 pb-2 inline-block">5. Şiirsel Formların Evrimi</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Kaside -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-oasis-600">
+                    <h3 class="text-2xl font-serif font-bold text-gray-800 mb-4">Kaside</h3>
+                    <p class="text-sm text-gray-700 mb-4">Cahiliye metoduna sadık kalınarak <strong>Atlâl</strong> (eski yurt kalıntılarına ağlama) geleneğiyle başlanır. Nedenleri:</p>
+                    <ul class="text-sm text-gray-700 list-disc pl-5 mb-4 space-y-1">
+                        <li>Ataların edebî anlayışından kopamamak.</li>
+                        <li>Yeni bir metot görememek.</li>
+                        <li>Eleştirmen ve dilcilerin Cahiliye tarzını diretmesi.</li>
+                    </ul>
+                    <div class="bg-gray-50 p-3 rounded text-sm border border-gray-200">
+                        <strong>İstisnalar:</strong> Haricî ve Şiiler, ideolojiyi aktarmak acil olduğu için girişi (atlâl) atlarlar. Ayrıca Hamriyat (şarap şiiri) müstakil bir tür olmuştur.
+                    </div>
+                </div>
+
+                <!-- Recez -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-desert-800">
+                    <h3 class="text-2xl font-serif font-bold text-gray-800 mb-4">Recez (Halk Vezni)</h3>
+                    <p class="text-sm text-gray-700 mb-4">Önceleri çarşı pazarda, <em>hudâ/hidâ</em> (deveci ezgisi), atışma veya ninni olarak doğaçlama söylenen kısa halk şiiriydi.</p>
+                    <p class="text-sm text-gray-700 mb-4"><strong>Değişim:</strong> Emevîlerde uzatılarak planlı kasidelere (<strong>Urcûze</strong>) dönüştürüldü.</p>
+                    <div class="bg-gray-50 p-3 rounded text-sm border border-gray-200">
+                        <strong>Karakteristiği:</strong> Çöllerdeki bedevi recez şairleri, dil güçlerini kanıtlamak için kasten <em>garip ve anlamı zor kelimeler</em> kullanmışlardır.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 6: GELENEKSEL TÜRLER -->
+        <section id="sec-6" class="mb-16 scroll-mt-8">
+            <h2 class="text-3xl font-serif font-bold text-desert-900 mb-6 border-b-2 border-oasis-600 pb-2 inline-block">6. Geleneksel Türlerin Yeni Karakteri</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Medih -->
+                <div class="comparison-card bg-white p-5 rounded-lg border border-gray-200 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-bl">Medih (Övgü)</div>
+                    <p class="text-sm text-gray-800 mt-4">Verilen bol hediyelerle bir <strong>kazanç kapısı</strong> ve en itibarlı tür oldu. Siyasi gruplar da övgü yazdı.</p>
+                    <p class="text-xs text-gray-500 mt-2 bg-gray-50 p-2 rounded"><em>Sadru'l-İslam Kıyası:</em> Eskiden aşırıya kaçılmaz, sadece İslam'a hizmetler övülürdü.</p>
+                </div>
+
+                <!-- Hiciv -->
+                <div class="comparison-card bg-white p-5 rounded-lg border border-gray-200 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-red-100 text-red-800 text-xs px-2 py-1 rounded-bl">Hiciv (Yergi)</div>
+                    <p class="text-sm text-gray-800 mt-4">Arazi dağıtımı sorunları ve Emevilerin kabileciliği körüklemesiyle yeniden hortladı. Çok sertleşti.</p>
+                    <p class="text-xs text-gray-500 mt-2 bg-gray-50 p-2 rounded"><em>Sadru'l-İslam Kıyası:</em> Eskiden küfür ve iftira yasaktı. Şimdi zındık, kafir, münafık iftiraları eklendi.</p>
+                </div>
+
+                <!-- Mersiye & Fahr -->
+                <div class="comparison-card bg-white p-5 rounded-lg border border-gray-200 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-bl">Mersiye & Fahr</div>
+                    <p class="text-sm text-gray-800 mt-4">Mersiyede kısmen Sadru'l-İslam ahlakı korundu ama Cahiliye tarzına dönüşler de oldu. Fahr (kahramanlık) şiiri siyasi grupların (Şii/Harici) çatışmasıyla şekillendi.</p>
+                </div>
+
+                <!-- Su'lûk -->
+                <div class="comparison-card bg-white p-5 rounded-lg border border-gray-200 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-bl">Su'lûk (Yağmacı Şiiri)</div>
+                    <p class="text-sm text-gray-800 mt-4">Valilerin ağır vergileri halkı yoksullaştırdı ve dağa çıkardı. Dörde ayrılırlar: Yoksul (vergi yüzünden), Ahlaksız (dışlanan), Suçlu (adaletten kaçan), Siyasi (isyankar).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 7: NAKİDA -->
+        <section id="sec-7" class="mb-16 scroll-mt-8">
+            <div class="bg-desert-800 text-white p-8 rounded-2xl shadow-xl bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
+                <h2 class="text-3xl font-serif font-bold text-oasis-400 mb-4">7. Edebî Bir Gladyatör Arenası: Nakîda (Atışma)</h2>
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-1 text-sm text-gray-200 space-y-4">
+                        <p>Sadru'l-İslam'da müşriklere karşı "dini savunma" olan atışmalar, Emevilerde siyasi bir manipülasyon aracına dönüştü. Emevi yönetimi, halkı siyasetten uzak tutmak için onları çarşı pazarda kabile atışmalarıyla oyaladı.</p>
+                        <p>Halkın tezahüratıyla yapılan bu düellolarda kural basittir: Rakip ne kadar hicvettiyse, sen daha ağırını yaparsın. İddiasını çürütür ve kendini översin.</p>
+                        <div class="bg-black/30 p-4 rounded-lg border border-white/20">
+                            <span class="font-bold text-oasis-300">Nakîda Şartları:</span> Konu birliği, anlam karşılığı, fahr/hiciv içermesi ve peşinden mutlaka tehdit gelmesi.
+                        </div>
+                    </div>
+                    <div class="text-6xl hidden md:block">⚔️</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 8: GAZEL -->
+        <section id="sec-8" class="mb-16 scroll-mt-8">
+            <h2 class="text-3xl font-serif font-bold text-desert-900 mb-6 border-b-2 border-oasis-600 pb-2 inline-block">8. Aşkın Sosyolojisi: Gazel</h2>
+            <p class="text-gray-700 mb-6">Gazel, kasidenin girişi (nesîb) olmaktan çıkıp bağımsızlaştı. Gelişme sebepleri: Dini hislerin zayıflaması, ganimet/refah artışı, Şam'ın Hicaz'ı eğlenceye teşviki ve <strong>gınânın (besteleme)</strong> yaygınlaşmasıdır.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Geleneksel -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col">
+                    <h3 class="font-serif font-bold text-xl text-desert-800 mb-3 border-b pb-2">1. Geleneksel Gazel</h3>
+                    <p class="text-sm text-gray-600 flex-1">Cahiliye'nin taklididir. Sevgilinin yurdu, hayali, cefa ve güzellik işlenir. Kimi zorlamayla, kimi samimiyetle bu eski tarzı devam ettirmiştir.</p>
+                </div>
+                <!-- Hadari -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col">
+                    <h3 class="font-serif font-bold text-xl text-red-800 mb-3 border-b pb-2">2. Hadarî (Şehirli) Gazel</h3>
+                    <p class="text-sm text-gray-600 flex-1">Açık, şehvetli ve gizlemesizdir. Hicaz'daki özgürlük ortamında, şairlerin sevgilileriyle yaşadıklarını veya gördükleri güzellikleri rahatça tasvir etmesidir.</p>
+                </div>
+                <!-- Uzri -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col">
+                    <h3 class="font-serif font-bold text-xl text-oasis-800 mb-3 border-b pb-2">3. Uzrî (İffetli) Gazel</h3>
+                    <p class="text-sm text-gray-600 flex-1 mb-3">Sadru'l İslam ahlakı ile Emevi medeniyetinin sentezidir. Duygular utanma nedeniyle açık edilmez.</p>
+                    <ul class="text-xs text-gray-500 list-disc pl-4 space-y-1">
+                        <li>Sona ermeyecek bir aşk.</li>
+                        <li>Aklın değil kalbin hakimiyeti.</li>
+                        <li><strong>Kavuşma istenmez:</strong> Aşkı bitireceği korkusuyla, asıl olan o ayrılık ıstırabını çekmektir.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 9: SİYASİ ŞİİR -->
+        <section id="sec-9" class="mb-16 scroll-mt-8">
+            <h2 class="text-3xl font-serif font-bold text-desert-900 mb-6 border-b-2 border-oasis-600 pb-2 inline-block">9. Siyasî Şiir: İdeolojilerin Dili</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-5">
+                    <div class="chart-container bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                        <canvas id="politicalChart"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2 text-center">Fırkaların edebî odaklarındaki analitik dağılım</p>
+                </div>
+
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="p-4 bg-white rounded-lg border-l-4 border-gray-400 shadow-sm">
+                        <h4 class="font-bold text-gray-800">1. Emevî Savunması</h4>
+                        <p class="text-sm text-gray-600 mt-1">Meşruiyeti dinden ziyade, "parçalanmış toplumu bir çatı altında toplayıp istikrar sağlama" argümanına dayandırdılar.</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg border-l-4 border-red-700 shadow-sm">
+                        <h4 class="font-bold text-gray-800">2. Haricî Şiiri (İsyan ve İman)</h4>
+                        <p class="text-sm text-gray-600 mt-1">Siyasi-dini bir edebiyattır. İsyancı ruhları şehadet arzusuyla (ibadet gibi) doludur. Şiirleri saf hamasettir, temiz bedevi dili kullanırlar. <strong>Ku'ûd'a</strong> (savaşa katılmayanlara) nefret kusarlar. Muhalifleri istisnasız kafir sayarlar.</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg border-l-4 border-green-700 shadow-sm">
+                        <h4 class="font-bold text-gray-800">3. Şiî Edebiyatı (Hüzün ve Hak)</h4>
+                        <p class="text-sm text-gray-600 mt-1">Tevvâbîn hareketiyle başlar. Ehl-i Beyt sevgisi, hilafet hakkının ispatı, Kerbela hüznü ve düşmana tehdit işlenir. Şiirde yüksek samimiyet ve siyasi-dini bir bütünlük vardır.</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg border-l-4 border-blue-800 shadow-sm">
+                        <h4 class="font-bold text-gray-800">4. Zübeyrî Şiiri</h4>
+                        <p class="text-sm text-gray-600 mt-1">Hilafetin Kureyş/Mekke hakkı olduğunu savunurlar. Ancak delil sunma veya fikirsel derinlikten yoksundur, daha çok siyasi hiciv andırır.</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg border-l-4 border-purple-700 shadow-sm">
+                        <h4 class="font-bold text-gray-800">5. Şuûbiyye Hareketi (Mevâlî)</h4>
+                        <p class="text-sm text-gray-600 mt-1">Arap dışlamasına tepkidir. Fars kültürünü övüp Arap ırkını aşağılarlar. Gramer hataları yapsalar da üslupları incedir. Arapları kastederek <em>Hind, Selma, cumul (develer)</em> gibi semboller kullanırlar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 10: NESİR -->
+        <section id="sec-10" class="mb-16 scroll-mt-8">
+            <h2 class="text-3xl font-serif font-bold text-desert-900 mb-6 border-b-2 border-oasis-600 pb-2 inline-block">10. Nesrin Kurumsallaşması</h2>
+            
+            <div class="space-y-6">
+                <!-- Hitabet & Kitabet -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="text-xl font-bold text-desert-800 mb-3 flex items-center gap-2">🎙️ Hitabet (Altın Çağ)</h3>
+                        <p class="text-sm text-gray-700">Şiiri halk, hitabeti yöneticiler kullandı. Çok milletlilik hutbeleri uzattı. Muhalifleri bastırmak için <strong>çokça tehdit, uyarı, hakaret ve yergi</strong> içerirdi (Sadru'l-İslam'dan en büyük farkı).</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="text-xl font-bold text-desert-800 mb-3 flex items-center gap-2">✍️ Kitabet (İnşâ)</h3>
+                        <p class="text-sm text-gray-700">Siyasi hayatın hızlanmasıyla <strong>Divânu'r-resâil</strong> kuruldu. Vergi, ordu ve siyasi risaleler yazıldı. Arapçaya tam hakim, maharetli bir <em>profesyonel katipler tabakası</em> oluştu.</p>
+                    </div>
+                </div>
+
+                <!-- Vasiyet -->
+                <div class="bg-desert-50 p-6 rounded-xl border border-desert-200 shadow-sm">
+                    <h3 class="text-xl font-bold text-desert-800 mb-3">📜 Vasiyyet</h3>
+                    <p class="text-sm text-gray-700 mb-2">Hutbeden farkı, kişinin ölüme yakınken ailesine veya halefine bıraktığı söz olmasıdır. Siyasi (yönetim devri), Dini (iyiliği emretme) ve Sosyal vasiyetler olarak ayrılır.</p>
+                </div>
+
+                <!-- Tevkiat -->
+                <div class="bg-oasis-900 text-white p-8 rounded-xl shadow-lg">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-serif font-bold text-oasis-100">🖋️ Tevkîât (Dilekçe Notları)</h3>
+                        <span class="bg-oasis-700 px-3 py-1 rounded-full text-xs font-semibold">İcaz (Kısalık) Sanatı</span>
+                    </div>
+                    <p class="text-sm text-oasis-100 mb-6">Halife veya valilerin dilekçelere düştükleri olumlu/olumsuz kısa notlardır. Efsanevi bir kısalıkta (icaz); ayet, hadis, şiir veya atasözünden ibaret veciz hükümlerdir.</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        <button class="bg-oasis-800 hover:bg-oasis-700 border border-oasis-600 p-4 rounded-lg text-left transition-colors group">
+                            <span class="block text-xs text-oasis-300 uppercase mb-1">Ayet ile Karar</span>
+                            <span class="text-sm italic group-hover:text-white transition-colors">"Hüküm ancak Allah'ındır."</span>
+                        </button>
+                        <button class="bg-oasis-800 hover:bg-oasis-700 border border-oasis-600 p-4 rounded-lg text-left transition-colors group">
+                            <span class="block text-xs text-oasis-300 uppercase mb-1">Hadis ile Karar</span>
+                            <span class="text-sm italic group-hover:text-white transition-colors">"Zarara zararla karşılık yoktur."</span>
+                        </button>
+                        <button class="bg-oasis-800 hover:bg-oasis-700 border border-oasis-600 p-4 rounded-lg text-left transition-colors group">
+                            <span class="block text-xs text-oasis-300 uppercase mb-1">Mesel ile Karar</span>
+                            <span class="text-sm italic group-hover:text-white transition-colors">"Sabır selamettir."</span>
+                        </button>
+                        <button class="bg-oasis-800 hover:bg-oasis-700 border border-oasis-600 p-4 rounded-lg text-left transition-colors group">
+                            <span class="block text-xs text-oasis-300 uppercase mb-1">Şiir ile Karar</span>
+                            <span class="text-sm italic group-hover:text-white transition-colors">"Kötülüğe iyilikle karşılık ver."</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 11: TEST -->
+        <section id="sec-11" class="mb-16 scroll-mt-8">
+            <div class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-oasis-600">
+                <h2 class="text-3xl font-serif font-bold text-desert-900 mb-2">11. İnteraktif Bilgi Testi</h2>
+                <p class="text-gray-600 mb-8 pb-4 border-b border-gray-100">Okuduğunuz notlardaki bilgileri pekiştirmek için bu kapsamlı değerlendirme testini çözebilirsiniz.</p>
+
+                <div class="space-y-8" id="quiz-container">
+                    
+                    <!-- Soru 1 -->
+                    <div class="question-card" data-correct="1">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">1. Emeviler döneminde edebî bir tür olarak 'Nakîda'nın ortaya çıkışında ve yaygınlaşmasında Emevi yönetiminin rolü hakkında aşağıdakilerden hangisi söylenebilir?</h3>
+                        <div class="space-y-3 options-container">
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="0">A) Yöneticiler, kendi askeri başarılarını destanlaştırmak için şairlere nakîda yazdırmıştır.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="1">B) Emevi yönetimi, halkın siyasetle ilgilenmesini engellemek ve enerjilerini kabilecilik atışmalarıyla tüketmelerini sağlamak amacıyla nakîdayı gizlice teşvik etmiştir.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="2">C) Nakîda, saraylarda sadece kadın şairler tarafından icra edilen elit bir sanat olarak desteklenmiştir.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="3">D) Yönetim, nakîdayı İslamiyet öncesi dönemin izlerini silmek için bir araç olarak kullanıp yasaklamıştır.</button>
+                        </div>
+                        <div class="explanation hidden mt-4 p-4 rounded-lg bg-desert-100 text-desert-900 border border-desert-200 text-sm"></div>
+                    </div>
+
+                    <!-- Soru 2 -->
+                    <div class="question-card" data-correct="2">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">2. Aşağıdakilerden hangisi Emevi dönemi 'Uzrî (İffetli) Gazel' şairlerinin temel felsefesiyle uyuşmaz?</h3>
+                        <div class="space-y-3 options-container">
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="0">A) Aklın değil kalbin mutlak hakimiyeti esastır.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="1">B) Aşk, şartlar ne olursa olsun asla sona ermeyecek ebedi bir duygudur.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="2">C) Aşkın ebediyetini koruması için sevgiliye kavuşma arzusu şiirin temel itici gücü olmalı ve şair mutlaka vuslatı dilemelidir.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="3">D) Ayrılık ıstırabı çekmek ve aşk ateşiyle yanmak, sevdanın özünü oluşturur.</button>
+                        </div>
+                        <div class="explanation hidden mt-4 p-4 rounded-lg bg-desert-100 text-desert-900 border border-desert-200 text-sm"></div>
+                    </div>
+
+                    <!-- Soru 3 -->
+                    <div class="question-card" data-correct="0">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">3. Harici şiirinin genel karakteristiği göz önüne alındığında, aşağıdaki temalardan hangisinin bu şiirlerde yer alması beklenmez?</h3>
+                        <div class="space-y-3 options-container">
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="0">A) Liderlerinin veya önemli savaşçılarının ardından duyulan derin hüzün, ağıt ve kaderden şikayet.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="1">B) Muhalifleri (Şiiler, Emeviler, Zübeyriler) tekfir etme ve dinsizlikle suçlama.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="2">C) Savaşa katılmayanlara (ku'ûd) karşı duyulan şiddetli nefret.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="3">D) Şehadeti özleme ve isyanı adeta bir ibadet olarak görme.</button>
+                        </div>
+                        <div class="explanation hidden mt-4 p-4 rounded-lg bg-desert-100 text-desert-900 border border-desert-200 text-sm"></div>
+                    </div>
+
+                    <!-- Soru 4 -->
+                    <div class="question-card" data-correct="3">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">4. Emeviler döneminde 'Recez' vezninin kullanımındaki evrim hakkında aşağıdakilerden hangisi doğrudur?</h3>
+                        <div class="space-y-3 options-container">
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="0">A) Sadece saray eğlencelerinde söylenen lirik şarkılara dönüşmüştür.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="1">B) Eski önemini yitirerek tamamen unutulmuş ve yerini kasideye bırakmıştır.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="2">C) Dini bir forma bürünerek sadece hutbelerde kullanılmaya başlanmıştır.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="3">D) Önceleri kısa, doğaçlama bir halk ezgisi iken, planlı ve çok beyitli kasidelere (urcûze) dönüşmüş, kasten zor kelimeler kullanılmıştır.</button>
+                        </div>
+                        <div class="explanation hidden mt-4 p-4 rounded-lg bg-desert-100 text-desert-900 border border-desert-200 text-sm"></div>
+                    </div>
+
+                    <!-- Soru 5 -->
+                    <div class="question-card" data-correct="0">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">5. Dilbilim çalışmalarının (Nahiv) Emeviler döneminde ivme kazanmasının temel sebebi aşağıdakilerden hangisidir?</h3>
+                        <div class="space-y-3 options-container">
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="0">A) Kur'an'ın noktasız/harekesiz olması ve yabancıların İslam'a girmesiyle oluşan "lahn" (yanlış okuma) sorununu çözmek.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="1">B) Emevi halifelerinin şiir yarışmalarında kuralları belirleme isteği.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="2">C) Farsçanın resmi dil olmasını engellemek için kurumsal bir dil kurumu oluşturulması.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="3">D) Çarşı pazardaki ticaret dilinin standardize edilmesi.</button>
+                        </div>
+                        <div class="explanation hidden mt-4 p-4 rounded-lg bg-desert-100 text-desert-900 border border-desert-200 text-sm"></div>
+                    </div>
+
+                    <!-- Soru 6 -->
+                    <div class="question-card" data-correct="3">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">6. Arap olmayan Müslümanların (Mevâlî) Arapların dışlayıcı politikalarına karşı oluşturdukları "Şuûbiyye" hareketinin edebiyatlarındaki temel stratejisi nedir?</h3>
+                        <div class="space-y-3 options-container">
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="0">A) Arapçayı çok iyi bildiklerini kanıtlamak için Emevi gramer kurallarını tamamen yeniden yazmışlardır.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="1">B) Emevi yöneticilerine en abartılı methiyeleri dizerek devlet kademelerinde Arapların önüne geçmeyi amaçlamışlardır.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="2">C) Şiir yazmayı tamamen reddedip sadece hitabet ve nesir alanında eserler vermişlerdir.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="3">D) Arap kültürünü aşağılayıp kendi eski kültürlerini yüceltmek için şiirlerinde "Hind, Selma, develer" gibi sembollerle Arap ırkını kastetmişlerdir.</button>
+                        </div>
+                        <div class="explanation hidden mt-4 p-4 rounded-lg bg-desert-100 text-desert-900 border border-desert-200 text-sm"></div>
+                    </div>
+
+                    <!-- Soru 7 -->
+                    <div class="question-card" data-correct="1">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">7. Emeviler dönemi "Hitabet" (hutbe) sanatının, Sadru'l-İslam dönemi hutbelerinden ayrılan en belirgin ideolojik farkı nedir?</h3>
+                        <div class="space-y-3 options-container">
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="0">A) Ayet ve hadislere yer vermeyi tamamen bırakarak sadece Arap şiirinden alıntılar yapılması.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="1">B) Muhalif halkı itaat altına almak amacıyla hutbelerin çok miktarda tehdit, uyarı, ağır hakaret ve yergi içermesi.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="2">C) Sadece dini ritüellerle sınırlandırılıp siyasi mesajlardan arındırılması.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="3">D) Çok milletli yapı sebebiyle hutbelerin aşırı derecede kısa tutularak "icaz" sanatının zirvesini yaşaması.</button>
+                        </div>
+                        <div class="explanation hidden mt-4 p-4 rounded-lg bg-desert-100 text-desert-900 border border-desert-200 text-sm"></div>
+                    </div>
+
+                    <!-- Soru 8 -->
+                    <div class="question-card" data-correct="0">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">8. Sadru'l-İslam'da zekat ve devletleşme sayesinde yok denecek kadar azalan Su'lûk (Eşkıya/Yağmacı) şairlerinin Emevilerde yeniden kitleler halinde ortaya çıkmasının başlıca sosyo-ekonomik nedeni nedir?</h3>
+                        <div class="space-y-3 options-container">
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="0">A) Emevi valilerinin yönettikleri bölgeleri kendi malı gibi görüp ağır vergiler almasıyla halkın yoksullaşıp dağa çıkması.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="1">B) Emevi devletinin Bedevi şiir geleneğini korumak için bilerek yağmacılığı teşvik edip maaş bağlaması.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="2">C) Sınır boylarındaki gazilerin, fethedilen toprakları paylaşamayarak birbirlerini yağmalaması.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="3">D) Arap olmayan Müslümanların (Mevâlî) kasıtlı olarak sadece yağmacılık yapabilecekleri mesleklere yönlendirilmesi.</button>
+                        </div>
+                        <div class="explanation hidden mt-4 p-4 rounded-lg bg-desert-100 text-desert-900 border border-desert-200 text-sm"></div>
+                    </div>
+
+                    <!-- Soru 9 -->
+                    <div class="question-card" data-correct="2">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">9. Emevi şairlerinin çoğu Cahiliye geleneğine uyarak kasidelerine "Atlâl" (terk edilen yurdun harabelerine ağlama) ile başlarken, bu geleneği bilinçli olarak reddeden ve doğrudan konuya giren şair grubu hangisidir?</h3>
+                        <div class="space-y-3 options-container">
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="0">A) Saraylarda yaşayan devlet destekli medih (övgü) şairleri.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="1">B) Hicaz bölgesindeki Hadarî (şehirli) gazel şairleri.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="2">C) Haricî ve Şiî şairler.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="3">D) Necd bölgesindeki çöl şairleri.</button>
+                        </div>
+                        <div class="explanation hidden mt-4 p-4 rounded-lg bg-desert-100 text-desert-900 border border-desert-200 text-sm"></div>
+                    </div>
+
+                    <!-- Soru 10 -->
+                    <div class="question-card" data-correct="3">
+                        <h3 class="font-bold text-lg text-gray-800 mb-4">10. Abdullah b. Zübeyr'in hilafet davasını destekleyen "Zübeyrî Şiiri"nin edebi/ideolojik niteliği hakkında hangisi söylenebilir?</h3>
+                        <div class="space-y-3 options-container">
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="0">A) Emevilerin tüm siyasi argümanlarını derin fikirler ve Kuran ayetleriyle çürüten akademik bir şiirdir.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="1">B) Şii edebiyatı kadar hüzünlü ve şehadet özlemiyle doludur.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="2">C) Tamamen bedevi bir dille yazılmış, sadece kahramanlık anlatan hamaset destanlarıdır.</button>
+                            <button class="w-full text-left p-4 rounded-xl border border-gray-200 hover:border-oasis-400 hover:bg-oasis-50 transition-all font-medium text-gray-700" data-index="3">D) Fikirsel derinlikten ve karşı argümandan yoksundur, hilafetin Kureyş'in hakkı olmasını öven siyasi hiciv niteliğindedir.</button>
+                        </div>
+                        <div class="explanation hidden mt-4 p-4 rounded-lg bg-desert-100 text-desert-900 border border-desert-200 text-sm"></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Scroll Spy Logic for Sidebar
+            const sections = document.querySelectorAll('section');
+            const navItems = document.querySelectorAll('.nav-item');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -60% 0px',
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navItems.forEach(item => {
+                            item.classList.remove('active');
+                            if (item.getAttribute('href') === `#${id}`) {
+                                item.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => observer.observe(section));
+
+            // Political Radar Chart Initialization
+            const ctxPolitical = document.getElementById('politicalChart').getContext('2d');
+            new Chart(ctxPolitical, {
+                type: 'radar',
+                data: {
+                    labels: ['Hamaset / Savaş', 'Dini İman', 'Ehl-i Beyt Hüznü', 'Arap Kültürü (Aleyhte)', 'Hiciv/Tehdit'],
+                    datasets: [
+                        {
+                            label: 'Hariciler',
+                            data: [90, 100, 10, 20, 60],
+                            backgroundColor: 'rgba(185, 28, 28, 0.2)', // red
+                            borderColor: 'rgb(185, 28, 28)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Şiiler',
+                            data: [50, 80, 100, 30, 70],
+                            backgroundColor: 'rgba(21, 128, 61, 0.2)', // green
+                            borderColor: 'rgb(21, 128, 61)',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Şuûbiyye',
+                            data: [10, 20, 10, 100, 80],
+                            backgroundColor: 'rgba(126, 34, 206, 0.2)', // purple
+                            borderColor: 'rgb(126, 34, 206)',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { display: true },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { boxWidth: 12 }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const explanations = [
+                "<strong>Doğru cevap B.</strong> Emevi yönetimi, halkın siyasetten uzak kalması ve muhalefet etmemesi için çarşı pazarda kabile asabiyetine dayalı bu atışmaları bilerek körüklemiş ve manipülatif bir araç olarak desteklemiştir.",
+                "<strong>Doğru cevap C.</strong> Uzrî (iffetli) gazelde aşık, kavuşmanın (vuslatın) aşkı öldüreceğine inanır. Bu nedenle asıl amaç kavuşmak değil, ayrılık ıstırabı çekmek ve aşk ateşiyle yanmaktır.",
+                "<strong>Doğru cevap A.</strong> Harici şairler aynı zamanda isyancı komutanlardır. Şehadeti ibadet saydıkları için savaşta kaybettiklerinin arkasından ağıt yakıp kaderden şikayet etmezler; Allah'ın takdirine rıza gösterirler.",
+                "<strong>Doğru cevap D.</strong> Başlangıçta deveci ezgisi veya savaş atışması gibi kısa/doğaçlama olan recez, Emevilerde planlı, çok beyitli kasidelere (urcûze) evrilmiş ve şairler dil güçlerini kanıtlamak için kasten garip kelimeler kullanmıştır.",
+                "<strong>Doğru cevap A.</strong> Fetihlerle sınırların genişlemesi ve Arap olmayanların İslam'a girmesiyle Arapça telaffuz bozulmuş (lahn), Kur'an-ı Kerim'i bu hatalardan korumak için nahiv (dil bilgisi) sistemleştirilmiştir.",
+                "<strong>Doğru cevap D.</strong> Şuûbiyye hareketi, Emevilerin Arap milliyetçiliği politikasına bir tepkidir. Fars gibi eski kültürlerini yüceltmişler, gramer hataları yapsalar da Arap ırkını sembolik olarak (Hind, Selma, develer vb. kelimelerle) aşağılamışlardır.",
+                "<strong>Doğru cevap B.</strong> Fetihler ve isyanlarla uğraşan Emevi yöneticileri hitabeti güçlü bir siyasi baskı aracı olarak kullanmış, muhaliflere karşı tehdit, uyarı ve hakaretleri hutbelere bolca yerleştirmişlerdir.",
+                "<strong>Doğru cevap A.</strong> Sadru'l-İslam ahlakı ve yardımlaşması ile azalan Su'lûk (yağmacı) şairler, Emevi yöneticilerinin (valilerin) adeta bölgeleri kendi mülkleri gibi görüp ağır vergiler toplaması ve fakirliği artırması yüzünden isyan edip dağa çıkmışlardır.",
+                "<strong>Doğru cevap C.</strong> Diğer şairler eski Cahiliye geleneğini (nesîb/atlâl) eleştirmenlerin baskısıyla sürdürürken; Haricî ve Şiî şairlerin çok acil ideolojik ve siyasi mesajları olduğu için bu romantik giriş kısmını atlayıp doğrudan konuya girmişlerdir.",
+                "<strong>Doğru cevap D.</strong> Zübeyrî edebiyatı, Şii veya Harici edebiyatı gibi derin ideolojik temeller veya karşıt fikirleri çürütme amacı taşımaz. Temel dayanakları Hz. Peygamberin Kureyşli olması hasebiyle hilafetin Mekkelilerin hakkı olduğudur, edebi açıdan siyasi hicve daha yakındır."
+            ];
+
+            document.querySelectorAll('.question-card').forEach((card, qIndex) => {
+                const buttons = card.querySelectorAll('button');
+                const correctIndex = parseInt(card.getAttribute('data-correct'));
+                const expDiv = card.querySelector('.explanation');
+
+                buttons.forEach((btn, bIndex) => {
+                    btn.addEventListener('click', () => {
+                        // Seçim yapıldıktan sonra tüm butonları kilitle
+                        buttons.forEach(b => {
+                            b.disabled = true;
+                            b.classList.remove('hover:bg-oasis-50', 'hover:border-oasis-400');
+                            b.classList.add('opacity-60', 'cursor-not-allowed');
+                        });
+
+                        // Cevabı doğrula
+                        if (bIndex === correctIndex) {
+                            btn.classList.remove('border-gray-200', 'opacity-60');
+                            btn.classList.add('bg-green-50', 'border-green-500', 'text-green-800', 'opacity-100');
+                            btn.innerHTML = '✅ ' + btn.innerHTML;
+                        } else {
+                            btn.classList.remove('border-gray-200', 'opacity-60');
+                            btn.classList.add('bg-red-50', 'border-red-500', 'text-red-800', 'opacity-100');
+                            btn.innerHTML = '❌ ' + btn.innerHTML;
+                            
+                            // Yanlış cevaplandıysa doğruyu da yeşil ile vurgula
+                            buttons[correctIndex].classList.remove('border-gray-200', 'opacity-60');
+                            buttons[correctIndex].classList.add('bg-green-50', 'border-green-500', 'text-green-800', 'opacity-100');
+                        }
+
+                        // Açıklamayı göster
+                        expDiv.innerHTML = explanations[qIndex];
+                        expDiv.classList.remove('hidden');
+                        expDiv.style.opacity = 0;
+                        setTimeout(() => {
+                            expDiv.style.transition = 'opacity 0.4s ease-in-out';
+                            expDiv.style.opacity = 1;
+                        }, 50);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
