@@ -1,210 +1,227 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-    <title>Şeref Can Mertdoğan's Hall</title>
-    <meta charset="utf-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/main.css" type="text/css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-        crossorigin="anonymous" />
-  
-
- 
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Şeref Can Mertdoğan - Software Engineer building developer tools, AI workflows and experimental game technology." />
+  <title>Şeref Can Mertdoğan - Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="css/main.css" type="text/css" rel="stylesheet" />
 </head>
+<body>
+  <canvas class="ambient-canvas" id="ambientCanvas" aria-hidden="true"></canvas>
 
-<body >
-    <div id="navigation-bar">
-        <a class="homeicon" href="#home" style="z-index:3 !important"><i class="fas fa-home"></i></a>
+  <header class="site-header" data-reveal>
+    <a class="brand" href="#hero" aria-label="Şeref Can Mertdoğan home">SCM</a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="#about">About</a>
+      <a href="#redglitch">RedGlitch</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-        <a class="biography-link" style="z-index:3 !important" href="#biography">About &nbsp; / &nbsp;</a>
-        
-        <a class="art-link" href="#art">Services &nbsp; / &nbsp; </a>
-        <!--
-        <a class="design-link" href="#design">Services &nbsp; / &nbsp; </a>
-        -->
-        <a class="contact-link" href="#contact">Contact</a>
-
-        <div id="socials">
-           
-            <a class="social-icon" href="https://github.com/canmertdogan"><i class="fab fa-github"></i></a>
-            <a class="social-icon" href="https://www.linkedin.com/in/%C5%9Feref-can-mertdo%C4%9Fan-9b5597321/"><i class="fab fa-linkedin"></i></a>
-          
-            <a class="social-icon" href="https://medium.com/@scmertdogan303"><i class="fab fa-medium"></i></a>
+  <main>
+    <section class="hero section" id="hero">
+      <div class="hero-inner parallax-layer" data-depth="0.025">
+        <p class="eyebrow reveal">Portfolio / 2026</p>
+        <h1 class="hero-title reveal">Şeref Can Mertdoğan</h1>
+        <p class="hero-role reveal">Software Engineer</p>
+        <p class="hero-copy reveal">Building developer tools, AI workflows and experimental game technology.</p>
+        <div class="hero-actions reveal">
+          <a class="button button-primary" href="#redglitch">View Projects</a>
+          <a class="button button-secondary" href="https://github.com/canmertdogan" target="_blank" rel="noreferrer">GitHub</a>
         </div>
+      </div>
+      <a class="scroll-cue" href="#about" aria-label="Scroll to about"></a>
+    </section>
 
-        
-    </div>
-
-    <div id="homepage">
-        <br><br><br>
-        <h1 class="homepage-title" style="opacity: 1.0 !important;"align="center">I am <strong style="color: white; ">Şeref Can.</strong></h1>
-        <h2 class="homepage-occupation" style="opacity: 1.0 !important;" align="center">Student, the "IT Guy", Webmaster, Junior Developer</h2>
-        <a class="swipedown"> Scroll Down >>></a>
-    </div>
-    <div id=rain>
-    </div>
-    </div>
-    <div id="biography">
-        <div id="container2">
-        <h3 style="font-size: 44px; margin-left: 0px; margin-bottom:0px !important; font-style: bold; color: cyan !important;"
-            align=center>About Me
-        </h3>
-        <p align=center style=" font-size: 20px; font-weight: 900; color: white ">Who am I?</p>
-        <br>
-     <p align=center style=" font-size: 20px;">I'm <strong style="color: white !important;">Şeref Can MERTDOĞAN</strong>, a tech-savvy problem-solver with hands-on experience across system administration, cybersecurity, and development. <br><br>
-I've worked with both Linux and Windows servers — from setup to maintenance — and I’m confident in handling system issues on both platforms. I have a solid grasp of CMS deployment, threat analysis (Level 1 SOC), and basic cybersecurity practices.
-
-<br><br> I'm also familiar with building and maintaining static websites, designing user interfaces, and crafting lightweight Node.js projects. Whether it’s troubleshooting hardware, repairing systems, or writing code in Python, C++, PHP, or C#, I enjoy solving problems and building useful tools — from admin dashboards to mini CMS apps.</p> <br><br>
-
-<p align= center style="margin-top: -10px; font-size: 20px; color: white !important">I'm always open to learning more, collaborating on meaningful projects, or lending a hand with technical roadblocks. Let’s build cool stuff together.</p>
-
-        <div style="color: cyan; font-size: 30px; font-family: 'Kode Mono';" align="center"><strong>- ★ -</strong></div>
+    <section class="section about" id="about">
+      <div class="section-grid">
+        <div>
+          <p class="eyebrow reveal">About</p>
+          <h2 class="section-title reveal">Ambitious systems, shipped with discipline.</h2>
         </div>
-    </div>
-      
-    </div>
-    </div>
-    </div>
-
-    <div id="art">
-        <p style="font-size: 44px; margin-left: 0px; margin-top: 0px; margin-bottom:0px; padding-top: 50px; font-style: bold; color: cyan !important;"
-            align=center>Abilities / Services
-        </p>
-        <p align=center style="padding-left: 20%; padding-right: 20%; padding-bottom: 25px; font-size: 20px; font-weight: 900; color: white ">Think here like a CV.</p>
-        
-        <div id="container">
-            <p align=center style="margin:0px;font-size: 20px; font-weight: 900; color: yellow ">Languages (Computer):</p>
-            <br><br>
-            <div style="margin: 15px;"></div>
-            
-              
-              <div class="range" style="--p:100">
-                <div class="range__label">JS</div>
-              </div>
-              <br>
-              <div class="range" style="--p:100">
-                <div class="range__label">C++</div>
-              </div>
-              <br>
-              <div class="range" style="--p:100">
-                <div class="range__label">C#</div>
-              </div>
-              <br>
-              <div class="range" style="--p:100">
-                <div class="range__label">PYTHON</div>
-              </div>
-              <br>
-              <div class="range" style="--p:100">
-                <div class="range__label">PHP</div>
-              </div>
+        <div class="about-content reveal">
+          <p>I enjoy building ambitious software systems that combine graphics, AI, developer tooling and modern web technologies.</p>
+          <div class="metrics-grid">
+            <article class="metric-card">
+              <span>17 Jan 2026</span>
+              <p>RedGlitch started</p>
+            </article>
+            <article class="metric-card">
+              <span>82,000+</span>
+              <p>Core source lines</p>
+            </article>
+            <article class="metric-card">
+              <span>1.4M+</span>
+              <p>Repository lines</p>
+            </article>
+          </div>
+          <ul class="inline-stack" aria-label="Primary technologies">
+            <li>Electron</li>
+            <li>Node</li>
+            <li>React</li>
+            <li>TypeScript</li>
+            <li>FastAPI</li>
+          </ul>
         </div>
-        <br><br>
-        <div id="container">
-            <p align=center style="margin: 0px; font-size: 20px; font-weight: 900; color: yellow ">Languages (Human):</p>
-            <br><br>
-            <div style="margin: 15px;"></div>
-            <div class="range" style="--p:90">
-                <div class="range__label">English</div>
-              </div>
-              <br>
-              <div class="range" style="--p:100">
-                <div class="range__label">Turkish</div>
-              </div>
-              <br>
-              <div class="range" style="--p:75">
-                <div class="range__label">Russian</div>
-              </div>
-              <br>
-              <div class="range" style="--p:35">
-                <div class="range__label">German</div>
-              </div>
-             
-             
-        </div>
-        <br><br>
-        <div id="container2">
-             <div id="headforcv" align="center" style="border: purple solid 1px !important; color:purple;"><strong style="color:yellow;">Cybersecurity Services</strong></div>
-            <p align="center" style="color:white">I can fortify your digital assets by providing cybersecurity services. From conducting thorough security assessments to identifying vulnerabilities, I ensure a comprehensive approach to safeguard your systems and data from potential threats.</p>
-            <br>
-            <p align="center" style="color:white">I can provide continuous monitoring of your digital infrastructure, utilizing advanced tools to detect and respond to potential security incidents promptly. This proactive approach ensures that any threats are identified and neutralized before they can cause significant harm.</p>
-            <br>
-            <p align="center" style="color:white">I can educate your team on cybersecurity best practices, raising awareness about potential risks and promoting a security-conscious culture within your organization. From phishing awareness to password hygiene, I empower your personnel to be the first line of defense against cyber threats.</p>
-             <br> <br>
-            
-            <div id="headforcv" align="center">Web Design / Development</div>
-            <p align="center" style="color:white">
-                I can design and develop visually appealing and user-friendly websites that not only reflect your brand but also provide a seamless and engaging user experience. From crafting custom layouts to implementing responsive design, I ensure your website stands out in the digital landscape.</p>
-             <br> <br>
-            <div id="headforcv" align="center">Copywriting/Ghostwriting</div>
-            <p align="center" style="color:white">I can elevate your brand through compelling copywriting and ghostwriting services. Crafting persuasive and engaging content tailocyan to your target audience, I ensure that your message resonates effectively, whether it's for websites, blogs, or promotional materials.</p>
-            <br> <br>
-            <div id="headforcv" align="center">Website Optimization</div>
-            <p align="center" style="color:white">I can enhance the performance of your website through optimization techniques, ensuring fast loading times, smooth navigation, and a seamless user experience. From image compression to code optimization, I employ various strategies to make your website efficient and user-friendly.</p>
-            <br> <br>
-            <div id="headforcv" align="center">Content Creation</div>
-            <p align="center" style="color:white">I can create captivating and relevant content that aligns with your brand voice and resonates with your audience. Whether it's blog posts, articles, or social media content, I ensure that each piece contributes to your overall digital presence and communicates your message effectively.</p>
-            <br> <br>
-           
-            <div style="color: cyan; font-size: 30px; font-family: 'Kode Mono';" align="center"><strong> - - ★ - - </strong></div>
-            <div id="container">
-           
-            
-            </div>
-        </div>
-            <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
-        </div>
-        
-    </div>
-  
-    <div id="contact">
-        <p style="font-size: 44px; margin-left: 20px; margin-top: 0px; padding-top: 50px; font-style: bold; color: rgb(0, 255, 64) !important;"
-            align=center>
-            Contact</p>
-            <div id="container2" align="center">
-                
-                <form id="contactForm" style="max-width: 400px; margin: 0 auto;">
-              
-                  <input type="text" id="name" placeholder="Name" name="name" style="padding: 10px; background-color: #000; color: rgb(0, 255, 64); border: 2px solid rgb(0, 255, 64); width: 100%; font-family: 'Kode Mono';" requicyan>
-                  <br><br>
-              
-                  <input type="email" id="email" name="email" placeholder="E-Mail" style="padding: 10px; background-color: #000; color: rgb(0, 255, 64); border: 2px solid rgb(0, 255, 64); width: 100%; font-family: 'Kode Mono';" requicyan>
-                  <br><br>
-              
-                  <textarea id="message" name="message" placeholder="Write your message here..." rows="4" requicyan style="padding: 10px; background-color: #000; color: rgb(0, 255, 64); border: 2px solid rgb(0, 255, 64); width: 100%; font-family: 'Kode Mono';"></textarea>
-                  <br><br>
-              
-                  <button type="button" style="padding: 10px; background-color: #000; color: rgb(0, 255, 64); border: 2px solid rgb(0, 255, 64); width: 425px; font-family: 'Kode Mono'; box-sizing: border-box;" onclick="sendEmail()"><strong>Submit, if you aren't Nigerian Prince :) </strong></button>
-              
-                </form>
-           
-          
-              </div>
-              
-           
-    </div>
+      </div>
+    </section>
 
-    <footer>
-        2024 - Coded/Designed by Şeref Can Mertdoğan. 
+    <section class="section featured" id="redglitch">
+      <div class="featured-heading">
+        <p class="eyebrow reveal">Featured Project</p>
+        <h2 class="redglitch-title reveal">RedGlitch</h2>
+        <p class="featured-copy reveal">An AI-assisted game development studio capable of building and editing games without restarting the engine.</p>
+      </div>
 
+      <div class="studio-shot reveal parallax-layer" data-depth="0.012" aria-label="RedGlitch studio interface preview">
+        <div class="shot-topbar">
+          <div class="window-controls" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span class="shot-path">projects / redglitch / live-studio</span>
+          <span class="shot-status">LIVE</span>
+        </div>
+        <div class="studio-layout">
+          <aside class="studio-sidebar">
+            <span>Scene</span>
+            <strong>Cyber_Fog_City</strong>
+            <div class="layer active"></div>
+            <div class="layer"></div>
+            <div class="layer short"></div>
+          </aside>
+          <div class="studio-viewport">
+            <div class="grid-plane"></div>
+            <div class="viewport-node node-a"></div>
+            <div class="viewport-node node-b"></div>
+            <div class="viewport-node node-c"></div>
+          </div>
+          <aside class="studio-inspector">
+            <span>Inspector</span>
+            <div class="property"></div>
+            <div class="property wide"></div>
+            <div class="property"></div>
+            <div class="property tiny"></div>
+          </aside>
+        </div>
+      </div>
 
- 
-    </footer>
+      <div class="feature-cards">
+        <article class="feature-card reveal">
+          <h3>Live Editing</h3>
+          <p>No restart. Instant updates.</p>
+        </article>
+        <article class="feature-card reveal">
+          <h3>AI Scene Generation</h3>
+          <p>Generate playable maps in seconds.</p>
+        </article>
+        <article class="feature-card reveal">
+          <h3>Desktop Studio</h3>
+          <p>Electron-based IDE.</p>
+        </article>
+        <article class="feature-card reveal">
+          <h3>Rendering</h3>
+          <p>2.5D renderer, shader system and live serialization.</p>
+        </article>
+      </div>
+
+      <div class="tech-panel reveal">
+        <p class="panel-label">Tech</p>
+        <ul class="tech-list">
+          <li>Electron</li>
+          <li>React</li>
+          <li>TypeScript</li>
+          <li>Node.js</li>
+          <li>FastAPI</li>
+          <li>WebSockets</li>
+          <li>Monaco</li>
+          <li>Three.js</li>
+          <li>ONNX</li>
+          <li>WebGPU</li>
+        </ul>
+      </div>
+
+      <div class="project-actions reveal">
+        <a class="button button-primary" href="#contact">Read Technical Report</a>
+        <a class="button button-secondary" href="https://github.com/canmertdogan" target="_blank" rel="noreferrer">GitHub Repository</a>
+      </div>
+    </section>
+
+    <section class="section projects" id="projects">
+      <div class="section-heading">
+        <p class="eyebrow reveal">Other Projects</p>
+        <h2 class="section-title reveal">Focused experiments around graphics, AI and tooling.</h2>
+      </div>
+      <div class="project-grid">
+        <article class="project-card reveal">
+          <span>01</span>
+          <h3>Cyber Fog Shader</h3>
+          <p>Atmospheric rendering experiments for dark game environments.</p>
+        </article>
+        <article class="project-card reveal">
+          <span>02</span>
+          <h3>AI Terrain Generator</h3>
+          <p>Procedural map creation workflows for playable spaces.</p>
+        </article>
+        <article class="project-card reveal">
+          <span>03</span>
+          <h3>Networking Experiments</h3>
+          <p>Realtime synchronization tests for multiplayer and editor tools.</p>
+        </article>
+        <article class="project-card reveal">
+          <span>04</span>
+          <h3>Electron Utilities</h3>
+          <p>Desktop tooling patterns for local-first developer software.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section stack" id="stack">
+      <p class="eyebrow reveal">Tech Stack</p>
+      <div class="stack-marquee reveal" aria-label="Technology stack">
+        <span>Next.js</span>
+        <span>React</span>
+        <span>TypeScript</span>
+        <span>TailwindCSS</span>
+        <span>Framer Motion</span>
+        <span>Lenis</span>
+        <span>GSAP</span>
+        <span>Vercel Analytics</span>
+      </div>
+    </section>
+
+    <section class="section timeline" id="timeline">
+      <div class="section-heading">
+        <p class="eyebrow reveal">Timeline</p>
+        <h2 class="section-title reveal">A path toward larger technical systems.</h2>
+      </div>
+      <ol class="timeline-list">
+        <li class="reveal"><span>2022</span><p>Started programming</p></li>
+        <li class="reveal"><span>2024</span><p>AI and Cybersecurity</p></li>
+        <li class="reveal"><span>2026</span><p>Started RedGlitch</p></li>
+        <li class="reveal"><span>Today</span><p>Building developer tools</p></li>
+      </ol>
+    </section>
+
+    <section class="section contact" id="contact">
+      <p class="eyebrow reveal">Contact</p>
+      <h2 class="contact-title reveal">Let’s build serious software.</h2>
+      <div class="contact-links reveal">
+        <a href="https://github.com/canmertdogan" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/%C5%9Feref-can-mertdo%C4%9Fan-9b5597321/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="mailto:rainr00t@proton.me">Mail</a>
+        <a href="CV.pdf">CV.pdf</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 Şeref Can Mertdoğan</span>
+    <a href="#hero">Back to top</a>
+  </footer>
+
+  <script src="js/site.js"></script>
 </body>
-
 </html>
-
-<script>
-    function sendEmail() {
-      var name = document.getElementById("name").value;
-      var email = document.getElementById("email").value;
-      var message = document.getElementById("message").value;
-
-      var mailtoLink = `mailto:rainr00t@proton.me?subject=${encodeURIComponent('Contact Form Submission')}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nMessage: ${message}`)}`;
-
-      window.location.href = mailtoLink;
-    }
-  </script>
