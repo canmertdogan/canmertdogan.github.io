@@ -660,13 +660,19 @@ a {
 }
 
 .reveal {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+.animation-ready .reveal {
   opacity: 0;
   filter: blur(10px);
   transform: translateY(22px);
   transition: opacity 700ms ease, filter 700ms ease, transform 700ms ease;
 }
 
-.reveal.is-visible {
+.animation-ready .reveal.is-visible {
   opacity: 1;
   filter: blur(0);
   transform: translateY(0);
@@ -821,6 +827,7 @@ a {
     transition-duration: 0.01ms !important;
   }
 
+  .animation-ready .reveal,
   .reveal {
     opacity: 1;
     filter: none;

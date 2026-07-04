@@ -1,4 +1,7 @@
 (function () {
+  document.documentElement.classList.add("animation-ready");
+
+  try {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const reveals = document.querySelectorAll(".reveal, [data-reveal]");
 
@@ -133,4 +136,11 @@
 
   resize();
   draw();
+  } catch (error) {
+    document.documentElement.classList.remove("animation-ready");
+    document.querySelectorAll(".reveal").forEach((item) => {
+      item.classList.add("is-visible");
+    });
+    console.warn("Portfolio animation fallback enabled.", error);
+  }
 })();
