@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f3f5f2">
+  <title>Sarf Atlası — Arapça Türetme Rehberi</title>
+  <meta name="description" content="Arapça sarf konularını adım adım öğreten interaktif çalışma uygulaması.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Sarf Atlası ana sayfa">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><strong>SARF</strong><small>ATLASI</small></span>
+      </a>
+      <div class="topbar-context">
+        <span class="context-dot"></span>
+        <span id="header-context">Öğrenme rotası</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-button" id="reset-button" title="İlerlemeyi sıfırla" aria-label="İlerlemeyi sıfırla">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v6h6M20 20v-6h-6M5.1 15a7.5 7.5 0 0 0 12.3 2.4L20 14M4 10l2.6-3.4A7.5 7.5 0 0 1 19 9"/></svg>
+        </button>
+        <div class="streak"><span>Seri</span><strong id="streak-count">1 gün</strong></div>
+        <div class="profile-chip" aria-hidden="true">ط</div>
+      </div>
+    </header>
+
+    <aside class="curriculum" id="curriculum">
+      <div class="curriculum-head">
+        <span class="overline">MÜFREDAT</span>
+        <button class="close-menu" id="close-menu" aria-label="Menüyü kapat">×</button>
+        <h1>Türetme<br>haritası</h1>
+        <p>11 konu · temel → ileri</p>
+      </div>
+      <div class="overall-progress">
+        <div class="progress-copy"><span>Genel ilerleme</span><strong id="overall-percent">0%</strong></div>
+        <div class="progress-track"><i id="overall-bar"></i></div>
+      </div>
+      <nav class="topic-list" id="topic-list" aria-label="Ders konuları"></nav>
+      <div class="sidebar-actions">
+        <div class="exam-card">
+          <span class="exam-icon">⌁</span>
+          <div><strong>Sınav modu</strong><small>Tüm konulardan karma test</small></div>
+          <button id="exam-button" aria-label="Sınav modunu aç">→</button>
+        </div>
+        <a class="laboratory-card" href="sarf-laboratuvari.html">
+          <span class="laboratory-icon" aria-hidden="true">◇</span>
+          <div><strong>Sarf Laboratuvarı</strong><small>İnteraktif makineler ve rehberler</small></div>
+          <span class="laboratory-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="lesson-stage">
+      <div class="mobile-stage-head">
+        <button id="menu-button" class="icon-button" aria-label="Müfredatı aç">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <span id="mobile-title">Sarf Atlası</span>
+        <span id="mobile-progress">0%</span>
+      </div>
+      <div class="lesson-toolbar">
+        <div class="breadcrumb" id="breadcrumb">ÖĞRENME ROTASI / BAŞLANGIÇ</div>
+        <button class="sound-toggle" id="sound-toggle" aria-pressed="false">
+          <svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Zm4 4a5 5 0 0 1 0 6m3-9a9 9 0 0 1 0 12"/></svg>
+          <span>Sesler kapalı</span>
+        </button>
+      </div>
+      <section id="lesson-content" class="lesson-content" aria-live="polite"></section>
+      <footer class="lesson-footer">
+        <button class="button secondary" id="back-button">← Geri</button>
+        <div class="step-dots" id="step-dots" aria-label="Ders adımları"></div>
+        <button class="button primary" id="next-button">Başla <span>→</span></button>
+      </footer>
+    </main>
+
+    <aside class="insight-panel">
+      <div class="insight-top">
+        <span class="overline">DERS PUSULASI</span>
+        <span class="status-badge"><i></i> AKTİF</span>
+      </div>
+      <div id="insight-content"></div>
+      <div class="keyboard-hint"><kbd>←</kbd><kbd>→</kbd><span>adımlar arasında ilerle</span></div>
+    </aside>
+  </div>
+
+  <div class="scrim" id="scrim"></div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

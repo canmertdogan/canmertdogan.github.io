@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f6f2">
+  <title>Sarf Laboratuvarı — İnteraktif Makineler</title>
+  <meta name="description" content="Arapça sarf kalıplarını çözmek, türetmek ve karşılaştırmak için interaktif çalışma laboratuvarı.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="sarf-laboratuvari.css">
+</head>
+<body>
+  <div class="lab-shell">
+    <header class="lab-topbar">
+      <a class="lab-brand" href="sarf-laboratuvari.html">
+        <span class="lab-mark"><i></i><i></i><i></i></span>
+        <span><strong>SARF</strong><small>LABORATUVARI</small></span>
+      </a>
+      <div class="lab-status"><i></i><span>Bağımsız çalışma alanı</span></div>
+      <div class="lab-total"><span>Laboratuvar ilerlemesi</span><strong id="total-progress">0%</strong></div>
+    </header>
+
+    <aside class="lab-sidebar" id="lab-sidebar">
+      <div class="sidebar-heading">
+        <span class="eyebrow">İNTERAKTİF ARAÇLAR</span>
+        <h1>Kalıbı gör.<br>Mantığı çöz.</h1>
+        <p>Ezber kartları yok. Her araç tek bir düşünme becerisini çalıştırır.</p>
+      </div>
+      <nav class="machine-nav" id="machine-nav">
+        <button class="machine-link active" data-machine="detector">
+          <span class="machine-index">01</span><span><strong>Kalıp dedektörü</strong><small>Kelimeyi katmanlarına ayır</small></span><i>→</i>
+        </button>
+        <button class="machine-link" data-machine="forge">
+          <span class="machine-index">02</span><span><strong>Türetme makinesi</strong><small>Kökten hedef kelimeye git</small></span><i>→</i>
+        </button>
+        <button class="machine-link" data-machine="contrast">
+          <span class="machine-index">03</span><span><strong>İnce fark simülatörü</strong><small>Benzer kalıpları ayır</small></span><i>→</i>
+        </button>
+        <button class="machine-link" data-machine="guide">
+          <span class="machine-index">04</span><span><strong>Soru çözme rehberi</strong><small>Karar ağacıyla teşhis et</small></span><i>→</i>
+        </button>
+        <button class="machine-link" data-machine="context">
+          <span class="machine-index">05</span><span><strong>Bağlam radarı</strong><small>Cümledeki gerçek görevi bul</small></span><i>→</i>
+        </button>
+        <button class="machine-link" data-machine="irab">
+          <span class="machine-index">06</span><span><strong>İ‘rab çözümleyici</strong><small>Görev, durum ve alameti bul</small></span><i>→</i>
+        </button>
+        <button class="machine-link" data-machine="translation">
+          <span class="machine-index">07</span><span><strong>Tercüme köprüsü</strong><small>Doğal Türkçe cümleyi kur</small></span><i>→</i>
+        </button>
+      </nav>
+      <div class="sidebar-note"><span>⌁</span><p>Bir kelimeyi çözemezsen önce <b>kökü değil, dış kalıbı</b> tara. En görünür işaretten başla.</p></div>
+    </aside>
+
+    <main class="lab-main">
+      <div class="mobile-lab-head">
+        <button id="menu-toggle" aria-label="Araç menüsünü aç">☰</button>
+        <strong id="mobile-machine-name">Kalıp dedektörü</strong>
+        <span id="mobile-score">0%</span>
+      </div>
+      <div class="machine-header">
+        <div><span class="eyebrow" id="machine-kicker">MAKİNE 01</span><h2 id="machine-title">Kalıp dedektörü</h2></div>
+        <div class="session-stat"><span>Bu araçta</span><strong id="machine-stat">0 çözüm</strong></div>
+      </div>
+      <section class="machine-stage" id="machine-stage" aria-live="polite"></section>
+    </main>
+
+    <aside class="lab-guide-panel">
+      <div class="guide-panel-head"><span class="eyebrow">CANLI REHBER</span><span class="live-dot">AKTİF</span></div>
+      <div id="guide-panel-content"></div>
+      <div class="legend">
+        <span><i class="root-color"></i>Kök harfi</span>
+        <span><i class="added-color"></i>Ek harf</span>
+        <span><i class="signal-color"></i>Kalıp sinyali</span>
+      </div>
+    </aside>
+  </div>
+  <div class="lab-scrim" id="lab-scrim"></div>
+  <div class="lab-toast" id="lab-toast"></div>
+  <script src="sarf-laboratuvari.js"></script>
+</body>
+</html>
