@@ -1,227 +1,194 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Şeref Can Mertdoğan - Software Developer building developer tools, AI workflows and experimental game technology." />
-  <title>Şeref Can Mertdoğan - Software Developer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link href="css/main.css" type="text/css" rel="stylesheet" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081014">
+  <meta name="description" content="Şeref Can Mertdoğan — software developer building game engines, network tooling, and digital products.">
+  <title>Şeref Can Mertdoğan — Software Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  <canvas class="ambient-canvas" id="ambientCanvas" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="signal-canvas" aria-hidden="true"></canvas>
+  <div class="noise" aria-hidden="true"></div>
 
-  <header class="site-header" data-reveal>
-    <a class="brand" href="#hero" aria-label="Şeref Can Mertdoğan home">SCM</a>
-    <nav class="nav-links" aria-label="Primary navigation">
-      <a href="#about">About</a>
-      <a href="#redglitch">RedGlitch</a>
-      <a href="#projects">Projects</a>
+  <header class="topbar">
+    <a class="identity" href="#top" aria-label="Şeref Can Mertdoğan, home">
+      <span class="identity-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>ŞEREF CAN<br>MERTDOĞAN</span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="#systems">Systems</a>
+      <a href="#profile">Profile</a>
       <a href="#contact">Contact</a>
     </nav>
+    <a class="status" href="https://github.com/canmertdogan" target="_blank" rel="noreferrer">
+      <span></span> GitHub / Public
+    </a>
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
   </header>
 
-  <main>
-    <section class="hero section" id="hero">
-      <div class="hero-inner parallax-layer" data-depth="0.025">
-        <p class="eyebrow reveal">Portfolio / 2026</p>
-        <h1 class="hero-title reveal">Şeref Can Mertdoğan</h1>
-        <p class="hero-role reveal">Software Developer</p>
-        <p class="hero-copy reveal">Building developer tools, AI workflows and experimental game technology.</p>
-        <div class="hero-actions reveal">
-          <a class="button button-primary" href="#redglitch">View Projects</a>
-          <a class="button button-secondary" href="https://github.com/canmertdogan" target="_blank" rel="noreferrer">GitHub</a>
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-copy reveal">
+        <p class="kicker"><span>01</span> SOFTWARE DEVELOPER · ISTANBUL</p>
+        <h1>Building systems for the <em>real world.</em></h1>
+        <p class="lede">I design and ship ambitious software across game technology, network infrastructure, and digital commerce.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#systems">Explore systems <span>↘</span></a>
+          <a class="button ghost" href="mailto:rainr00t@proton.me">Start a conversation</a>
         </div>
       </div>
-      <a class="scroll-cue" href="#about" aria-label="Scroll to about"></a>
+
+      <div class="system-map reveal" data-tilt aria-label="Animated map connecting four active projects">
+        <div class="map-head"><span>LIVE SYSTEM MAP</span><span id="utc-clock">UTC+03 / --:--:--</span></div>
+        <svg class="topology" viewBox="0 0 760 620" role="img" aria-labelledby="map-title">
+          <title id="map-title">Network map connecting RedGlitch, LXXXO, NetPurifier and the developer</title>
+          <defs>
+            <radialGradient id="nodeGlow"><stop offset="0" stop-color="#c6e6df" stop-opacity=".85"/><stop offset="1" stop-color="#c6e6df" stop-opacity="0"/></radialGradient>
+            <filter id="softGlow"><feGaussianBlur stdDeviation="7"/></filter>
+          </defs>
+          <g class="map-grid">
+            <path d="M0 105H760M0 210H760M0 315H760M0 420H760M0 525H760"/>
+            <path d="M126 0V620M252 0V620M378 0V620M504 0V620M630 0V620"/>
+          </g>
+          <g class="routes">
+            <path pathLength="1" d="M380 310C308 288 238 235 174 164"/>
+            <path pathLength="1" d="M380 310C470 253 531 204 603 139"/>
+            <path pathLength="1" d="M380 310C290 360 229 421 157 488"/>
+            <path pathLength="1" d="M380 310C458 348 528 420 608 497"/>
+          </g>
+          <g class="pulses">
+            <circle r="4"><animateMotion dur="4.8s" repeatCount="indefinite" path="M174 164C238 235 308 288 380 310"/></circle>
+            <circle r="4"><animateMotion dur="5.6s" begin="-2s" repeatCount="indefinite" path="M603 139C531 204 470 253 380 310"/></circle>
+            <circle r="4"><animateMotion dur="5.2s" begin="-1s" repeatCount="indefinite" path="M157 488C229 421 290 360 380 310"/></circle>
+            <circle r="4"><animateMotion dur="6s" begin="-4s" repeatCount="indefinite" path="M608 497C528 420 458 348 380 310"/></circle>
+          </g>
+          <g class="core-node">
+            <circle cx="380" cy="310" r="76" class="core-aura"/>
+            <circle cx="380" cy="310" r="39"/>
+            <circle cx="380" cy="310" r="10"/>
+            <text x="380" y="374">SCM / CORE</text>
+          </g>
+          <g class="map-node" transform="translate(174 164)"><circle r="18"/><circle r="5"/><text x="30" y="-6">REDGLITCH</text><text x="30" y="12">ENGINE / ACTIVE</text></g>
+          <g class="map-node" transform="translate(603 139)"><circle r="18"/><circle r="5"/><text text-anchor="end" x="-30" y="-6">LXXXO</text><text text-anchor="end" x="-30" y="12">COMMERCE / LIVE</text></g>
+          <g class="map-node" transform="translate(157 488)"><circle r="18"/><circle r="5"/><text x="30" y="-6">NETPURIFIER</text><text x="30" y="12">NETWORK / TOOLKIT</text></g>
+          <g class="map-node quiet" transform="translate(608 497)"><circle r="18"/><circle r="5"/><text text-anchor="end" x="-30" y="-6">EXPERIMENTS</text><text text-anchor="end" x="-30" y="12">R&amp;D / CONTINUOUS</text></g>
+        </svg>
+        <div class="map-foot"><span><i class="legend active"></i> OPERATIONAL</span><span><i class="legend build"></i> IN DEVELOPMENT</span><span>NODE / 04</span></div>
+      </div>
+
+      <div class="hero-index"><span>PORTFOLIO SYSTEM</span><span>2026.07</span><span class="scroll-label">SCROLL TO INSPECT ↓</span></div>
     </section>
 
-    <section class="section about" id="about">
-      <div class="section-grid">
-        <div>
-          <p class="eyebrow reveal">About</p>
-          <h2 class="section-title reveal">Ambitious systems, shipped with discipline.</h2>
+    <section class="manifesto" id="profile">
+      <div class="section-label reveal"><span>02</span><p>OPERATING PRINCIPLE</p></div>
+      <div class="manifesto-copy reveal">
+        <h2>Technology should turn complex environments into <span>clear decisions.</span></h2>
+        <div class="manifesto-detail">
+          <p>My work sits where interfaces meet infrastructure. I build complete products: the system underneath, the tools around it, and the surface people actually use.</p>
+          <dl>
+            <div><dt>DISCIPLINES</dt><dd>Product engineering<br>Developer tools<br>Interactive systems</dd></div>
+            <div><dt>FOCUS</dt><dd>Local-first software<br>Real-time workflows<br>Useful automation</dd></div>
+          </dl>
         </div>
-        <div class="about-content reveal">
-          <p>I enjoy building ambitious software systems that combine graphics, AI, developer tooling and modern web technologies.</p>
-          <div class="metrics-grid">
-            <article class="metric-card">
-              <span>17 Jan 2026</span>
-              <p>RedGlitch started</p>
-            </article>
-            <article class="metric-card">
-              <span>82,000+</span>
-              <p>Core source lines</p>
-            </article>
-            <article class="metric-card">
-              <span>1.4M+</span>
-              <p>Repository lines</p>
-            </article>
+      </div>
+    </section>
+
+    <section class="systems" id="systems">
+      <div class="section-heading reveal">
+        <div class="section-label"><span>03</span><p>SELECTED SYSTEMS</p></div>
+        <p class="section-intro">Four products. Different domains. One approach: understand the hard problem, then build the entire path.</p>
+      </div>
+
+      <article class="project project-featured reveal" data-project="redglitch">
+        <div class="project-meta"><span>01 / FLAGSHIP</span><span class="project-state"><i></i> PUBLIC BETA</span></div>
+        <div class="project-copy">
+          <p class="project-domain">GAME TECHNOLOGY / CREATIVE SYSTEMS</p>
+          <h3>RedGlitch<br><span>Game Studio</span></h3>
+          <p>A local-first desktop game studio for building and playtesting 2D, isometric, and 3D projects—without breaking the creative loop.</p>
+          <ul class="tags"><li>Electron</li><li>React 19</li><li>Three.js</li><li>FastAPI</li><li>Local AI</li></ul>
+          <a class="text-link" href="https://github.com/canmertdogan/redglitch-engine" target="_blank" rel="noreferrer">Inspect repository <span>↗</span></a>
+        </div>
+        <div class="project-visual redglitch-ui" data-tilt>
+          <div class="console-top"><span>REDGLITCH // STUDIO_7.0</span><span>● LIVE RUNTIME</span></div>
+          <div class="console-body">
+            <div class="scene-tree"><b>SCENE GRAPH</b><span>▾ World_Main</span><span>└ Environment</span><span>└ Player_Rig</span><span>└ Logic_Core</span><span>└ Light_Volume</span></div>
+            <div class="viewport"><div class="horizon"></div><div class="terrain"></div><div class="axis a"></div><div class="axis b"></div><div class="reticle"><i></i><i></i></div><span>CAM_01 / PERSPECTIVE</span></div>
+            <div class="inspector"><b>INSPECTOR</b><label>POSITION <i style="--v:64%"></i></label><label>ROTATION <i style="--v:42%"></i></label><label>INTENSITY <i style="--v:78%"></i></label><small>ENTITY / 03A4F2</small></div>
           </div>
-          <ul class="inline-stack" aria-label="Primary technologies">
-            <li>Electron</li>
-            <li>Node</li>
-            <li>React</li>
-            <li>TypeScript</li>
-            <li>FastAPI</li>
-          </ul>
+          <div class="console-log"><span>[18:42:03] world serialized</span><span>[18:42:04] playtest hot reload</span><span class="ok">STATUS_OK</span></div>
         </div>
-      </div>
-    </section>
+      </article>
 
-    <section class="section featured" id="redglitch">
-      <div class="featured-heading">
-        <p class="eyebrow reveal">Featured Project</p>
-        <h2 class="redglitch-title reveal">RedGlitch</h2>
-        <p class="featured-copy reveal">An AI-assisted game development studio capable of building and editing games without restarting the engine.</p>
-      </div>
-
-      <div class="studio-shot reveal parallax-layer" data-depth="0.012" aria-label="RedGlitch studio interface preview">
-        <div class="shot-topbar">
-          <div class="window-controls" aria-hidden="true"><span></span><span></span><span></span></div>
-          <span class="shot-path">projects / redglitch / live-studio</span>
-          <span class="shot-status">LIVE</span>
-        </div>
-        <div class="studio-layout">
-          <aside class="studio-sidebar">
-            <span>Scene</span>
-            <strong>Cyber_Fog_City</strong>
-            <div class="layer active"></div>
-            <div class="layer"></div>
-            <div class="layer short"></div>
-          </aside>
-          <div class="studio-viewport">
-            <div class="grid-plane"></div>
-            <div class="viewport-node node-a"></div>
-            <div class="viewport-node node-b"></div>
-            <div class="viewport-node node-c"></div>
-          </div>
-          <aside class="studio-inspector">
-            <span>Inspector</span>
-            <div class="property"></div>
-            <div class="property wide"></div>
-            <div class="property"></div>
-            <div class="property tiny"></div>
-          </aside>
-        </div>
-      </div>
-
-      <div class="feature-cards">
-        <article class="feature-card reveal">
-          <h3>Live Editing</h3>
-          <p>No restart. Instant updates.</p>
-        </article>
-        <article class="feature-card reveal">
-          <h3>AI Scene Generation</h3>
-          <p>Generate playable maps in seconds.</p>
-        </article>
-        <article class="feature-card reveal">
-          <h3>Desktop Studio</h3>
-          <p>Electron-based IDE.</p>
-        </article>
-        <article class="feature-card reveal">
-          <h3>Rendering</h3>
-          <p>2.5D renderer, shader system and live serialization.</p>
-        </article>
-      </div>
-
-      <div class="tech-panel reveal">
-        <p class="panel-label">Tech</p>
-        <ul class="tech-list">
-          <li>Electron</li>
-          <li>React</li>
-          <li>TypeScript</li>
-          <li>Node.js</li>
-          <li>FastAPI</li>
-          <li>WebSockets</li>
-          <li>Monaco</li>
-          <li>Three.js</li>
-          <li>ONNX</li>
-          <li>WebGPU</li>
-        </ul>
-      </div>
-
-      <div class="project-actions reveal">
-        <a class="button button-primary" href="#contact">Read Technical Report</a>
-        <a class="button button-secondary" href="https://github.com/canmertdogan" target="_blank" rel="noreferrer">GitHub Repository</a>
-      </div>
-    </section>
-
-    <section class="section projects" id="projects">
-      <div class="section-heading">
-        <p class="eyebrow reveal">Other Projects</p>
-        <h2 class="section-title reveal">Focused experiments around graphics, AI and tooling.</h2>
-      </div>
       <div class="project-grid">
-        <article class="project-card reveal">
-          <span>01</span>
-          <h3>Cyber Fog Shader</h3>
-          <p>Atmospheric rendering experiments for dark game environments.</p>
+        <article class="project reveal" data-project="lxxxo">
+          <div class="project-meta"><span>02 / COMMERCE</span><span class="project-state"><i></i> LIVE</span></div>
+          <div class="mini-visual commerce-visual" aria-hidden="true">
+            <div class="commerce-word">LXXXO</div>
+            <div class="commerce-track"><i></i><i></i><i></i></div>
+            <div class="commerce-data"><span>CURATED / 01</span><span>DISCOVER / 24</span><span>RESELL / 09</span></div>
+          </div>
+          <div class="project-copy">
+            <p class="project-domain">FASHION MARKETPLACE / FULL-STACK PRODUCT</p>
+            <h3>LXXXO<span>.com</span></h3>
+            <p>A curated fashion marketplace designed around discovery, trusted sellers, and the full transaction lifecycle.</p>
+            <ul class="tags"><li>Next.js 15</li><li>React 19</li><li>Prisma</li><li>PostgreSQL</li></ul>
+            <a class="text-link" href="https://lxxxo.com" target="_blank" rel="noreferrer">Visit live product <span>↗</span></a>
+          </div>
         </article>
-        <article class="project-card reveal">
-          <span>02</span>
-          <h3>AI Terrain Generator</h3>
-          <p>Procedural map creation workflows for playable spaces.</p>
-        </article>
-        <article class="project-card reveal">
-          <span>03</span>
-          <h3>Networking Experiments</h3>
-          <p>Realtime synchronization tests for multiplayer and editor tools.</p>
-        </article>
-        <article class="project-card reveal">
-          <span>04</span>
-          <h3>Electron Utilities</h3>
-          <p>Desktop tooling patterns for local-first developer software.</p>
+
+        <article class="project reveal" data-project="netpurifier">
+          <div class="project-meta"><span>03 / NETWORK</span><span class="project-state amber"><i></i> TOOLKIT</span></div>
+          <div class="mini-visual network-visual" aria-hidden="true">
+            <div class="packet-lines"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="network-core"><span>NP</span><b>ROUTE<br>OPTIMIZER</b></div>
+            <div class="latency"><span>LATENCY</span><strong>24<small>ms</small></strong><i></i></div>
+          </div>
+          <div class="project-copy">
+            <p class="project-domain">NETWORK INFRASTRUCTURE / WINDOWS</p>
+            <h3>NetPurifier</h3>
+            <p>An internet optimization and proxy toolkit that combines Shadowsocks workflows with practical network controls.</p>
+            <ul class="tags"><li>C#</li><li>Shadowsocks</li><li>Proxy tools</li><li>Optimization</li></ul>
+            <a class="text-link" href="https://github.com/canmertdogan/NetPurifier" target="_blank" rel="noreferrer">Inspect repository <span>↗</span></a>
+          </div>
         </article>
       </div>
     </section>
 
-    <section class="section stack" id="stack">
-      <p class="eyebrow reveal">Tech Stack</p>
-      <div class="stack-marquee reveal" aria-label="Technology stack">
-        <span>Next.js</span>
-        <span>React</span>
-        <span>TypeScript</span>
-        <span>TailwindCSS</span>
-        <span>Framer Motion</span>
-        <span>Lenis</span>
-        <span>GSAP</span>
-        <span>Vercel Analytics</span>
+    <section class="capabilities">
+      <div class="section-label reveal"><span>04</span><p>CAPABILITY MATRIX</p></div>
+      <div class="capability-grid reveal">
+        <div><span>01</span><h3>Product systems</h3><p>From data model and business logic to the final interaction.</p></div>
+        <div><span>02</span><h3>Interactive engines</h3><p>Real-time graphics, tools, editors, serialization, and runtime design.</p></div>
+        <div><span>03</span><h3>Network tooling</h3><p>Desktop utilities and focused infrastructure for real constraints.</p></div>
+        <div><span>04</span><h3>Applied AI</h3><p>Local models, agents, and automation integrated into actual workflows.</p></div>
       </div>
+      <div class="stack-line reveal"><span>JAVASCRIPT</span><span>TYPESCRIPT</span><span>C#</span><span>NODE.JS</span><span>REACT</span><span>ELECTRON</span><span>THREE.JS</span><span>FASTAPI</span></div>
     </section>
 
-    <section class="section timeline" id="timeline">
-      <div class="section-heading">
-        <p class="eyebrow reveal">Timeline</p>
-        <h2 class="section-title reveal">A path toward larger technical systems.</h2>
+    <section class="contact" id="contact">
+      <div class="contact-signal" aria-hidden="true"><i></i><i></i><i></i><span>OPEN CHANNEL</span></div>
+      <div class="contact-copy reveal">
+        <p class="kicker"><span>05</span> ESTABLISH A CONNECTION</p>
+        <h2>Have a difficult system<br>worth building?</h2>
+        <p>I’m always interested in serious product work, ambitious technical problems, and people who care about the details.</p>
+        <a class="button primary" href="mailto:rainr00t@proton.me">rainr00t@proton.me <span>↗</span></a>
       </div>
-      <ol class="timeline-list">
-        <li class="reveal"><span>2022</span><p>Started programming</p></li>
-        <li class="reveal"><span>2024</span><p>AI and Cybersecurity</p></li>
-        <li class="reveal"><span>2026</span><p>Started RedGlitch</p></li>
-        <li class="reveal"><span>Today</span><p>Building developer tools</p></li>
-      </ol>
-    </section>
-
-    <section class="section contact" id="contact">
-      <p class="eyebrow reveal">Contact</p>
-      <h2 class="contact-title reveal">Let’s build serious software.</h2>
       <div class="contact-links reveal">
-        <a href="https://github.com/canmertdogan" target="_blank" rel="noreferrer">GitHub</a>
-        <a href="https://www.linkedin.com/in/%C5%9Feref-can-mertdo%C4%9Fan-9b5597321/" target="_blank" rel="noreferrer">LinkedIn</a>
-        <a href="mailto:rainr00t@proton.me">Mail</a>
-        <a href="CV.pdf">CV.pdf</a>
+        <a href="https://github.com/canmertdogan" target="_blank" rel="noreferrer"><span>GITHUB</span><b>Source &amp; experiments</b><i>↗</i></a>
+        <a href="https://www.linkedin.com/in/%C5%9Feref-can-mertdo%C4%9Fan-9b5597321/" target="_blank" rel="noreferrer"><span>LINKEDIN</span><b>Professional profile</b><i>↗</i></a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <span>© 2026 Şeref Can Mertdoğan</span>
-    <a href="#hero">Back to top</a>
+  <footer class="footer">
+    <span>© 2026 ŞEREF CAN MERTDOĞAN</span><span>SOFTWARE DEVELOPER / ISTANBUL</span><a href="#top">RETURN TO ORIGIN ↑</a>
   </footer>
-
   <script src="js/site.js"></script>
 </body>
 </html>
