@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOC Analyst Simulator</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%2358a6ff' d='M16 2 4 6v9c0 8 5 14 12 16 7-2 12-8 12-16V6z'/%3E%3Cpath fill='%230b0e14' d='M16 6 8 8.8V15c0 5.8 3.4 10.2 8 12 4.6-1.8 8-6.2 8-12V8.8z'/%3E%3Cpath stroke='%233fb950' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M11 16.5l3.3 3.3L21.5 12'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== TOP BAR ===================== -->
+<header class="topbar">
+  <div class="logo">
+    <div class="shield">&#x1F6E1;</div>
+    <div>SOC Analyst Simulator
+      <div class="sub">L1 triage practice &middot; built from mxdr-l1-soc-crash-course</div>
+    </div>
+  </div>
+  <nav class="nav" id="topnav">
+    <button id="nav-home" class="active" onclick="go('home')">Home</button>
+    <button onclick="go('scen-grid')">Scenarios</button>
+    <button id="nav-quiz" onclick="go('quiz')">Quiz</button>
+    <button id="nav-ref" onclick="go('ref'); renderRef()">Cheat Sheets</button>
+  </nav>
+  <div class="top-right">
+    <span class="evidence-pill">Evidence <span class="score-pill" id="evidenceCount">0/0</span></span>
+    <span id="quiz-stat">&#8212;</span>
+    <button class="icon-btn" id="settingsBtn" onclick="toggleSettings()" title="Settings" aria-label="Settings">&#9881;</button>
+  </div>
+</header>
+
+<!-- ===================== HOME ===================== -->
+<section class="screen active" id="home">
+  <div class="hero">
+    <h1>Practice <span class="hl">L1 alert triage</span> the way a real SOC works.</h1>
+    <p>You are the first responder. Alerts land in your queue &mdash; build the timeline, enrich the indicators,
+    decode the commands, check the assets and users, then classify, severity-rate, and act. Every decision is
+    scored and debriefed against the expected analysis.</p>
+  </div>
+
+  <div class="stat-row" id="stat-row"></div>
+
+  <div class="section-title"><span class="bar"></span>Training modes</div>
+  <div class="mode-cards">
+    <div class="mode-card" onclick="startShift()">
+      <div class="icon">&#x1F4DF;</div>
+      <h3>Start a Shift</h3>
+      <p>A 3-alert queue, one after another, ending in a shift report. This is the full loop.</p>
+      <span class="tag">Recommended</span>
+    </div>
+    <div class="mode-card" onclick="go('scen-grid')">
+      <div class="icon">&#x1F50E;</div>
+      <h3>Browse Scenarios</h3>
+      <p>Hand-crafted alerts from the crash course: brute force, phishing&rarr;C2, ransomware, MFA fatigue &amp; more. Pick one and drill it.</p>
+      <span class="tag" id="scen-tag">Scenarios</span>
+    </div>
+    <div class="mode-card" onclick="go('quiz')">
+      <div class="icon">&#x2753;</div>
+      <h3>Knowledge Quiz</h3>
+      <p id="quiz-stat-detail">Event IDs, Sysmon, logon types, MITRE, severity &mdash; random questions per round.</p>
+      <span class="tag">Flash-style review</span>
+    </div>
+    <div class="mode-card" onclick="go('ref'); renderRef()">
+      <div class="icon">&#x1F4DA;</div>
+      <h3>Cheat Sheets</h3>
+      <p>Browseable quick-reference: Windows/Sysmon event IDs, logon types, failure codes, MITRE tactics, severity matrix, persistence keys, correlation map.</p>
+      <span class="tag">Reference material</span>
+    </div>
+  </div>
+
+  <div id="recent-strip"></div>
+</section>
+
+<!-- ===================== SCENARIO GRID ===================== -->
+<section class="screen" id="scen-grid">
+  <div class="section-title"><span class="bar"></span>All scenarios</div>
+  <div class="scen-toolbar">
+    <div class="scen-search">
+      <input id="scenSearch" type="text" placeholder="Search title, summary, MITRE hint&hellip;" aria-label="Search scenarios">
+      <button class="icon-btn" id="scenClear" onclick="clearScenSearch()" title="Clear search">&times;</button>
+    </div>
+    <div class="chips" id="scenCats"></div>
+    <div class="scen-sel">
+      <select id="scenDiff" onchange="renderScenarios()" aria-label="Filter by difficulty">
+        <option value="">All difficulties</option>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+      <select id="scenSort" onchange="renderScenarios()" aria-label="Sort scenarios">
+        <option value="title">Sort: Title</option>
+        <option value="best">Sort: Best score</option>
+        <option value="new">Sort: Difficulty</option>
+      </select>
+    </div>
+  </div>
+  <div class="results-count" id="scenCount"></div>
+  <div class="scenario-grid" id="scenario-grid"></div>
+  <div class="empty" id="scenEmpty" style="display:none">No scenarios match your filters.</div>
+</section>
+
+<!-- ===================== QUEUE ===================== -->
+<section class="screen" id="queue">
+  <div class="row-flex">
+    <div class="section-title" style="margin:0"><span class="bar"></span>Your alert queue</div>
+    <div class="spacer"></div>
+    <span class="small" id="shift-progress"></span>
+  </div>
+  <div class="mt-14" id="queue-list"></div>
+  <div class="debrief-actions">
+    <button class="btn" onclick="endShift()">End Shift (report)</button>
+    <button class="btn" onclick="go('home')">Home</button>
+  </div>
+</section>
+
+<!-- ===================== INVESTIGATION ===================== -->
+<section class="screen" id="inv">
+  <div class="inv-top">
+    <div class="inv-title">
+      <h2 id="inv-title">Alert</h2>
+      <div class="rule" id="inv-sub"></div>
+    </div>
+    <div class="inv-meta">
+      <span class="timer" id="timer">00:00</span>
+      <button class="btn" onclick="renderReport(); go('report')" title="End shift early">End Shift</button>
+    </div>
+  </div>
+
+  <div class="grid-inv">
+    <div class="panel">
+      <div class="tabs" id="tabs"></div>
+      <div class="tab-body" id="tab-body"></div>
+    </div>
+    <div class="panel decision" id="decision-panel">
+      <div class="panel-head decision-head">
+        <span>Decision</span>
+        <span class="decision-meter" id="decision-meter"></span>
+        <button class="drawer-close" onclick="toggleDrawer()" title="Hide decision panel" aria-label="Hide decision panel">&rsaquo;</button>
+      </div>
+      <div class="panel-body" id="decision-body"></div>
+    </div>
+  </div>
+
+  <div class="decision-bar" id="decision-bar" onclick="toggleDrawer()">
+    <span>Decision panel</span>
+    <span class="decision-bar-status" id="decision-bar-status">Classify to submit</span>
+  </div>
+</section>
+
+<!-- ===================== DEBRIEF ===================== -->
+<section class="screen" id="debrief">
+  <div id="debrief-content"></div>
+</section>
+
+<!-- ===================== REPORT ===================== -->
+<section class="screen" id="report">
+  <div class="section-title"><span class="bar"></span>Shift report</div>
+  <div id="report-body"></div>
+</section>
+
+<!-- ===================== QUIZ ===================== -->
+<section class="screen" id="quiz">
+  <div id="quiz-setup" class="quiz-setup">
+    <div class="section-title"><span class="bar"></span>Knowledge quiz</div>
+    <div class="quiz-q">
+      <div class="qtext">Build your round</div>
+      <div class="field">
+        <label>Topics</label>
+        <div class="chips" id="quiz-topics"></div>
+      </div>
+      <div class="field">
+        <label>Questions per round</label>
+        <div class="chips" id="quiz-counts"></div>
+      </div>
+      <button class="btn primary" onclick="startQuiz()">Start quiz</button>
+    </div>
+  </div>
+  <div id="quiz-progress-wrap" style="display:none">
+    <div class="quiz-progress"><div class="fill" id="quiz-progress-fill" style="width:0%"></div></div>
+  </div>
+  <div id="quiz-body"></div>
+  <div class="quiz-review" id="quiz-review"></div>
+</section>
+
+<!-- ===================== REFERENCE ===================== -->
+<section class="screen" id="ref">
+  <div class="ref-grid">
+    <div class="ref-nav" id="ref-nav"></div>
+    <div class="ref-panel" id="ref-panel"></div>
+  </div>
+</section>
+
+<!-- ===================== SETTINGS MODAL ===================== -->
+<div class="modal-backdrop" id="settingsModal" onclick="if(event.target===this)toggleSettings()">
+  <div class="modal" role="dialog" aria-label="Settings">
+    <h3>Settings</h3>
+    <div class="modal-body">
+      <div class="modal-row">
+        <label class="settings-toggle">
+          <input type="checkbox" id="hardModeChk" onchange="setHardMode(this.checked)">
+          <span><b>Hard mode</b> &mdash; removes evidence hints, suspicious-event highlighting and the triage playbook during investigations</span>
+        </label>
+      </div>
+      <div class="modal-row">
+        <div class="modal-label">Your progress is stored in this browser (localStorage).</div>
+      </div>
+      <div class="modal-row">
+        <button class="btn" onclick="exportProg()">Export progress (JSON)</button>
+        <button class="btn" onclick="document.getElementById('importFile').click()">Import progress</button>
+        <input type="file" id="importFile" accept="application/json" style="display:none" onchange="importProg(event)">
+      </div>
+      <div class="modal-row">
+        <button class="btn danger" onclick="resetProg()">Reset all progress</button>
+      </div>
+      <div class="modal-row small">Keyboard shortcuts: <span class="kbd">1&ndash;7</span> switch investigation tabs &middot; <span class="kbd">1&ndash;4</span> answer quiz &middot; <span class="kbd">Ctrl/&#8984;+Enter</span> submit decision &middot; <span class="kbd">/</span> focus SIEM search.</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="toggleSettings()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MOBILE BOTTOM NAV ===================== -->
+<nav class="bottom-nav" aria-label="Primary">
+  <button id="bnav-home" data-screen="home" class="active" onclick="go('home')">&#127968;<span>Home</span></button>
+  <button id="bnav-scen" data-screen="scen-grid" onclick="go('scen-grid')">&#128269;<span>Cases</span></button>
+  <button id="bnav-quiz" data-screen="quiz" onclick="go('quiz')">&#10067;<span>Quiz</span></button>
+  <button id="bnav-ref" data-screen="ref" onclick="go('ref'); renderRef()">&#128218;<span>Cheat</span></button>
+</nav>
+
+<script src="vendor/marked.min.js"></script>
+<script src="vendor/purify.min.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+/* build reference nav + initial renders */
+(function init() {
+  const quick = REFERENCE.map(r =>
+    '<button data-id="' + r.id + '" class="' + (r.id === S.ref ? "active" : "") +
+    '" onclick="S.ref=\'' + r.id + '\'; renderRef()">' + r.title + '</button>').join("");
+  const full = MD_SHEETS.map(r =>
+    '<button data-id="' + r.id + '" class="' + (r.id === S.ref ? "active" : "") +
+    '" onclick="S.ref=\'' + r.id + '\'; renderRef()">' + r.title + '</button>').join("");
+  document.getElementById("ref-nav").innerHTML = quick +
+    '<div class="ref-divider">Full markdown cheat sheets</div>' + full;
+  bindShortcuts();
+  renderQuizSetup();
+  renderHome();
+  renderScenarios();
+  renderRef();
+  restoreShift();
+})();
+</script>
+</body>
+</html>

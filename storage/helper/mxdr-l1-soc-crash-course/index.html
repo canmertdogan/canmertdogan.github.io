@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>MXDR L1 SOC Crash Course</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%236ea8ff' d='M8 1l6 2v4c0 4-2.5 7-6 8-3.5-1-6-4-6-8V3z'/></svg>">
+<style>
+  :root{
+    --bg0:#0a0d14; --bg1:#0f1420; --bg2:#151b2a; --bg3:#1d2536; --bg4:#26304a;
+    --border:#212a3d; --border2:#32405e;
+    --text:#e2e9f5; --muted:#8b98b3; --faint:#5d6a86;
+    --accent:#6ea8ff; --accent2:#9d7bff; --green:#3dd68c;
+    --p0:#ff6b6b; --p1:#ffb020; --p3:#8b98b3;
+    --hl:#0b0e16;
+    --radius:14px; --radius-s:8px;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Cascadia Mono",monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg0); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Inter",Helvetica,Arial,sans-serif;
+    font-size:15px; line-height:1.55; display:flex; min-height:100vh;
+  }
+  ::selection{background:rgba(110,168,255,.3);}
+  a{color:var(--accent); text-decoration:none;}
+  button{font-family:inherit;}
+
+  /* scrollbar */
+  ::-webkit-scrollbar{width:10px; height:10px;}
+  ::-webkit-scrollbar-thumb{background:var(--bg4); border-radius:6px; border:2px solid var(--bg0);}
+  ::-webkit-scrollbar-track{background:transparent;}
+  #scrollbar{position:fixed; top:0; left:0; height:3px; width:0; z-index:200;
+    background:linear-gradient(90deg,var(--accent),var(--accent2),var(--green)); border-radius:0 2px 2px 0;}
+
+  /* ── Sidebar ───────────────────────────── */
+  #sidebar{
+    width:304px; min-width:304px; background:var(--bg1); border-right:1px solid var(--border);
+    height:100vh; position:sticky; top:0; overflow-y:auto; padding:18px 14px 22px;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; padding:2px 6px;}
+  .brand .logo{width:34px; height:34px; border-radius:9px; flex-shrink:0;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    display:flex; align-items:center; justify-content:center; color:#0a0d14; font-weight:800; font-size:16px;}
+  .brand h1{font-size:15px; line-height:1.25; letter-spacing:-.01em;}
+  .brand .sub{font-size:11px; color:var(--muted); margin-top:2px;}
+  #mode-badge{display:inline-flex; align-items:center; gap:6px; margin-top:8px; font-size:10.5px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; padding:3px 9px; border-radius:20px; width:fit-content;}
+  #mode-badge.ok{color:var(--green); background:rgba(61,214,140,.1); border:1px solid rgba(61,214,140,.25);}
+  #mode-badge.warn{color:var(--p1); background:rgba(255,176,32,.1); border:1px solid rgba(255,176,32,.3);}
+
+  .search-wrap{position:relative;}
+  #search{width:100%; background:var(--bg2); border:1px solid var(--border); color:var(--text);
+    padding:9px 12px 9px 32px; border-radius:var(--radius-s); font-size:13px; outline:none; transition:border-color .15s, box-shadow .15s;}
+  #search:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(110,168,255,.15);}
+  .search-wrap .icon{position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--faint);}
+  #search-empty{display:none; color:var(--muted); font-size:12.5px; padding:18px 6px; text-align:center;}
+
+  #groups{display:flex; flex-direction:column; gap:12px; flex:1;}
+  .grp{background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-s); overflow:hidden;}
+  .grp-title{display:flex; align-items:center; gap:8px; width:100%; background:none; border:none;
+    color:var(--text); padding:9px 11px; font-size:12px; cursor:pointer; text-align:left; font-weight:700; letter-spacing:.04em;}
+  .grp-title:hover{background:var(--bg3);}
+  .grp .dot{width:8px; height:8px; border-radius:50%; flex-shrink:0;}
+  .grp.p0 .dot{background:var(--p0); box-shadow:0 0 8px rgba(255,107,107,.5);}
+  .grp.p1 .dot{background:var(--p1); box-shadow:0 0 8px rgba(255,176,32,.5);}
+  .grp.p3 .dot{background:var(--p3);}
+  .grp-name{flex:1; font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted);}
+  .grp-num{font-size:11px; color:var(--muted); font-family:var(--mono);}
+  .grp .chev{color:var(--faint); transform:rotate(90deg); transition:transform .18s;}
+  .grp.collapsed .chev{transform:none;}
+  .grp.collapsed .grp-body{display:none;}
+  .grp-body{border-top:1px solid var(--border); padding:4px;}
+  .mod{display:flex; align-items:center; gap:8px; width:100%; text-align:left; background:none; border:none;
+    color:var(--muted); padding:7px 9px; border-radius:7px; font-size:13px; cursor:pointer;
+    border-left:3px solid transparent; transition:background .12s,color .12s;}
+  .mod:hover{background:var(--bg3); color:var(--text);}
+  .mod.active{background:var(--bg3); color:var(--text); border-left-color:var(--accent);}
+  .mod .chk{width:15px; height:15px; border-radius:50%; border:1.5px solid var(--border2); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--bg0); opacity:0; transition:.15s;}
+  .mod.done .chk{opacity:1; background:var(--green); border-color:var(--green); color:#06130c;}
+  .mod .num{width:25px; color:var(--faint); font-family:var(--mono); font-size:11px; flex-shrink:0;}
+  .mod.done .t{color:var(--green);}
+  .mod .t{flex:1; line-height:1.3;}
+
+  .side-foot{border-top:1px solid var(--border); padding-top:14px; display:flex; flex-direction:column; gap:12px;}
+  .side-foot h3{font-size:10.5px; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin-bottom:4px;}
+  .side-foot .links a{display:block; font-size:13px; padding:3px 0; color:var(--muted);}
+  .side-foot .links a:hover{color:var(--accent);}
+  .btn.small{padding:7px 12px; font-size:12px;}
+
+  /* ── Main ─────────────────────────────── */
+  #main{flex:1; min-width:0; padding:30px 38px 60px;}
+  .inner{max-width:920px; margin:0 auto;}
+
+  .card{background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius);}
+
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:6px; background:var(--bg4);
+    color:var(--text); font-weight:600; font-size:13px; padding:9px 16px; border-radius:var(--radius-s);
+    border:1px solid transparent; cursor:pointer; transition:filter .12s, background .12s, transform .05s; white-space:nowrap;}
+  .btn:hover{filter:brightness(1.12);}
+  .btn:active{transform:translateY(1px);}
+  .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#0a0d14;}
+  .btn.ghost{background:var(--bg3); border-color:var(--border);}
+  .btn:disabled{opacity:.45; cursor:default; filter:none;}
+
+  /* ── Dashboard ─────────────────────────── */
+  .hero{display:flex; align-items:center; justify-content:space-between; gap:24px; padding:30px 32px; margin-bottom:20px;
+    position:relative; overflow:hidden;}
+  .hero::after{content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(600px 200px at 85% -20%, rgba(110,168,255,.14), transparent 60%);}
+  .hero-kicker{font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:var(--accent); margin-bottom:8px;}
+  .hero h1{font-size:30px; line-height:1.12; letter-spacing:-.02em; margin-bottom:10px;
+    background:linear-gradient(90deg,#fff,var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .hero p{color:var(--muted); font-size:13.5px; max-width:420px;}
+  .hero-ring{flex-shrink:0; position:relative; width:132px; height:132px;}
+  .ring-bg{fill:none; stroke:var(--bg3); stroke-width:9;}
+  .ring-fg{fill:none; stroke:url(#ringGrad); stroke-width:9; stroke-linecap:round;
+    transform:rotate(-90deg); transform-origin:50% 50%; transition:stroke-dashoffset .4s ease;}
+  .ring-mid{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .ring-pct{font-size:26px; font-weight:800; font-family:var(--mono);}
+  .ring-sub{font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em;}
+
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:20px;}
+  .stat{background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-s); padding:14px 16px;}
+  .stat .v{font-size:24px; font-weight:800; font-family:var(--mono); letter-spacing:-.02em;}
+  .stat .l{font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-top:2px;}
+  .stat .v.green{color:var(--green);} .stat .v.p0{color:var(--p0);} .stat .v.p1{color:var(--p1);} .stat .v.p3{color:var(--p3);}
+
+  .prio-cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-bottom:22px;}
+  .prio{background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-s); padding:16px 18px;}
+  .prio-head{display:flex; align-items:center; gap:8px; font-size:11px; font-weight:800; text-transform:uppercase;
+    letter-spacing:.1em; margin-bottom:2px;}
+  .prio-head .dot{width:9px; height:9px; border-radius:50%;}
+  .prio.p0 .dot{background:var(--p0);} .prio.p1 .dot{background:var(--p1);} .prio.p3 .dot{background:var(--p3);}
+  .prio-head .dot{box-shadow:0 0 8px currentColor;}
+  .prio.p0 .prio-head{color:var(--p0);} .prio.p1 .prio-head{color:var(--p1);} .prio.p3 .prio-head{color:var(--muted);}
+  .prio-num{margin-left:auto; font-family:var(--mono); font-size:12px; color:var(--text);}
+  .prio-name{font-size:15px; font-weight:700; margin-bottom:1px;}
+  .prio-desc{font-size:12px; color:var(--muted); margin-bottom:12px;}
+  .track{height:7px; background:var(--bg3); border-radius:4px; overflow:hidden;}
+  .track i{display:block; height:100%; width:0; border-radius:4px; transition:width .3s ease;}
+  .prio.p0 .track i{background:var(--p0);} .prio.p1 .track i{background:var(--p1);} .prio.p3 .track i{background:var(--p3);}
+
+  .cont-wrap{margin-bottom:22px; display:flex; gap:12px; align-items:center;}
+  .cont-wrap .label{font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted);}
+
+  .tiles h2{font-size:16px; margin-bottom:12px; letter-spacing:-.01em;}
+  .tile-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(165px,1fr)); gap:10px;}
+  .tile{text-align:left; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-s);
+    padding:12px 14px; cursor:pointer; color:var(--text); transition:border-color .12s, transform .12s, background .12s;}
+  .tile:hover{border-color:var(--accent); transform:translateY(-1px); background:var(--bg3);}
+  .tile-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;}
+  .tile-num{font-family:var(--mono); font-size:11px; color:var(--faint);}
+  .tile-chk{color:var(--green); font-weight:800;}
+  .tile-title{font-size:12.5px; line-height:1.35; margin-bottom:9px; min-height:2.7em;}
+  .tile-bar{height:4px; background:var(--bg3); border-radius:3px; overflow:hidden;}
+  .tile-bar i{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--green));}
+
+  /* ── Module view ───────────────────────── */
+  #module-view .card-head{padding:24px 26px 20px;}
+  .top-line{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:14px;}
+  .num-chip{font-family:var(--mono); font-weight:700; font-size:12px; letter-spacing:.06em; padding:4px 11px;
+    border-radius:20px; background:rgba(110,168,255,.12); color:var(--accent); border:1px solid rgba(110,168,255,.3);}
+  .badge{font-size:10.5px; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.05em; text-transform:uppercase;}
+  .badge.p0{background:rgba(255,107,107,.12); color:var(--p0); border:1px solid rgba(255,107,107,.3);}
+  .badge.p1{background:rgba(255,176,32,.12); color:var(--p1); border:1px solid rgba(255,176,32,.3);}
+  .badge.p3{background:rgba(139,152,179,.12); color:var(--p3); border:1px solid rgba(139,152,179,.3);}
+  .badge.plain{background:var(--bg3); color:var(--muted); border:1px solid var(--border);}
+  .badge.done{background:rgba(61,214,140,.12); color:var(--green); border:1px solid rgba(61,214,140,.3);}
+  .card-head h2{font-size:22px; letter-spacing:-.015em; margin-bottom:8px;}
+  .card-head .desc{color:var(--muted); font-size:14px; line-height:1.6; margin-bottom:18px;}
+  .actions{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px;}
+  .mod-progress{display:flex; align-items:center; gap:14px;}
+  .mod-progress .track{flex:1;}
+  .mod-progress .track i{background:linear-gradient(90deg,var(--accent),var(--green));}
+  #sec-label{font-size:12px; color:var(--muted); font-family:var(--mono); white-space:nowrap;}
+
+  .card-secs{padding:20px 26px 26px; border-top:1px solid var(--border);}
+  .card-secs h3{font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin-bottom:12px;}
+  #sections{list-style:none; display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:4px 18px;}
+  #sections li{display:flex; align-items:flex-start; gap:10px; padding:6px 8px; border-radius:7px;
+    font-size:13.5px; cursor:pointer; transition:background .12s;}
+  #sections li:hover{background:var(--bg3);}
+  #sections .box{margin-top:2px; width:16px; height:16px; border:1.5px solid var(--border2); border-radius:5px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:10px; color:transparent; transition:.15s;}
+  #sections li.done{color:var(--faint);}
+  #sections li.done .box{border-color:var(--green); background:rgba(61,214,140,.15); color:var(--green);}
+  #sections li.done .sec-t{text-decoration:line-through;}
+
+  /* ── Markdown content ──────────────────── */
+  #md-body{margin:20px 0 0; border-top:1px solid var(--border); padding-top:22px;}
+  .md-wrap{display:flex; gap:28px; align-items:flex-start;}
+  .md-main{flex:1; min-width:0;}
+  .md-toc{flex:0 0 200px; position:sticky; top:24px; max-height:calc(100vh - 48px); overflow:auto;
+    font-size:12.5px; border-left:1px solid var(--border); padding-left:14px;}
+  .toc-title{font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin-bottom:8px;}
+  .toc-links a{display:block; color:var(--muted); padding:3px 0; line-height:1.35; border-left:2px solid transparent; padding-left:8px; margin-left:-14px;}
+  .toc-links a:hover{color:var(--accent);}
+  .toc-links a.active{color:var(--accent); border-left-color:var(--accent);}
+  .toc-links a.toc-l3{padding-left:20px;}
+
+  #md-body .md-main h1,#md-body .md-main h2,#md-body .md-main h3,
+  #md-body .md-main h4,#md-body .md-main h5,#md-body .md-main h6{color:var(--text); line-height:1.3; margin:24px 0 10px; scroll-margin-top:20px;}
+  #md-body .md-main h1{font-size:25px; padding-bottom:10px; border-bottom:1px solid var(--border); margin-top:8px;}
+  #md-body .md-main h2{font-size:20px; padding-bottom:7px; border-bottom:1px solid var(--border);}
+  #md-body .md-main h3{font-size:17px;}
+  #md-body .md-main h4{font-size:15px;}
+  #md-body .md-main p{margin:10px 0;}
+  #md-body .md-main ul,#md-body .md-main ol{margin:10px 0 10px 26px;}
+  #md-body .md-main li{margin:4px 0;}
+  #md-body .md-main li::marker{color:var(--faint);}
+  #md-body .md-main li > p{margin:4px 0;}
+  #md-body .md-main strong{color:#fff; font-weight:700;}
+  #md-body .md-main a{color:var(--accent); text-decoration:underline; text-underline-offset:2px;}
+  #md-body .md-main hr{border:none; border-top:1px solid var(--border); margin:20px 0;}
+  #md-body .md-main blockquote{margin:14px 0; padding:10px 16px; border-left:3px solid var(--accent);
+    background:var(--bg3); border-radius:0 8px 8px 0; color:var(--muted);}
+  #md-body .md-main blockquote p{margin:4px 0;}
+  #md-body .md-main code{font-family:var(--mono); font-size:12.5px; background:var(--bg3); border:1px solid var(--border);
+    padding:1.5px 6px; border-radius:5px; color:var(--text);}
+  #md-body .md-main table{border-collapse:collapse; width:100%; margin:14px 0; font-size:13px;}
+  #md-body .md-main th,#md-body .md-main td{border:1px solid var(--border); padding:7px 11px; text-align:left; vertical-align:top;}
+  #md-body .md-main th{background:var(--bg3); font-weight:650; color:var(--text);}
+  #md-body .md-main tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+  .table-wrap{overflow-x:auto; margin:14px 0;}
+  .table-wrap table{margin:0;}
+  #md-body .md-main img{max-width:100%; border-radius:8px;}
+
+  .code-block{margin:14px 0; border:1px solid var(--border); border-radius:9px; overflow:hidden; background:var(--hl);}
+  .code-head{display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--bg3); padding:6px 12px; border-bottom:1px solid var(--border);}
+  .code-lang{font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-family:var(--mono);}
+  .copy-btn{background:none; border:none; color:var(--muted); font-size:11px; cursor:pointer; padding:3px 8px; border-radius:5px;}
+  .copy-btn:hover{color:var(--text); background:var(--bg4);}
+  .copy-btn.ok{color:var(--green);}
+  .code-block pre{margin:0; padding:13px 16px; overflow-x:auto; line-height:1.55; background:var(--hl);}
+  .code-block.hl pre{max-height:440px; overflow:auto;}
+  .code-block pre code{background:none; border:none; padding:0; font-family:var(--mono); font-size:12.5px; color:var(--text); display:block;}
+  .hljs{background:transparent; color:var(--text); padding:0;}
+  .hljs-keyword,.hljs-selector-tag,.hljs-tag{color:#ff7b9d;}
+  .hljs-string,.hljs-regexp,.hljs-addition{color:#9fe88a;}
+  .hljs-number,.hljs-literal,.hljs-symbol,.hljs-bullet{color:#ffab70;}
+  .hljs-comment,.hljs-quote{color:#5d6a86; font-style:italic;}
+  .hljs-title,.hljs-section,.hljs-name{color:#82c4ff;}
+  .hljs-attr,.hljs-attribute,.hljs-variable,.hljs-template-variable{color:#d2a8ff;}
+  .hljs-built_in,.hljs-type,.hljs-class{color:#7cd7ff;}
+  .hljs-function,.hljs-meta,.hljs-title.function_{color:#82c4ff;}
+  .hljs-operator,.hljs-punctuation{color:#8b98b3;}
+  .hljs-emphasis{font-style:italic;} .hljs-strong{font-weight:700;}
+
+  .nav-row{display:flex; justify-content:space-between; gap:10px; margin-top:34px; padding-top:18px; border-top:1px solid var(--border);}
+
+  .md-loading{display:flex; align-items:center; gap:12px; color:var(--muted); font-size:13.5px; padding:26px 4px;}
+  .spinner{width:18px; height:18px; border-radius:50%; border:2px solid var(--bg3); border-top-color:var(--accent);
+    animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .md-fallback{border:1px dashed var(--border2); border-radius:var(--radius-s); padding:22px 24px; color:var(--muted); font-size:13.5px; line-height:1.7;}
+  .md-fallback b{color:var(--text);}
+  .md-fallback code{font-family:var(--mono); background:var(--bg3); padding:1px 6px; border-radius:5px; font-size:12.5px; color:var(--accent);}
+  .md-fallback .fb-actions{display:flex; flex-wrap:wrap; gap:10px; margin:16px 0 10px;}
+  .md-fallback .fine{font-size:12px; color:var(--faint);}
+
+  /* mobile bar */
+  #mobilebar{display:none; align-items:center; gap:12px; padding:10px 16px; background:var(--bg1);
+    border-bottom:1px solid var(--border); position:sticky; top:0; z-index:50;}
+  #menu-btn{background:none; border:1px solid var(--border); color:var(--text); border-radius:8px; padding:6px 11px; cursor:pointer; font-size:16px;}
+  #mobilebar .brand{flex:1; padding:0;}
+  #overlay{display:none;}
+
+  #toast{position:fixed; bottom:24px; left:50%; transform:translate(-50%,20px); background:var(--bg4);
+    color:var(--text); border:1px solid var(--border2); padding:10px 18px; border-radius:10px; font-size:13px;
+    box-shadow:0 10px 30px rgba(0,0,0,.5); opacity:0; pointer-events:none; transition:.25s; z-index:300;}
+  #toast.show{opacity:1; transform:translate(-50%,0);}
+
+  @media (max-width:900px){
+    body{flex-direction:column;}
+    #mobilebar{display:flex;}
+    #sidebar{position:fixed; left:0; top:0; bottom:0; width:min(86vw,330px); min-width:0; transform:translateX(-105%);
+      transition:transform .25s ease; z-index:60; box-shadow:0 0 40px rgba(0,0,0,.5);}
+    #sidebar.open{transform:none;}
+    #overlay{position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:55;}
+    #overlay.show{display:block;}
+    #main{padding:18px 16px 50px;}
+    .hero{flex-direction:column; align-items:flex-start; padding:24px;}
+    .hero-ring{align-self:center;}
+    .md-wrap{flex-direction:column;}
+    .md-toc{position:static; flex:none; width:100%; max-height:none; border-left:none; border-bottom:1px solid var(--border); padding:0 0 12px; margin-bottom:6px;}
+    .toc-links{display:flex; flex-wrap:wrap; gap:2px 14px;}
+    .toc-links a{border:none; padding-left:0; margin-left:0;}
+    #sections{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div id="scrollbar"></div>
+<div id="overlay"></div>
+
+<div id="mobilebar">
+  <button id="menu-btn" aria-label="Menu">☰</button>
+  <div class="brand"><div class="logo">S</div><div><h1>MXDR L1 SOC</h1><div class="sub">Crash Course</div></div></div>
+</div>
+
+<aside id="sidebar">
+  <div class="brand">
+    <div class="logo">S</div>
+    <div>
+      <h1>MXDR L1 SOC</h1>
+      <div class="sub">Complete beginner → L1 operational curriculum</div>
+    </div>
+  </div>
+  <span id="mode-badge" class="ok">…</span>
+  <div class="search-wrap">
+    <span class="icon">⌕</span>
+    <input id="search" type="text" placeholder="Search modules / sections…">
+  </div>
+  <div id="search-empty">No modules match your search.</div>
+  <div id="groups"></div>
+  <div class="side-foot">
+    <div class="links">
+      <h3>Resources</h3>
+      <a href="case-studies/" target="_blank">Case Studies</a>
+      <a href="cheatsheets/" target="_blank">Cheatsheets</a>
+      <a href="interview/" target="_blank">Interview Prep</a>
+      <a href="labs/" target="_blank">Labs</a>
+    </div>
+    <button class="btn ghost small" id="pick-side">Open modules folder…</button>
+  </div>
+</aside>
+
+<main id="main">
+  <div class="inner">
+    <div id="dashboard"></div>
+    <div id="module-view" style="display:none"></div>
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script src="vendor/marked.min.js"></script>
+<script src="vendor/purify.min.js"></script>
+<script src="vendor/hl-full.min.js"></script>
+<script src="vendor/lang-powershell.min.js"></script>
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=n=>String(n).padStart(2,"0");
+const base=p=>p.split("/").pop();
+const PRIO={0:"P0",1:"P1",3:"P3"};
+const GRP={0:{name:"Foundation"},1:{name:"Core"},3:{name:"Advanced"}};
+
+const MODULES=[
+{n:0,file:"modules/00-soc-mxdr-fundamentals.md",title:"SOC and MXDR Fundamentals",p:0,
+ desc:"What a SOC is, its architecture, the people/process/technology model, tiered roles, L1 workflow, shift operations, and the Event → Alert → Incident → Case pipeline.",
+ s:["0.1 What is a SOC?","0.2 People / Process / Technology Model","0.3 SOC Roles and Responsibilities","0.4 Typical L1 Workflow","0.5 SOC Operational Models","0.6 Core Concepts: Event → Alert → Incident → Case","0.7 Lifecycle: Event → Closure","0.8 Severity, Priority, SLA, Impact, Urgency","0.9 False Positive vs True Positive vs Benign Positive","0.10 What an L1 Analyst Actually Does at 03:00","0.11 Common L1 Mistakes","0.12 Study Checklist for Module 0","0.13 Key Takeaways"]},
+{n:1,file:"modules/01-mdr-xdr-mxdr-deep-dive.md",title:"MDR / XDR / MXDR Deep Dive",p:0,
+ desc:"Core definitions, critical comparisons, realistic MXDR architecture and data flow, and what this means for the L1 analyst.",
+ s:["1.1 Core Definitions","1.2 Critical Comparisons","1.3 Realistic MXDR Architecture","1.4 How They Work Together: Data Flow Example","1.5 What This Means for L1 Analyst","1.6 Interview Questions for This Module","1.7 Study Checklist for Module 1"]},
+{n:2,file:"modules/02-alert-triage-methodology.md",title:"Alert Triage Methodology",p:0,
+ desc:"The core L1 skill: triage mindset, 20-question framework, enrichment checklist, timeline construction, correlation, evidence collection, classification decision matrix and runbook template.",
+ s:["2.1 The Triage Mindset","2.2 The 20-Question Triage Framework","2.3 Alert Enrichment Checklist","2.4 Context Gathering Workflow","2.5 Timeline Construction","2.6 Correlation: Connecting the Dots","2.7 Evidence Collection for Escalation","2.8 Classification Decision Matrix","2.9 Root Cause Analysis Basics (L1 Level)","2.10 Common Triage Pitfalls","2.11 Practical Triage Scenarios (Mental Reps)","2.12 Triage Runbook Template","2.13 Interview Questions for This Module","2.14 Study Checklist for Module 2"]},
+{n:3,file:"modules/03-incident-severity-escalation.md",title:"Incident Severity and Escalation",p:0,
+ desc:"Severity vs priority vs impact vs urgency, severity definitions, priority matrix, escalation criteria and procedures, SLA definitions, severity decision tree, and escalation communication.",
+ s:["3.1 Severity vs Priority vs Impact vs Urgency","3.2 Severity Definitions (Industry Standard)","3.3 Priority Matrix: Severity × Asset Criticality","3.4 Escalation Criteria: When to Escalate IMMEDIATELY","3.5 Escalation Procedures","3.6 SLA Definitions (Typical MXDR)","3.7 Severity Determination Workflow","3.8 Example Scenarios with Severity/Priority","3.9 Communication During Escalation","3.10 Common Escalation Mistakes","3.11 Interview Questions for This Module","3.12 Study Checklist for Module 3"]},
+{n:4,file:"modules/04-windows-security-event-logs.md",title:"Windows Security & Event Logs",p:0,
+ desc:"Windows architecture from a SOC perspective, event log structure, the must-know security Event IDs, deep-dive on the top 15, audit policy configuration and query patterns.",
+ s:["4.1 Windows Architecture Basics","4.2 Windows Event Log Structure","4.3 Critical Security Event IDs — The \"Must Know\" List","4.4 Deep Dive: Top 15 Event IDs for L1","4.5 Advanced Audit Policy Configuration","4.6 Event Log Query Patterns (KQL / Splunk / Elastic)","4.7 Common Event ID Correlation Patterns","4.8 Log Quality Issues & Workarounds","4.9 Interview Questions for This Module","4.10 Study Checklist for Module 4"]},
+{n:5,file:"modules/05-sysmon-telemetry.md",title:"Sysmon Telemetry",p:0,
+ desc:"What Sysmon is, complete Event ID reference, deep dive on critical IDs, process trees, config, query patterns, and Sysmon vs EDR vs native Windows events.",
+ s:["5.1 What is Sysmon?","5.2 Sysmon Event IDs — Complete Reference","5.3 Critical Event IDs for L1 — Deep Dive","5.4 Process Trees — Building and Analyzing","5.5 Sysmon Configuration — What L1 Should Know","5.6 Sysmon Query Patterns (KQL)","5.7 Sysmon vs EDR vs Windows Events","5.8 Interview Questions for This Module","5.9 Study Checklist for Module 5"]},
+{n:6,file:"modules/06-powershell-security.md",title:"PowerShell Security",p:0,
+ desc:"PowerShell as the #1 attack vector: execution flow, logging triad, Event ID 4104 script block logging, attack patterns, investigation workflow, remoting, and Constrained Language Mode.",
+ s:["6.1 PowerShell Basics for SOC","6.2 PowerShell Execution Flow","6.3 PowerShell Logging — The SOC Visibility Triad","6.4 Event ID 4104 — Script Block Logging Deep Dive","6.5 Common Attack Patterns in PowerShell","6.6 PowerShell Investigation Workflow for L1","6.7 PowerShell Profile & Persistence","6.8 PowerShell Remoting (WinRM) — Lateral Movement","6.9 Constrained Language Mode & JEA","6.10 PowerShell 7+ (Core) Differences","6.11 Interview Questions for This Module","6.12 Study Checklist for Module 6"]},
+{n:7,file:"modules/07-active-directory.md",title:"Active Directory",p:0,
+ desc:"AD fundamentals, objects, OUs and GPO, service and privileged accounts, tier model, AD reconnaissance, key monitoring events, and Entra ID cloud identity.",
+ s:["7.1 Active Directory Fundamentals","7.2 AD Objects — What L1 Needs to Know","7.3 Organizational Units (OUs) & Group Policy","7.4 Service Accounts — High-Value Targets","7.5 Privileged Accounts & Tier Model","7.6 AD Authentication vs Authorization","7.7 AD Reconnaissance — What Attackers Enumerate","7.8 AD Security Monitoring — Key Events","7.9 Azure AD / Entra ID — Cloud Identity","7.10 AD Hardening Basics","7.11 Interview Questions for This Module","7.12 Study Checklist for Module 7"]},
+{n:8,file:"modules/08-kerberos-ntlm.md",title:"Kerberos and NTLM",p:0,
+ desc:"Kerberos protocol flow and structures, encryption types, attack detection focus, NTLM legacy protocol and attacks, comparison, critical event IDs and detection queries.",
+ s:["8.1 Kerberos — The Protocol","8.2 Kerberos Flow — Step by Step","8.3 Critical Kerberos Structures","8.4 Kerberos Encryption Types (etype)","8.5 Kerberos Attacks — Detection Focus","8.6 NTLM — The Legacy Protocol","8.7 NTLM Attacks","8.8 Kerberos vs NTLM — Comparison","8.9 Critical Event IDs Summary","8.10 Detection Queries (KQL)","8.11 Interview Questions for This Module","8.12 Study Checklist for Module 8"]},
+{n:9,file:"modules/09-networking-for-soc.md",title:"Networking for SOC",p:0,
+ desc:"OSI model from a SOC view, TCP/IP core protocols, critical ports to memorize, IP addressing, DHCP, VPN/proxy/firewall, NDR, flow data and wireless notes.",
+ s:["9.1 OSI Model — SOC Perspective","9.2 TCP/IP Suite — Core Protocols","9.3 Critical Ports — Memorize These","9.4 IP Addressing & Routing — SOC Essentials","9.5 DHCP — Dynamic Host Configuration Protocol","9.6 VPN, Proxy, Firewall — Network Security Devices","9.7 NDR (Network Detection and Response)","9.8 Network Flow Data (NetFlow/IPFIX/sFlow)","9.9 Wireless (WiFi) — Brief SOC Notes","9.10 Interview Questions for This Module","9.11 Study Checklist for Module 9"]},
+{n:10,file:"modules/10-dns-security.md",title:"DNS Security",p:1,
+ desc:"DNS fundamentals and record types, resolution process, security threats, DNS investigation workflow, log sources and detection query patterns.",
+ s:["10.1 DNS Fundamentals","10.2 Critical DNS Record Types","10.3 DNS Resolution Process","10.4 DNS Security Threats","10.5 DNS Security Controls","10.6 DNS Investigation Workflow for L1","10.7 DNS Log Sources for SOC","10.8 DNS Query Patterns — Detection Queries","10.9 Interview Questions for This Module","10.10 Study Checklist for Module 10"]},
+{n:11,file:"modules/11-http-https-tls.md",title:"HTTP/HTTPS/TLS",p:1,
+ desc:"HTTP fundamentals, TLS in transit, X.509 certificates, TLS visibility for SOC, proxy logs, and HTTP/HTTPS attack patterns to detect.",
+ s:["11.1 HTTP Fundamentals","11.2 HTTPS & TLS — Encryption in Transit","11.3 TLS Certificates — X.509","11.4 TLS Visibility for SOC","11.5 Proxy Logs — SOC Gold Mine","11.6 HTTP/HTTPS Attack Patterns — Detection","11.7 Interview Questions for This Module","11.8 Study Checklist for Module 11"]},
+{n:12,file:"modules/12-network-traffic-analysis.md",title:"Network Traffic Analysis",p:1,
+ desc:"5-tuple flow analysis, beaconing, lateral movement, exfiltration, scanning detection, Wireshark/tcpdump PCAP basics, Zeek, and network threat hunting.",
+ s:["12.1 Network Flow Analysis — The 5-Tuple","12.2 Beaconing Detection — C2 Heartbeat","12.3 Lateral Movement Detection","12.4 Data Exfiltration Detection","12.5 Scanning & Reconnaissance Detection","12.6 PCAP Analysis — Wireshark/tcpdump Essentials","12.7 Zeek (Bro) — Structured Network Logs","12.8 Threat Hunting with Network Data","12.9 Interview Questions for This Module","12.10 Study Checklist for Module 12"]},
+{n:13,file:"modules/13-endpoint-security.md",title:"Endpoint Security",p:0,
+ desc:"Endpoint protection evolution, EDR telemetry the agent sees, detection methodologies, response capabilities, common alert types for triage, evasion, and vendor comparison.",
+ s:["13.1 Endpoint Protection Evolution","13.2 EDR Telemetry — What the Agent Sees","13.3 Detection Methodologies","13.4 EDR Response Capabilities","13.5 EDR Architecture — What L1 Sees in Console","13.6 Common EDR Alert Types — Triage Guide","13.7 EDR Evasion — What Attackers Do","13.8 Major EDR Vendors — Capability Comparison","13.9 EDR Health & Hygiene — What L1 Monitors","13.10 Interview Questions for This Module","13.11 Study Checklist for Module 13"]},
+{n:14,file:"modules/14-malware-fundamentals.md",title:"Malware Fundamentals",p:1,
+ desc:"Malware taxonomy and lifecycle, static and dynamic analysis basics, ransomware behaviors, delivery vectors, and malware classification for triage.",
+ s:["14.1 Malware Taxonomy — Types & Purposes","14.2 Malware Lifecycle (Kill Chain Mapping)","14.3 File Analysis Basics (Static)","14.4 Dynamic Analysis (Behavioral)","14.5 Ransomware — Specific Behaviors","14.6 Malware Delivery Vectors — L1 Detection Points","14.7 Malware Classification for Triage","14.8 Threat Intelligence for Malware","14.9 Interview Questions for This Module","14.10 Study Checklist for Module 14"]},
+{n:15,file:"modules/15-command-and-control.md",title:"Command and Control (C2)",p:1,
+ desc:"What C2 is, communication models, protocols and channels, major frameworks, C2 indicators, beaconing deep dive, infrastructure and SOC disruption role.",
+ s:["15.1 What is C2?","15.2 C2 Communication Models","15.3 C2 Protocols & Channels","15.4 C2 Frameworks — Know the Big Ones","15.5 C2 Indicators — What L1 Detects","15.6 Beaconing Detection — Deep Dive","15.7 C2 Infrastructure — Attacker OPSEC","15.8 C2 Takedown & Disruption (SOC Role)","15.9 Interview Questions for This Module","15.10 Study Checklist for Module 15"]},
+{n:16,file:"modules/16-phishing-email-security.md",title:"Phishing and Email Security",p:0,
+ desc:"Phishing taxonomy, email anatomy, SPF/DKIM/DMARC, analysis workflow, malicious attachments and URLs, BEC handling, and the email security stack.",
+ s:["16.1 Phishing Taxonomy","16.2 Email Anatomy — Headers & Body","16.3 Email Authentication — SPF, DKIM, DMARC","16.4 Phishing Email Analysis Workflow","16.5 Malicious Attachments — Analysis","16.6 Malicious URLs — Analysis","16.7 Business Email Compromise (BEC) — Special Handling","16.8 Email Gateway & Security Stack","16.9 Interview Questions for This Module","16.10 Study Checklist for Module 16"]},
+{n:17,file:"modules/17-threat-intelligence.md",title:"Threat Intelligence",p:1,
+ desc:"TI fundamentals, IOC/IOA/TTP hierarchy, IOC types and enrichment, sources, TIP functions, STIX/TAXII, TLP classification, and L1 enrichment workflow.",
+ s:["17.1 Threat Intelligence Fundamentals","17.2 IOC / IOA / TTP — The Hierarchy","17.3 IOC Types & Enrichment Fields","17.4 Threat Intelligence Sources","17.5 TIP (Threat Intelligence Platform) — Core Functions","17.6 STIX / TAXII — Standards","17.7 TI Enrichment Workflow for L1","17.8 TI Sharing & Classification (TLP)","17.9 Attribution — L1 Perspective","17.10 Interview Questions for This Module","17.11 Study Checklist for Module 17"]},
+{n:18,file:"modules/18-mitre-attck.md",title:"MITRE ATT&CK",p:0,
+ desc:"The universal threat language: 14 enterprise tactics in attack order, critical techniques for L1, mapping workflow, ATT&CK Navigator, and coverage gap analysis.",
+ s:["18.1 What is MITRE ATT&CK?","18.2 Enterprise Tactics (14) — In Attack Order","18.3 Critical Techniques for L1 — Must Know Cold","18.4 MITRE Mapping Workflow for L1","18.5 ATT&CK Navigator — Visualization","18.6 Detection Coverage & Gap Analysis","18.7 Interview Questions for This Module","18.8 Study Checklist for Module 18"]},
+{n:19,file:"modules/19-common-attacks.md",title:"Common Attacks — Detection & Triage",p:0,
+ desc:"Detection matrix across identity, endpoint, network, web, AD and cloud attack categories, plus full attack chain correlation.",
+ s:["19.1 Attack Categories & Detection Matrix","19.2 Identity Attacks — Detection Patterns","19.3 Endpoint Attacks — Detection Patterns","19.4 Network Attacks — Detection Patterns","19.5 Web Attacks — Detection Patterns","19.6 AD/Identity Attacks — Detection Patterns","19.7 Cloud Attacks — Detection Patterns","19.8 Attack Chain Correlation — Putting It Together","19.9 Interview Questions for This Module","19.10 Study Checklist for Module 19"]},
+{n:20,file:"modules/20-web-security.md",title:"Web Security",p:1,
+ desc:"Web app architecture, OWASP Top 10 detection focus, injection, XSS, broken access control, SSRF, deserialization, session attacks and security headers.",
+ s:["20.1 Web Application Architecture","20.2 OWASP Top 10 (2021) — L1 Detection Focus","20.3 Injection Attacks — Deep Dive","20.4 Cross-Site Scripting (XSS)","20.5 Broken Access Control — BOLA / IDOR","20.6 Server-Side Request Forgery (SSRF)","20.7 Deserialization / RCE","20.8 Authentication & Session Attacks","20.9 Web Security Headers — L1 Checklist","20.10 Web Security Logging — What L1 Needs","20.11 Interview Questions for This Module","20.12 Study Checklist for Module 20"]},
+{n:21,file:"modules/21-linux-security.md",title:"Linux Security for SOC Analysts",p:1,
+ desc:"Linux fundamentals and logging for SOC, authentication, process, persistence, network and filesystem investigation, auditd, containers/Kubernetes basics and quick-reference command card.",
+ s:["21.1 Why Linux Security Matters for SOC","21.2 Linux Fundamentals for SOC","21.3 Linux Logging — The SOC Analyst's View","21.4 Authentication Investigation","21.5 Process Investigation","21.6 Persistence Mechanisms","21.7 Network Investigation","21.8 File System Investigation","21.9 Linux Auditd — Advanced Telemetry","21.10 Container/Kubernetes Basics for SOC","21.11 Practical Investigation Checklist","21.12 Common L1 Mistakes with Linux","21.13 MITRE ATT&CK Mapping for Linux","21.14 Quick Reference Commands Card","21.15 Summary: What L1 Must Know"]},
+{n:22,file:"modules/22-soar-automation.md",title:"SOAR and Automation",p:1,
+ desc:"SOAR architecture and concepts, common L1 use cases, major platforms, when automation is safe vs needs a human, playbook design and metrics.",
+ s:["22.1 What is SOAR?","22.2 SOAR Architecture","22.3 Key SOAR Concepts","22.4 Common SOAR Use Cases for L1","22.5 Major SOAR Platforms","22.6 L1 Analyst Role in SOAR","22.7 When Automation is SAFE vs REQUIRES HUMAN","22.8 Playbook Design Principles for SOC","22.9 Metrics SOAR Should Track","22.10 Common L1 Mistakes with SOAR","22.11 Practical Exercise: SOAR Playbook Walkthrough","22.12 Summary: What L1 Must Know"]},
+{n:23,file:"modules/23-query-log-analysis.md",title:"Query and Log Analysis",p:0,
+ desc:"Platform-agnostic query concepts, KQL, SPL, SQL basics, field extraction, time handling, query performance, and a query template library.",
+ s:["23.1 Why Query Skills Matter for L1","23.2 Core Query Concepts (Platform Agnostic)","23.3 KQL — Kusto Query Language","23.4 SPL — Splunk Processing Language","23.5 SQL Basics for Log Analysis","23.6 Field Extraction & Parsing","23.7 Time Handling — Critical for SOC","23.8 Query Performance Optimization","23.9 Building Investigation Queries: Step by Step","23.10 Common L1 Query Mistakes","23.11 Query Templates Library","23.12 Summary: What L1 Must Know"]},
+{n:24,file:"modules/24-incident-response.md",title:"Incident Response for L1",p:0,
+ desc:"NIST SP 800-61 lifecycle, L1's role in each phase, common playbooks, severity classification, communication, when NOT to act independently, and per-incident checklists.",
+ s:["24.1 Incident Response Lifecycle (NIST SP 800-61)","24.2 Phase 1: Preparation","24.3 Phase 2: Detection & Alerting","24.4 Phase 3: Analysis & Triage (L1 Core)","24.5 Phase 4: Containment (Immediate)","24.6 Phase 5: Eradication","24.7 Phase 6: Recovery","24.8 Phase 7: Lessons Learned","24.9 L1 Incident Response Playbooks","24.10 Severity Classification for L1","24.11 Communication During Incident","24.12 When L1 Should NOT Act Independently","24.13 L1 Incident Response Checklist","24.14 Summary: What L1 Must Know"]},
+{n:25,file:"modules/25-forensics-basics.md",title:"Forensics Basics for L1",p:1,
+ desc:"Chain of custody, evidence preservation before containment, Windows/Linux/browser/email forensic artifacts, evidence packaging for handoff, and tools to know exist.",
+ s:["25.1 Why Forensics Basics Matter for L1","25.2 Chain of Custody Basics","25.3 Evidence Preservation: Before Containment","25.4 Windows Forensic Artifacts","25.5 Linux Forensic Artifacts","25.6 Browser Artifacts","25.7 Email Forensics Basics","25.8 File & Disk Forensics Concepts","25.9 Memory Forensics Concepts (Awareness Only)","25.10 Evidence Packaging for Handoff","25.11 Common L1 Forensics Mistakes","25.12 Tools L1 Should Know Exist","25.13 Summary: What L1 Must Know"]},
+{n:26,file:"modules/26-security-products.md",title:"Security Products — Telemetry & Usage",p:1,
+ desc:"Product categories across endpoint, network, identity, email, data, vuln mgmt, cloud and SIEM/XDR/SOAR, plus which product answers which question.",
+ s:["26.1 Product Categories Overview","26.2 Endpoint Products","26.3 Network Products","26.4 Identity & Access Products","26.5 Email Security Products","26.6 Data Protection Products","26.7 Vulnerability Management","26.8 Cloud Security Products","26.9 SIEM / XDR / SOAR — The Integration Layer","26.10 Product Integration in MXDR Architecture","26.11 L1 Cheat Sheet: Which Product for Which Question?","26.12 Common L1 Mistakes with Security Products","26.13 Summary: What L1 Must Know"]},
+{n:27,file:"modules/27-cloud-security-basics.md",title:"Cloud Security Basics for L1",p:1,
+ desc:"Cloud identity, audit logs as the primary data source, common cloud alerts, investigation workflow, L1 containment authority, and cloud MITRE matrix.",
+ s:["27.1 Why Cloud Security for L1?","27.2 Cloud Identity — The Critical Layer","27.3 Cloud Audit Logs — L1 Primary Data Source","27.4 Common Cloud Alerts L1 Will Investigate","27.5 Cloud Investigation Workflow for L1","27.6 Cloud Containment Actions (L1 Authority)","27.7 Key Cloud Security Concepts for Interviews","27.8 Cloud-Specific MITRE ATT&CK","27.9 L1 Cloud Investigation Cheat Sheet","27.10 Common L1 Mistakes with Cloud","27.11 Summary: What L1 Must Know"]},
+{n:28,file:"modules/28-real-soc-case-studies.md",title:"Real SOC Case Studies",p:0,
+ desc:"19 realistic walkthroughs — brute force, password spray, PowerShell, phishing, LOLBin, C2 beaconing, ransomware, RDP, lateral movement, PtH, Kerberoasting, golden ticket, DNS tunneling, exfiltration, impossible travel and more.",
+ s:["How to Approach Any Case (The Framework)","Case 1: Brute Force → Successful Login","Case 2: Password Spraying","Case 3: Suspicious PowerShell","Case 4: Malicious Office Document","Case 5: Phishing Email (No Click)","Case 6: Malware Execution (LOLBin)","Case 7: C2 Beaconing","Case 8: Ransomware Behavior","Case 9: Suspicious RDP","Case 10: Lateral Movement","Case 11: Pass-the-Hash","Case 12: Kerberoasting","Case 13: Golden Ticket","Case 14: DNS Tunneling","Case 15: Data Exfiltration","Case 16: Suspicious Privileged Account Activity","Case 17: Impossible Travel","Case 18: Endpoint Compromise (Full Chain)","Case 19: Web Attack (SQL Injection)"]},
+{n:29,file:"modules/29-interview-preparation.md",title:"L1 SOC / MXDR Interview Preparation",p:0,
+ desc:"Fundamental and technical questions, 50+ scenario questions, STAR answer framework, trick questions, questions to ask the interviewer, and a pre-interview checklist.",
+ s:["29.1 Fundamental Questions (Must Know Cold)","29.2 Technical Questions (Must Explain Clearly)","29.3 Scenario Questions (50+ Realistic)","29.4 Interview Answer Framework (STAR Method)","29.5 Common \"Trick\" Questions","29.6 Questions to Ask THE Interviewer","29.7 Pre-Interview Checklist","Summary: What L1 Must Know for Interview"]},
+{n:30,file:"modules/30-practical-labs.md",title:"Practical Labs",p:0,
+ desc:"12 hands-on labs: event ID analysis, failed login analysis, PowerShell command lines, process trees, DNS and HTTP(S) logs, email headers, hash investigation, MITRE mapping, ticket writing, severity and escalation practice.",
+ s:["Lab 1: Windows Event ID Analysis","Lab 2: Failed Login Analysis","Lab 3: PowerShell Command Line Analysis","Lab 4: Process Tree Analysis","Lab 5: DNS Log Analysis","Lab 6: HTTP/HTTPS Log Analysis","Lab 7: Phishing Email Header Analysis","Lab 8: Suspicious Hash Investigation","Lab 9: MITRE ATT&CK Mapping","Lab 10: Write a SOC Incident Ticket","Lab 11: Severity Determination Practice","Lab 12: Escalation Decision Matrix","Lab Completion Checklist","Advanced Practice (Optional)","Summary: What L1 Must Demonstrate"]},
+{n:31,file:"modules/31-soc-ticketing.md",title:"SOC Ticketing — Writing Professional Cases",p:0,
+ desc:"Ticket quality, standard template, field-by-field guide, good vs bad examples, lifecycle states, shift handoff format, metrics, and a ticket checklist.",
+ s:["31.1 Why Ticket Quality Matters","31.2 Standard SOC Ticket Template","31.3 Field-by-Field Guide","31.4 Good vs Bad Ticket Examples","31.5 Common Ticket Writing Mistakes","31.6 Ticket Lifecycle States","31.7 Shift Handoff Format","31.8 Metrics Your Tickets Feed","31.9 Quick Reference: Ticket Checklist","31.10 Interview Ticket Exercise","Summary: What L1 Must Demonstrate"]},
+{n:32,file:"modules/32-advanced-optional-topics.md",title:"Advanced But Optional Topics",p:3,
+ desc:"Beyond normal L1 scope — APT, threat hunting, detection engineering, Sigma, YARA, Suricata, advanced KQL/SPL, memory forensics, reverse engineering and the post-L1 learning path.",
+ s:["32.1 APT (Advanced Persistent Threat)","32.2 Threat Hunting","32.3 Detection Engineering","32.4 Sigma Rules","32.5 YARA Rules","32.6 Suricata / Snort","32.7 KQL Advanced","32.8 SPL Advanced","32.9 Memory Forensics (Volatility 3)","32.10 Reverse Engineering","32.11 Malware Analysis Advanced","32.12 Cloud Detection Engineering","32.13 Learning Path After L1","32.14 Certifications Worth Considering","32.15 Recommended Advanced Resources","Summary: What L1 Must Know About Advanced Topics"]}
+];
+
+const KEY="mxdr-l1-progress";
+const store={ get(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return{};}}, set(o){try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}} };
+const prog=store.get();
+const isDone=m=>prog["m"+m.n]===true;
+const secArr=m=>prog["m"+m.n+"_s"]||[];
+const modDone=m=>isDone(m)||secArr(m).length>=m.s.length;
+
+/* ────────────────────────── md engine ────────────────────────── */
+const fileSrc={};
+const localKey=p=>"mxdr-file:"+p;
+function initMd(){
+  marked.use({gfm:true});
+  if(typeof hljs==="undefined"||typeof DOMPurify==="undefined") return false;
+  hljs.registerLanguage("kql",function(hljs){
+    return {name:"KQL",
+      keywords:{keyword:"let where extend project project-away project-keep summarize count take top distinct sort by join lookup union evaluate render make-series mv-expand mv-apply as asc desc limit keep search range scan in not and or has contains startswith endswith matches regex has_all has_any between !in !has !contains ipv4_is_match isnotempty isempty case iff materialize",
+        built_in:"ago datetime bin now tostring toint tolong todouble toreal todatetime parse_json format_datetime datetime_add datetime_part pack unpack make_list make_set arg_max arg_min dist count any max min sum avg strcat replace split trim toupper tolower base64_encode base64_decode hash sha256 hashlookup tolower toupper strcat split", literal:"true false null dynamic"},
+      contains:[hljs.QUOTE_STRING_MODE,hljs.C_LINE_COMMENT_MODE,{className:"operator",begin:/[|()]/},{className:"string",begin:/`/,end:/`/},{className:"number",begin:/\b\d+(\.\d+)?\b/,relevance:0}]};
+  });
+  hljs.registerLanguage("spl",function(hljs){
+    return {name:"SPL",
+      keywords:{keyword:"index sourcetype host source search table stats fields dedup eval where rename rex regex extract xmlkv multikv chart timechart top rare eventstats streamstats transaction bucket sort head tail format lookup join append return loadjob datamodel tstats mstats outputcsv inputcsv makeresults gentimes fillnull eventcount map inputlookup outputlookup",
+        built_in:"count values dc list avg sum max min earliest latest relative_time now strftime tonumber tostring if case"},
+      contains:[hljs.QUOTE_STRING_MODE,{className:"attr",begin:/\b[a-zA-Z_][\w.]*=(?!=)/,relevance:4},{className:"number",begin:/\b\d+(\.\d+)?\b/},{className:"operator",begin:/[|()]/},hljs.C_LINE_COMMENT_MODE]};
+  });
+  hljs.registerLanguage("yara",function(hljs){
+    return {name:"YARA",
+      keywords:{keyword:"rule private global meta strings condition and or not all any of them filesize entrypoint uint8 uint16 uint32 uint64 uint8be uint16be uint32be uint64be at in range contains starts_with ends_with", literal:"true false"},
+      contains:[{className:"string",begin:/"/,end:/"/},{className:"regexp",begin:/\/(?!\/)/,end:/\/[imsx]{0,4}/},{className:"variable",begin:/\$[a-zA-Z0-9_]+/},{className:"meta",begin:/^\w+\s*:/,relevance:0},hljs.C_LINE_COMMENT_MODE]};
+  });
+  ["zeek","wireshark","csv","text"].forEach(n=>{
+    if(hljs.getLanguage("plaintext")) hljs.registerLanguage(n,hljs.getLanguage("plaintext").rawDefinition);
+  });
+  return true;
+}
+const mdEngineOk=initMd();
+const mdCache={};
+const mdLoading={};
+
+async function fetchFile(m){
+  const b=base(m.file);
+  if(fileSrc[m.file]!=null) return fileSrc[m.file];
+  if(b!==m.file&&fileSrc[b]!=null) return fileSrc[b];
+  try{
+    const c=localStorage.getItem(localKey(m.file))||(b!==m.file?localStorage.getItem(localKey(b)):null);
+    if(c!=null) return c;
+  }catch(e){}
+  if(location.protocol==="file:") return null;
+  try{
+    const r=await fetch(m.file);
+    if(!r.ok) return null;
+    const t=await r.text();
+    fileSrc[m.file]=t;
+    return t;
+  }catch(e){ return null; }
+}
+
+function slugify(s){
+  let id=s.toLowerCase().replace(/[^\w\s-]/g,"").replace(/[\s_]+/g,"-").replace(/-+/g,"-").replace(/^-|-$/g,"")||"section";
+  if(slugify.used[id]) id=id+"-"+(++slugify.used[id]); else slugify.used[id]=1;
+  return id;
+}
+
+function renderMd(m,text){
+  slugify.used={};
+  let html;
+  try{ html=marked.parse(text); }catch(e){ return {html:"<p class=\"md-err\">Failed to parse markdown.</p>",toc:[]}; }
+  html=DOMPurify.sanitize(html);
+  const w=document.createElement("div");
+  w.innerHTML=html;
+  w.querySelectorAll("pre code").forEach(el=>{
+    try{ hljs.highlightElement(el); }catch(e){}
+  });
+  w.querySelectorAll("a[href]").forEach(a=>{ if(/^https?:/i.test(a.getAttribute("href")||"")){ a.target="_blank"; a.rel="noopener"; } });
+  w.querySelectorAll("table").forEach(t=>{ const box=document.createElement("div"); box.className="table-wrap"; t.replaceWith(box); box.appendChild(t); });
+  w.querySelectorAll("img").forEach(im=>im.loading="lazy");
+  const toc=[];
+  let firstH1=true;
+  w.querySelectorAll("h1,h2,h3").forEach(h=>{
+    if(h.tagName==="H1"&&firstH1){ firstH1=false; h.id=slugify(h.textContent); return; }
+    h.id=slugify(h.textContent);
+    toc.push({level:+h.tagName[1],text:h.textContent,id:h.id});
+  });
+  return {html:w.innerHTML,toc};
+}
+
+const LANG_LABEL={kql:"KQL",spl:"SPL",bash:"Bash",sh:"Shell",shell:"Shell",powershell:"PowerShell",sql:"SQL",python:"Python",yaml:"YAML",json:"JSON",xml:"XML",csv:"CSV",text:"text",plaintext:"text",zeek:"Zeek",yara:"YARA",wireshark:"Wireshark",markdown:"Markdown",javascript:"JS",html:"HTML",php:"PHP",java:"Java",csharp:"C#",ini:"INI",diff:"diff"};
+const langLabel=l=>LANG_LABEL[l]||l||"";
+
+function insertMd(box,md,m){
+  const tocHtml=md.toc.length
+    ? '<div class="toc-title">On this page</div><nav class="toc-links">'+md.toc.map(t=>'<a href="#'+t.id+'" class="toc-l'+t.level+'">'+esc(t.text)+'</a>').join("")+'</nav>'
+    : "";
+  box.innerHTML='<div class="md-wrap"><aside class="md-toc">'+tocHtml+'</aside><div class="md-main">'+md.html+
+    '<div class="nav-row">'+
+    '<button class="btn ghost" id="nav-prev" '+(m.n>0?"":'disabled')+'>← '+(m.n>0?"Module "+fmt(m.n-1):"Previous")+'</button>'+
+    '<button class="btn ghost" id="nav-next" '+(m.n<MODULES.length-1?"":'disabled')+'>'+(m.n<MODULES.length-1?"Module "+fmt(m.n+1):"Next")+' →</button>'+
+    '</div></div></div>';
+  const pn=$("#nav-prev"),nx=$("#nav-next");
+  if(pn&&m.n>0) pn.onclick=()=>showModule(m.n-1);
+  if(nx&&m.n<MODULES.length-1) nx.onclick=()=>showModule(m.n+1);
+  addCopyButtons(box);
+  observeToc(box,md.toc);
+}
+
+function addCopyButtons(box){
+  box.querySelectorAll("pre").forEach(pre=>{
+    if(pre.parentNode&&pre.parentNode.classList&&pre.parentNode.classList.contains("code-block")) return;
+    const code=pre.querySelector("code");
+    const lm=(code&&(code.className.match(/language-([\w-]+)/)||[]))||[];
+    const lang=lm[1]||"";
+    const wrap=document.createElement("div");
+    wrap.className="code-block"+(lang?" hl":"");
+    pre.replaceWith(wrap);
+    wrap.appendChild(pre);
+    const head=document.createElement("div");
+    head.className="code-head";
+    head.innerHTML='<span class="code-lang">'+esc(langLabel(lang))+'</span><button class="copy-btn">Copy</button>';
+    wrap.insertBefore(head,pre);
+  });
+  box.addEventListener("click",async e=>{
+    const b=e.target.closest(".copy-btn"); if(!b) return;
+    const code=b.closest(".code-block").querySelector("code");
+    const ok=await copyText(code.textContent);
+    b.textContent=ok?"Copied ✓":"Failed"; b.classList.toggle("ok",ok);
+    setTimeout(()=>{ b.textContent="Copy"; b.classList.remove("ok"); },1500);
+  });
+}
+
+function observeToc(box,toc){
+  const links=box.querySelectorAll(".toc-links a");
+  if(!links.length||typeof IntersectionObserver==="undefined") return;
+  const headings=box.querySelectorAll(".md-main h2,.md-main h3");
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){
+        links.forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+en.target.id));
+      }
+    });
+  },{rootMargin:"-12% 0px -72% 0px"});
+  headings.forEach(h=>obs.observe(h));
+}
+
+function fallbackPanel(m){
+  const file=location.protocol==="file:";
+  return '<div class="md-fallback">'+
+    '<b>Couldn\'t read <code>'+esc(m.file)+'</code> automatically.</b>'+
+    '<p>This page is open via <code>file://</code>, so the browser blocks fetching the markdown files (that\'s the CORS error you saw). Pick the course folder once and every module works offline — no server needed.</p>'+
+    '<div class="fb-actions">'+
+    '<button class="btn primary" id="pick-folder">Open modules folder…</button>'+
+    '<button class="btn ghost" id="copy-srv">Copy: python3 -m http.server 8000</button>'+
+    '<a class="btn ghost" href="'+m.file+'" target="_blank">Open raw file</a>'+
+    '</div>'+
+    '<p class="fine">Pick the <code>modules</code> folder (or the whole course folder). Files are cached in this browser, so it only needs to happen once.</p>'+
+    '</div>';
+}
+function bindFallback(m){
+  const pf=$("#pick-folder"); if(pf) pf.onclick=pickFolder;
+  const cs=$("#copy-srv"); if(cs) cs.onclick=async()=>{ toast((await copyText("python3 -m http.server 8000"))?"Server command copied":"Copy failed"); };
+  void m;
+}
+
+let _picker=null;
+function pickFolder(){
+  if(!_picker){
+    _picker=document.createElement("input");
+    _picker.type="file";
+    _picker.setAttribute("webkitdirectory","");
+    _picker.setAttribute("directory","");
+    _picker.style.display="none";
+    document.body.appendChild(_picker);
+    _picker.addEventListener("change",onPicked);
+  }
+  _picker.value="";
+  _picker.click();
+}
+function onPicked(e){
+  const files=[...e.target.files].filter(f=>/\.md$/i.test(f.name));
+  if(!files.length){ toast("No .md files found in that folder"); return; }
+  let done=0;
+  files.forEach(f=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      const path=(f.webkitRelativePath||f.name).replace(/^\.\//,"");
+      fileSrc[path]=r.result; fileSrc[f.name]=r.result;
+      try{ localStorage.setItem(localKey(path),r.result); }catch(err){}
+      if(++done===files.length){
+        toast("Loaded "+files.length+" markdown files — all modules ready");
+        if(CUR>=0) renderMdContent(MODULES[CUR],true);
+      }
+    };
+    r.readAsText(f);
+  });
+}
+
+async function renderMdContent(m,force){
+  const box=$("#md-body"), btn=$("#read-btn");
+  if(!box) return;
+  if(!force&&mdCache[m.file]){ box.style.display="block"; box.dataset.open="1"; insertMd(box,mdCache[m.file],m); if(btn)btn.textContent="Hide content"; return; }
+  if(mdLoading[m.file]&&!force) return;
+  mdLoading[m.file]=true;
+  box.style.display="block"; box.dataset.open="1";
+  box.innerHTML='<div class="md-loading"><div class="spinner"></div><span>Loading <code>'+esc(m.file)+'</code>…</span></div>';
+  if(btn)btn.textContent="Loading…";
+  const text=await fetchFile(m);
+  mdLoading[m.file]=false;
+  if(CUR!==m.n) return;
+  if(text==null){ box.innerHTML=fallbackPanel(m); if(btn)btn.textContent="Read content"; bindFallback(m); return; }
+  const md=renderMd(m,text);
+  mdCache[m.file]=md;
+  box.style.display="block"; box.dataset.open="1";
+  insertMd(box,md,m);
+  if(btn)btn.textContent="Hide content";
+}
+function toggleRead(m){
+  const box=$("#md-body"), btn=$("#read-btn");
+  if(!box) return;
+  if(box.dataset.open==="1"){
+    box.style.display="none"; box.dataset.open="0";
+    if(btn)btn.textContent="Read content";
+  }else{
+    box.style.display="block"; box.dataset.open="1";
+    if(btn)btn.textContent="Hide content";
+    if(!mdCache[m.file]&&!mdLoading[m.file]) renderMdContent(m,false);
+  }
+}
+function prefetch(m){
+  if(location.protocol==="file:") return;
+  [m.n-1,m.n+1].forEach(i=>{
+    if(i<0||i>=MODULES.length) return;
+    const mm=MODULES[i];
+    if(mdCache[mm.file]) return;
+    fetchFile(mm).then(t=>{ if(t&&!mdCache[mm.file]) mdCache[mm.file]=renderMd(mm,t); });
+  });
+}
+
+async function copyText(t){
+  try{ await navigator.clipboard.writeText(t); return true; }
+  catch(e){
+    try{ const ta=document.createElement("textarea"); ta.value=t; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); return true; }
+    catch(e2){ return false; }
+  }
+}
+
+/* ────────────────────────── UI ────────────────────────── */
+let CUR=-1;
+
+function renderGroups(){
+  const g=$("#groups"); g.innerHTML="";
+  [0,1,3].forEach(p=>{
+    const list=MODULES.filter(m=>m.p===p);
+    if(!list.length) return;
+    const done=list.filter(modDone).length;
+    const collapsed=!!(prog._grp&&prog._grp[p]);
+    const grp=document.createElement("div");
+    grp.className="grp p"+p+(collapsed?" collapsed":"");
+    grp.innerHTML='<button class="grp-title"><span class="dot"></span><span class="grp-name">'+GRP[p].name+'</span><span class="grp-num">'+done+'/'+list.length+'</span><svg class="chev" viewBox="0 0 16 16" width="12" height="12"><path d="M6 4l4 4-4 4" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="grp-body"></div>';
+    const body=grp.querySelector(".grp-body");
+    list.forEach(m=>{
+      const b=document.createElement("button");
+      b.className="mod"+(modDone(m)?" done":"");
+      b.dataset.id=m.n;
+      b.innerHTML='<span class="chk">✓</span><span class="num">'+fmt(m.n)+'</span><span class="t">'+esc(m.title)+'</span>';
+      b.onclick=()=>{ showModule(m.n); closeSidebar(); };
+      body.appendChild(b);
+    });
+    grp.querySelector(".grp-title").onclick=()=>{
+      const c=grp.classList.toggle("collapsed");
+      prog._grp=prog._grp||{}; prog._grp[p]=c; store.set(prog);
+    };
+    g.appendChild(grp);
+  });
+}
+function updateActiveBtn(n){ $$("#groups .mod").forEach(b=>b.classList.toggle("active",+b.dataset.id===n)); }
+function closeSidebar(){ $("#sidebar").classList.remove("open"); $("#overlay").classList.remove("show"); }
+
+function renderCard(m){
+  const c=$("#module-view");
+  c.innerHTML='<div class="card"><div class="card-head">'+
+    '<div class="top-line"><span class="num-chip">Module '+fmt(m.n)+'</span>'+
+    '<span class="badge p'+m.p+'">Priority '+PRIO[m.p]+'</span>'+
+    '<span class="badge plain">'+m.s.length+' sections</span>'+
+    '<span class="badge done" id="mod-done-badge" style="display:none">✓ Completed</span></div>'+
+    '<h2>'+esc(m.title)+'</h2>'+
+    '<p class="desc">'+esc(m.desc)+'</p>'+
+    '<div class="actions">'+
+    '<button class="btn primary" id="read-btn">Read content</button>'+
+    '<a class="btn ghost" href="'+m.file+'" target="_blank">Raw file ↗</a>'+
+    '<button class="btn ghost" id="toggle-mod"></button>'+
+    '</div>'+
+    '<div class="mod-progress"><div class="track"><i id="sec-bar"></i></div><span id="sec-label"></span></div>'+
+    '</div><div class="card-secs">'+
+    '<h3>Study checklist — click to toggle</h3>'+
+    '<ul id="sections">'+m.s.map((s,i)=>'<li data-i="'+i+'" class="'+(secArr(m).includes(s)?"done":"")+'"><span class="box">✓</span><span class="sec-t">'+esc(s)+'</span></li>').join("")+'</ul>'+
+    '</div></div>'+
+    '<div id="md-body" class="md-content" style="display:none" data-open="0"></div>';
+  $("#toggle-mod").textContent=isDone(m)?"Mark incomplete":"Mark module complete";
+  $("#read-btn").onclick=()=>toggleRead(m);
+  $("#toggle-mod").onclick=()=>{ setDone(m,!isDone(m)); updateSecUI(m); renderAll(); };
+  $$("#sections li").forEach(li=>{ li.onclick=()=>toggleSection(m,+li.dataset.i,li); });
+  updateSecUI(m);
+}
+function updateSecUI(m){
+  if(!$("#sec-bar")) return;
+  const d=secArr(m);
+  $("#sec-bar").style.width=Math.round(d.length/m.s.length*100)+"%";
+  $("#sec-label").textContent=d.length+" / "+m.s.length+" sections done";
+  const badge=$("#mod-done-badge"), btn=$("#toggle-mod");
+  if(badge) badge.style.display=modDone(m)?"":"none";
+  if(btn) btn.textContent=isDone(m)?"Mark incomplete":"Mark module complete";
+}
+function toggleSection(m,i,li){
+  const arr=secArr(m), s=m.s[i], k=arr.indexOf(s);
+  if(k>-1) arr.splice(k,1); else arr.push(s);
+  prog["m"+m.n+"_s"]=arr; store.set(prog);
+  li.classList.toggle("done",k===-1);
+  updateSecUI(m); renderAll();
+}
+function setDone(m,on){
+  const k="m"+m.n;
+  if(on){ prog[k]=true; prog[k+"_s"]=m.s.slice(); }
+  else delete prog[k];
+  store.set(prog);
+}
+
+function showModule(n){
+  if(n<0||n>=MODULES.length) return;
+  const m=MODULES[n];
+  CUR=n;
+  prog._last=n; store.set(prog);
+  $("#dashboard").style.display="none";
+  $("#module-view").style.display="block";
+  updateActiveBtn(n);
+  renderCard(m);
+  renderAll();
+  renderMdContent(m,false);
+  prefetch(m);
+  window.scrollTo({top:0});
+}
+function showDashboard(){
+  CUR=-1;
+  updateActiveBtn(-1);
+  $("#module-view").style.display="none";
+  $("#dashboard").style.display="block";
+  renderDashboard();
+}
+
+function renderDashboard(){
+  const d=$("#dashboard"); if(!d) return;
+  const total=MODULES.length, done=MODULES.filter(modDone).length;
+  const pct=Math.round(done/total*100);
+  const R=54, C=2*Math.PI*R;
+  const pc=p=>{ const l=MODULES.filter(m=>m.p===p); const dn=l.filter(modDone).length; return {l,dn,pct:l.length?Math.round(dn/l.length*100):0}; };
+  const p0=pc(0), p1=pc(1), p3=pc(3);
+  const cont=(prog._last!=null&&MODULES[prog._last])
+    ? 'Continue — Module '+fmt(prog._last)+': '+esc(MODULES[prog._last].title)
+    : 'Start with Module 00: '+esc(MODULES[0].title);
+  d.innerHTML=
+  '<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6ea8ff"/><stop offset="1" stop-color="#3dd68c"/></linearGradient></defs></svg>'+
+  '<section class="card hero">'+
+    '<div><div class="hero-kicker">Complete beginner → L1 operational curriculum</div>'+
+    '<h1>MXDR L1 SOC<br>Crash Course</h1>'+
+    '<p>'+total+' modules · '+MODULES.filter(m=>m.p===0).length+' must-know · '+MODULES.filter(m=>m.p===1).length+' core · '+MODULES.filter(m=>m.p===3).length+' optional. Your progress is saved in this browser.</p></div>'+
+    '<div class="hero-ring">'+
+      '<svg width="132" height="132" viewBox="0 0 140 140">'+
+        '<circle class="ring-bg" cx="70" cy="70" r="'+R+'"/>'+
+        '<circle class="ring-fg" cx="70" cy="70" r="'+R+'" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-done/total)).toFixed(1)+'"/>'+
+      '</svg>'+
+      '<div class="ring-mid"><div class="ring-pct">'+pct+'%</div><div class="ring-sub">complete</div></div>'+
+    '</div>'+
+  '</section>'+
+  '<section class="stats">'+
+    '<div class="stat"><div class="v">'+total+'</div><div class="l">Modules</div></div>'+
+    '<div class="stat"><div class="v green">'+done+'</div><div class="l">Completed</div></div>'+
+    '<div class="stat"><div class="v p0">'+p0.dn+'</div><div class="l">P0 done</div></div>'+
+    '<div class="stat"><div class="v p1">'+p1.dn+'</div><div class="l">P1 done</div></div>'+
+    '<div class="stat"><div class="v p3">'+p3.dn+'</div><div class="l">P3 done</div></div>'+
+  '</section>'+
+  '<section class="prio-cards">'+
+    prioCard(0,p0,"Foundation","Must-know for the L1 interview")+
+    prioCard(1,p1,"Core","Strongly recommended")+
+    prioCard(3,p3,"Advanced","Optional deep-dives")+
+  '</section>'+
+  '<div class="cont-wrap"><span class="label">Jump back in</span><button class="btn primary" id="cont-btn">'+cont+'</button></div>'+
+  '<section class="tiles"><h2>All modules</h2><div class="tile-grid">'+
+    MODULES.map(m=>{
+      const pctT=modDone(m)?100:Math.round(secArr(m).length/m.s.length*100);
+      return '<button class="tile'+(modDone(m)?" done":"")+'" data-id="'+m.n+'">'+
+        '<div class="tile-top"><span class="tile-num">'+fmt(m.n)+'</span>'+(modDone(m)?'<span class="tile-chk">✓</span>':'')+'</div>'+
+        '<div class="tile-title">'+esc(m.title)+'</div>'+
+        '<div class="tile-bar"><i style="width:'+pctT+'%"></i></div></button>';
+    }).join("")+
+  '</div></section>';
+  const cb=$("#cont-btn"); if(cb) cb.onclick=()=>showModule(prog._last!=null&&MODULES[prog._last]?prog._last:0);
+  $$(".tile").forEach(t=>{ t.onclick=()=>showModule(+t.dataset.id); });
+}
+function prioCard(p,data,name,desc){
+  return '<div class="prio p'+p+'">'+
+    '<div class="prio-head"><span class="dot"></span>Priority '+PRIO[p]+'<span class="prio-num">'+data.dn+'/'+data.l.length+'</span></div>'+
+    '<div class="prio-name">'+name+'</div>'+
+    '<div class="prio-desc">'+desc+'</div>'+
+    '<div class="track"><i style="width:'+data.pct+'%"></i></div></div>';
+}
+
+function renderAll(){
+  renderGroups();
+  if($("#dashboard")&&$("#dashboard").style.display!=="none") renderDashboard();
+  if(CUR>=0) updateSecUI(MODULES[CUR]);
+}
+
+function filter(q){
+  q=q.trim().toLowerCase();
+  let any=false;
+  $$("#groups .mod").forEach(b=>{
+    const m=MODULES[+b.dataset.id];
+    const hit=!q||m.title.toLowerCase().includes(q)||m.s.some(s=>s.toLowerCase().includes(q))||PRIO[m.p].toLowerCase()===q||fmt(m.n).includes(q);
+    b.style.display=hit?"":"none";
+    if(hit) any=true;
+  });
+  $$("#groups .grp").forEach(g=>{ g.style.display=[...g.querySelectorAll(".mod")].some(b=>b.style.display!=="none")?"":"none"; });
+  $("#search-empty").style.display=(any||!q)?"none":"block";
+}
+
+function toast(msg){
+  const t=$("#toast");
+  t.textContent=msg; t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t=setTimeout(()=>t.classList.remove("show"),2600);
+}
+
+function keybindings(){
+  document.addEventListener("keydown",e=>{
+    const typing=/^(input|textarea|select)$/i.test(e.target.tagName);
+    if(e.key==="/"&&!typing){ e.preventDefault(); $("#search").focus(); return; }
+    if(e.key==="Escape"){ const s=$("#search"); if(s.value){ s.value=""; filter(""); } s.blur(); return; }
+    if(typing) return;
+    if(e.key==="d"){ showDashboard(); return; }
+    if(e.key==="r"){ if(CUR>=0) toggleRead(MODULES[CUR]); return; }
+    if(e.key==="["){ if(CUR>0) showModule(CUR-1); return; }
+    if(e.key==="]"){ if(CUR<MODULES.length-1) showModule(CUR+1); return; }
+  });
+}
+
+function init(){
+  $("#menu-btn").onclick=()=>{ $("#sidebar").classList.toggle("open"); $("#overlay").classList.toggle("show"); };
+  $("#overlay").onclick=closeSidebar;
+  $("#search").addEventListener("input",e=>filter(e.target.value));
+  $("#pick-side").onclick=pickFolder;
+  const mode=$("#mode-badge");
+  const file=location.protocol==="file:";
+  mode.textContent=file?"file:// mode":"http mode";
+  mode.classList.add(file?"warn":"ok");
+  window.addEventListener("scroll",()=>{
+    const h=document.documentElement, max=h.scrollHeight-h.clientHeight;
+    $("#scrollbar").style.width=(max?Math.min(100,h.scrollTop/max*100):0)+"%";
+  },{passive:true});
+  window.addEventListener("resize",()=>{ if(innerWidth>900) closeSidebar(); });
+  keybindings();
+  renderAll();
+  if(prog._last!=null&&MODULES[prog._last]) showModule(prog._last);
+  else showDashboard();
+}
+init();
+</script>
+<noscript><div style="color:#8b98b3;padding:40px;text-align:center;font-family:sans-serif">This app needs JavaScript enabled.</div></noscript>
+</body>
+</html>
