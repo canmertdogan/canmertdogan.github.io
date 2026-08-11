@@ -1420,14 +1420,14 @@ function finishQuiz() {
    REFERENCE
    ============================================================ */
 const MD_SHEETS = [
-  { id: "md-common-ports",     file: "../mxdr-l1-soc-crash-course/cheatsheets/common-ports-cheatsheet.md",           title: "Common Ports" },
-  { id: "md-incident-severity", file: "../mxdr-l1-soc-crash-course/cheatsheets/incident-severity-cheatsheet.md",     title: "Incident Severity" },
-  { id: "md-ioc-ioa-ttp",      file: "../mxdr-l1-soc-crash-course/cheatsheets/ioc-ioa-ttp-cheatsheet.md",           title: "IOC / IOA / TTP" },
-  { id: "md-readiness",        file: "../mxdr-l1-soc-crash-course/cheatsheets/l1-soc-readiness-checklist.md",       title: "L1 Readiness Checklist" },
-  { id: "md-mitre",            file: "../mxdr-l1-soc-crash-course/cheatsheets/mitre-attck-cheatsheet.md",           title: "MITRE ATT&CK" },
-  { id: "md-siem-edr",         file: "../mxdr-l1-soc-crash-course/cheatsheets/siem-edr-xdr-mxdr-comparison.md",     title: "SIEM / EDR / XDR / MXDR" },
-  { id: "md-escalation",       file: "../mxdr-l1-soc-crash-course/cheatsheets/soc-escalation-cheatsheet.md",       title: "SOC Escalation" },
-  { id: "md-windows-events",   file: "../mxdr-l1-soc-crash-course/cheatsheets/windows-event-id-cheatsheet.md",     title: "Windows Event IDs" }
+  { id: "md-common-ports",     file: "../cheatsheets/common-ports-cheatsheet.md",           title: "Common Ports" },
+  { id: "md-incident-severity", file: "../cheatsheets/incident-severity-cheatsheet.md",     title: "Incident Severity" },
+  { id: "md-ioc-ioa-ttp",      file: "../cheatsheets/ioc-ioa-ttp-cheatsheet.md",           title: "IOC / IOA / TTP" },
+  { id: "md-readiness",        file: "../cheatsheets/l1-soc-readiness-checklist.md",       title: "L1 Readiness Checklist" },
+  { id: "md-mitre",            file: "../cheatsheets/mitre-attck-cheatsheet.md",           title: "MITRE ATT&CK" },
+  { id: "md-siem-edr",         file: "../cheatsheets/siem-edr-xdr-mxdr-comparison.md",     title: "SIEM / EDR / XDR / MXDR" },
+  { id: "md-escalation",       file: "../cheatsheets/soc-escalation-cheatsheet.md",       title: "SOC Escalation" },
+  { id: "md-windows-events",   file: "../cheatsheets/windows-event-id-cheatsheet.md",     title: "Windows Event IDs" }
 ];
 
 const mdCache = {};
@@ -1486,7 +1486,7 @@ function renderRefMd(md) {
 function mdNotice(md) {
   return `<div class="md-msg"><b>Couldn't load <code>${esc(md.file)}</code>.</b><br>` +
     `Browsers block fetching local files when the page is opened by double-click (file:// protocol). ` +
-    `Serve the folder that contains both <code>soc-analyst-simulator</code> and <code>mxdr-l1-soc-crash-course</code>, then open over http:<br>` +
+    `Serve the <code>mxdr-l1-soc-crash-course</code> folder, then open over http:<br>` +
     `<code>python3 -m http.server 8000</code> &nbsp;&rarr;&nbsp; ` +
     `<a href="http://localhost:8000/soc-analyst-simulator/" target="_blank">http://localhost:8000/soc-analyst-simulator/</a><br>` +
     `Or view the raw file directly: <a href="${esc(md.file)}" target="_blank">${esc(md.file)}</a>` +
