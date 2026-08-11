@@ -145,8 +145,9 @@
   .track i{display:block; height:100%; width:0; border-radius:4px; transition:width .3s ease;}
   .prio.p0 .track i{background:var(--p0);} .prio.p1 .track i{background:var(--p1);} .prio.p3 .track i{background:var(--p3);}
 
-  .cont-wrap{margin-bottom:22px; display:flex; gap:12px; align-items:center;}
+  .cont-wrap{margin-bottom:22px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;}
   .cont-wrap .label{font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted);}
+  .sim-quick{font-size:12.5px; color:var(--muted);}
 
   .tiles h2{font-size:16px; margin-bottom:12px; letter-spacing:-.01em;}
   .tile-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(165px,1fr)); gap:10px;}
@@ -310,6 +311,20 @@
     .toc-links a{border:none; padding-left:0; margin-left:0;}
     #sections{grid-template-columns:1fr;}
   }
+
+  /* ── Simulator cross-links ────────────────── */
+  .sim-card{margin-top:20px;}
+  .sim-body{padding:18px 26px 24px; display:flex; flex-direction:column; gap:14px;}
+  .sim-group .sim-label{font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--faint); margin-bottom:8px;}
+  .sim-links{display:flex; flex-wrap:wrap; gap:8px;}
+  .sim-link{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600;
+    padding:7px 12px; border-radius:20px; border:1px solid var(--border); background:var(--bg2);
+    color:var(--text); text-decoration:none; transition:border-color .12s, color .12s;}
+  .sim-link:hover{border-color:var(--accent); color:var(--accent);}
+  .sim-link.quiz{border-color:rgba(61,214,140,.3); color:var(--green);}
+  .sim-link.quiz:hover{border-color:var(--green);}
+  .sim-link .diff{font-size:10px; color:var(--faint); font-weight:400;}
+  .sim-empty{font-size:13px; color:var(--faint);}
 
   /* ── Quiz ──────────────────────────────── */
   .quiz-card{margin-top:20px;}
@@ -506,6 +521,76 @@ const MODULES=[
  s:["32.1 APT (Advanced Persistent Threat)","32.2 Threat Hunting","32.3 Detection Engineering","32.4 Sigma Rules","32.5 YARA Rules","32.6 Suricata / Snort","32.7 KQL Advanced","32.8 SPL Advanced","32.9 Memory Forensics (Volatility 3)","32.10 Reverse Engineering","32.11 Malware Analysis Advanced","32.12 Cloud Detection Engineering","32.13 Learning Path After L1","32.14 Certifications Worth Considering","32.15 Recommended Advanced Resources","Summary: What L1 Must Know About Advanced Topics"]}
 ];
 
+/* ── Simulator cross-links ─────────────────────────────────────────
+   Lets each module deep-link into the matching SOC Analyst Simulator
+   scenarios / quiz topic (soc-analyst-simulator/?scenario=<id> or
+   ?quiz=<tag>). Kept as a local lookup — not fetched from data.js —
+   so the course page has no hard runtime dependency on the simulator. */
+const SIM_SCEN_META={
+"brute-tor":{t:"Brute Force → Successful Logon",d:"Easy"},
+"phish-ps-c2":{t:"Phishing → PowerShell Cradle → C2 Beacon",d:"Easy"},
+"admin-rdp-impossible":{t:"Domain Admin RDP at 03:00 — Impossible Travel",d:"Hard"},
+"backup-benign":{t:"Nightly Backup Batch Logon",d:"Easy"},
+"vuln-scan":{t:"Internal Vulnerability Scan",d:"Easy"},
+"lsass-dump":{t:"LSASS Credential Dumping",d:"Medium"},
+"kerberoast":{t:"Kerberoasting",d:"Medium"},
+"log-clear":{t:"Audit Log Cleared on DC02",d:"Medium"},
+"ransomware":{t:"Ransomware on File Server",d:"Hard"},
+"runkey-persistence":{t:"Run Key + Startup Persistence",d:"Medium"},
+"sqli":{t:"SQL Injection on Customer Portal",d:"Medium"},
+"dns-dga":{t:"DNS DGA Beaconing",d:"Medium"},
+"mfa-fatigue":{t:"MFA Fatigue Attack on CFO",d:"Hard"},
+"linux-crypto":{t:"Linux SSH Compromise → Crypto Mining",d:"Medium"},
+"dns-tunnel":{t:"DNS Tunneling — Data Exfiltration",d:"Medium"},
+"pw-spray-vpn":{t:"VPN Password Spray",d:"Medium"},
+"pth-lateral":{t:"Pass-the-Hash Lateral Movement",d:"Medium"},
+"powershell-dc":{t:"PowerShell Encoded on Domain Controller",d:"Hard"},
+"iis-webshell":{t:"Web Shell on IIS Web Server",d:"Medium"},
+"bec-invoice":{t:"Invoice Fraud / BEC via Compromised Vendor Mailbox",d:"Medium"},
+"cloud-iam":{t:"Cloud IAM Credential Abuse & S3 Exfiltration",d:"Hard"},
+"rdp-brute":{t:"RDP Brute Force from Internet",d:"Easy"},
+"usb-malware":{t:"USB Removable Media Malware",d:"Easy"},
+"lolbin-download":{t:"LOLBin Download Cradle & Beaconing",d:"Medium"},
+"ntds-dump":{t:"NTDS.dit Dump & DC Attack",d:"Hard"},
+"cloud-exfil":{t:"Data Exfiltration to Cloud Storage",d:"Medium"},
+"legacy-auth":{t:"MFA Bypass via Legacy Authentication",d:"Medium"}
+};
+const MODULE_LAB_LINKS={
+0:{quiz:["Concepts"]},
+1:{quiz:["Concepts"]},
+2:{quiz:["Triage"],scenarios:["brute-tor","backup-benign","pw-spray-vpn"]},
+3:{quiz:["Severity"],scenarios:["ransomware","admin-rdp-impossible"]},
+4:{quiz:["Events"],scenarios:["brute-tor","log-clear"]},
+5:{quiz:["Sysmon"],scenarios:["lsass-dump","runkey-persistence"]},
+6:{quiz:["Sysmon"],scenarios:["phish-ps-c2","powershell-dc","lolbin-download"]},
+7:{quiz:["Events"],scenarios:["kerberoast","pth-lateral","ntds-dump"]},
+8:{quiz:["MITRE"],scenarios:["kerberoast","pth-lateral"]},
+9:{quiz:["Network"],scenarios:["vuln-scan","rdp-brute"]},
+10:{quiz:["Network"],scenarios:["dns-dga","dns-tunnel"]},
+11:{quiz:["Web"],scenarios:["sqli","iis-webshell"]},
+12:{quiz:["Network"],scenarios:["dns-dga","cloud-exfil"]},
+13:{quiz:["Sysmon"],scenarios:["lsass-dump","usb-malware","lolbin-download"]},
+14:{quiz:["Concepts"],scenarios:["ransomware","linux-crypto","usb-malware"]},
+15:{quiz:["Concepts"],scenarios:["phish-ps-c2","dns-dga","dns-tunnel"]},
+16:{quiz:["Concepts"],scenarios:["phish-ps-c2","bec-invoice"]},
+17:{quiz:["Concepts"],scenarios:["dns-dga"]},
+18:{quiz:["MITRE"],scenarios:["kerberoast","runkey-persistence","ransomware"]},
+19:{quiz:["MITRE"],scenarios:["brute-tor","sqli","ransomware"]},
+20:{quiz:["Web"],scenarios:["sqli","iis-webshell"]},
+21:{quiz:["Linux"],scenarios:["linux-crypto"]},
+22:{quiz:["Triage"]},
+23:{quiz:["Events"],scenarios:["log-clear"]},
+24:{quiz:["Severity"],scenarios:["ransomware","admin-rdp-impossible"]},
+25:{quiz:["Events"],scenarios:["log-clear","lsass-dump"]},
+26:{quiz:["Sysmon"]},
+27:{quiz:["Cloud"],scenarios:["cloud-iam","mfa-fatigue","legacy-auth","cloud-exfil"]},
+28:{scenarios:["brute-tor","ransomware","kerberoast","dns-tunnel"]},
+29:{},
+30:{shift:true},
+31:{},
+32:{}
+};
+
 const QUIZZES={
 0:[
 {q:"What does a SOC primarily provide?",type:"mc",o:["24/7 security monitoring, detection, triage and response","Software development and QA","Cloud infrastructure provisioning","Network firewall management"],a:0,e:"A Security Operations Center monitors systems around the clock to detect, analyze and respond to security events and alerts."},
@@ -569,7 +654,17 @@ const QUIZZES={
 {q:"Event ID for an account lockout?",type:"input",a:["4740"],e:"4740 = account locked out — correlate with 4625 brute force."},
 {q:"Event ID 7045 records:",type:"mc",o:["A DNS query","A new service installed","A user logon","A process exit"],a:1,e:"7045 = service installed — a common persistence technique."},
 {q:"Which logon type is used by a service/batch job with stored credentials?",type:"mc",o:["2 (interactive)","10 (RDP)","4 (batch)","3 (network)"],a:2,e:"Logon type 4 = batch/service; compare against scheduled-task and service activity."},
-{q:"Which authentication event is key for detecting pass-the-hash style activity?",type:"mc",o:["Only HTTPS errors","Only 4688","Nothing","NTLM credential validation (4776) with network logons"],a:3,e:"NTLM authentication via logon type 3 from odd sources = PtH detection point."}
+{q:"Which authentication event is key for detecting pass-the-hash style activity?",type:"mc",o:["Only HTTPS errors","Only 4688","Nothing","NTLM credential validation (4776) with network logons"],a:3,e:"NTLM authentication via logon type 3 from odd sources = PtH detection point."},
+{q:"Event ID 4634 records:",type:"mc",o:["A user logon","A user logoff","A password change","A privilege use"],a:1,e:"4634 = Logoff (any reason) — pairs with 4624 to measure session duration. 4647 is the user-initiated variant of the same thing."},
+{q:"Which Event ID is generated for a Kerberos TGT request (AS-REQ)?",type:"input",a:["4768"],e:"4768 = Kerberos TGT request (AS-REQ). Unusual encryption types or off-hours requests here can indicate AS-REP roasting or Golden Ticket abuse."},
+{q:"Event ID 4771 with failure code 0x18 typically means:",type:"mc",o:["Account locked out","Kerberos pre-authentication failed (bad password)","TGT request succeeded","Service ticket requested"],a:1,e:"4771 = Kerberos pre-auth failed; 0x18 = bad password. Repeated 4771s from one source is Kerberos-flavored brute force."},
+{q:"A new user account being created is logged as Event ID:",type:"input",a:["4720"],e:"4720 = User Account Created. Baseline your expected account-creation workflow so unexpected 4720s stand out."},
+{q:"A user being added to the Domain Admins group generates Event ID:",type:"mc",o:["4732","4728","4738","4725"],a:1,e:"4728 = member added to a security-enabled GLOBAL group (e.g. Domain Admins) — a classic privilege-escalation indicator. 4732 is for LOCAL groups."},
+{q:"The distinction between Event ID 1102 and 4719 is:",type:"mc",o:["They are identical","1102 = the Security log was cleared; 4719 = the audit policy itself was changed","1102 = account locked; 4719 = account created","1102 = service installed; 4719 = process created"],a:1,e:"1102 = the Security log was cleared (anti-forensics). 4719 = the audit policy configuration was changed, often to reduce what gets logged going forward."},
+{q:"On a 4625 failed logon, SubStatus 0xC000006A means:",type:"mc",o:["Account disabled","User does not exist","Wrong password","Account locked out"],a:2,e:"0xC000006A = STATUS_WRONG_PASSWORD, the most common brute-force/spray failure code. 0xC0000064 = no such user; 0xC0000234 = locked out."},
+{q:"Full PowerShell script block content (including de-obfuscated/decoded script) is captured by Event ID:",type:"input",a:["4104"],e:"4104 = Script Block Logging, which records the full de-obfuscated script content — critical for catching encoded PowerShell attacks. 4103 only logs which modules/cmdlets were used."},
+{q:"A user accessing a network share (e.g. an admin share like C$) is logged as Event ID:",type:"input",a:["5140"],e:"5140 = Network share object was accessed — key for spotting lateral movement over SMB/admin shares."},
+{q:"Event IDs 6005 and 6006 together are most useful for spotting:",type:"mc",o:["Kerberoasting","A gap in logging caused by a service restart or log tampering","Privilege escalation","Process injection"],a:1,e:"6005 = Event Log service started, 6006 = stopped. An unexpected stop/start pair (without a full reboot) can indicate an attempt to tamper with or gap the logs."}
 ],
 
 5:[
@@ -939,7 +1034,7 @@ const QUIZZES={
 
 const granular=MODULES.reduce((t,m)=>t+m.s.length,0);
 const totalQ=Object.values(QUIZZES).reduce((t,q)=>t+q.length,0);
-const simQ=15;
+const simQ=27;
 
 const KEY="mxdr-l1-progress";
 const store={ get(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return{};}}, set(o){try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}} };
@@ -1024,24 +1119,40 @@ function renderMd(m,text){
     h.id=slugify(h.textContent);
     toc.push({level:+h.tagName[1],text:h.textContent,id:h.id});
   });
-  const sections=splitSections(w);
+  const sections=splitSections(w,m.s);
   return {html:w.innerHTML,toc,sections};
 }
-function splitSections(w){
-  const secs=[]; let cur=null; const intro=[];
+function splitSections(w,expected){
+  const raw=[]; let cur=null; const intro=[];
   Array.from(w.childNodes).forEach(n=>{
     if(n.nodeType===1&&n.tagName==="H2"){
-      if(cur) secs.push(cur);
-      cur={title:n.textContent.trim(),html:""};
+      if(cur) raw.push(cur);
+      cur={title:n.textContent.trim(),html:"",node:n};
       return;
     }
     const s=n.outerHTML!=null?n.outerHTML:(n.textContent||"");
     if(!cur) intro.push(s); else cur.html+=s;
   });
-  if(cur) secs.push(cur);
+  if(cur) raw.push(cur);
   const introHtml=intro.join("");
-  if(secs.length&&introHtml) secs[0].html=introHtml+secs[0].html;
-  return secs;
+  if(raw.length&&introHtml) raw[0].html=introHtml+raw[0].html;
+  // Wizard steps are meant to line up 1:1 with the module's declared section
+  // list (m.s). Heading wording can drift slightly from that list without
+  // being a real problem — but if MORE <h2> steps appear than declared (e.g.
+  // a heading-like line escaped a fenced code block, such as an example
+  // runbook template), the extra step would desync the sidebar checklist
+  // from the wizard. Only then: fold any heading not in the declared list
+  // into the previous real step instead of leaving a phantom step.
+  if(expected&&raw.length>expected.length){
+    const wanted=new Set(expected);
+    const merged=[];
+    raw.forEach(sec=>{
+      if(wanted.has(sec.title)||!merged.length) merged.push({title:sec.title,html:sec.html});
+      else merged[merged.length-1].html+=sec.node.outerHTML+sec.html;
+    });
+    return merged;
+  }
+  return raw.map(({title,html})=>({title,html}));
 }
 
 const LANG_LABEL={kql:"KQL",spl:"SPL",bash:"Bash",sh:"Shell",shell:"Shell",powershell:"PowerShell",sql:"SQL",python:"Python",yaml:"YAML",json:"JSON",xml:"XML",csv:"CSV",text:"text",plaintext:"text",zeek:"Zeek",yara:"YARA",wireshark:"Wireshark",markdown:"Markdown",javascript:"JS",html:"HTML",php:"PHP",java:"Java",csharp:"C#",ini:"INI",diff:"diff"};
@@ -1399,6 +1510,25 @@ function renderGroups(){
 function updateActiveBtn(n){ $$("#groups .mod").forEach(b=>b.classList.toggle("active",+b.dataset.id===n)); }
 function closeSidebar(){ $("#sidebar").classList.remove("open"); $("#overlay").classList.remove("show"); }
 
+const SIM_BASE="soc-analyst-simulator/";
+function simLinksHtml(m){
+  const link=MODULE_LAB_LINKS[m.n]||{};
+  const scenLinks=(link.scenarios||[]).map(id=>{
+    const meta=SIM_SCEN_META[id]; if(!meta) return "";
+    return '<a class="sim-link" href="'+SIM_BASE+'?scenario='+id+'" target="_blank" rel="noopener">'+esc(meta.t)+' <span class="diff">'+meta.d+'</span></a>';
+  }).join("");
+  const quizLinks=(link.quiz||[]).map(tag=>
+    '<a class="sim-link quiz" href="'+SIM_BASE+'?quiz='+encodeURIComponent(tag)+'" target="_blank" rel="noopener">'+esc(tag)+' quiz round ↗</a>'
+  ).join("");
+  const shiftLink=link.shift?'<a class="sim-link quiz" href="'+SIM_BASE+'?shift=1" target="_blank" rel="noopener">Start a full 3-alert shift ↗</a>':"";
+  if(!scenLinks&&!quizLinks&&!shiftLink) return "";
+  return '<div class="card sim-card"><div class="quiz-head"><div><h3>Practice in the Simulator</h3>'+
+    '<div class="fine">Apply this module against a live SOC console</div></div></div>'+
+    '<div class="sim-body">'+
+    (scenLinks?'<div class="sim-group"><div class="sim-label">Related scenarios</div><div class="sim-links">'+scenLinks+'</div></div>':"")+
+    (quizLinks||shiftLink?'<div class="sim-group"><div class="sim-label">Practice round</div><div class="sim-links">'+quizLinks+shiftLink+'</div></div>':"")+
+    '</div></div>';
+}
 function renderCard(m){
   const c=$("#module-view");
   c.innerHTML='<div class="card"><div class="card-head">'+
@@ -1422,8 +1552,9 @@ function renderCard(m){
     '<h3>Study checklist — click to toggle</h3>'+
     '<ul id="sections">'+m.s.map((s,i)=>'<li data-i="'+i+'" class="'+(secArr(m).includes(s)?"done":"")+'"><span class="box">✓</span><span class="sec-t">'+esc(s)+'</span></li>').join("")+'</ul>'+
     '</div></div>'+
+    '<div id="md-body" class="md-content" style="display:none" data-open="0"></div>'+
     '<div class="card quiz-card"><div class="quiz-head"><div><h3>Module Quiz</h3><div class="fine">Check your understanding</div></div><span class="q-best" id="quiz-best"></span></div><div class="quiz-body" id="quiz-body"></div></div>'+
-    '<div id="md-body" class="md-content" style="display:none" data-open="0"></div>';
+    simLinksHtml(m);
   $("#toggle-mod").textContent=isDone(m)?"Mark incomplete":"Mark module complete";
   $("#read-btn").onclick=()=>toggleRead(m);
   $("#toggle-mod").onclick=()=>{ setDone(m,!isDone(m)); updateSecUI(m); renderAll(); };
@@ -1492,9 +1623,17 @@ function showDashboard(){
   renderDashboard();
 }
 
+function simProgRead(){
+  try{ return JSON.parse(localStorage.getItem("socSimProg"))||null; }catch(e){ return null; }
+}
 function renderDashboard(){
   const d=$("#dashboard"); if(!d) return;
   const total=MODULES.length, done=MODULES.filter(modDone).length;
+  const sim=simProgRead();
+  const simBestVals=sim&&sim.best?Object.values(sim.best):[];
+  const simBest=simBestVals.length?Math.max(...simBestVals):null;
+  const simDone=sim&&sim.best?Object.keys(sim.best).length:0;
+  const simShifts=sim?(sim.shifts||0):0;
   const pct=Math.round(done/total*100);
   const R=54, C=2*Math.PI*R;
   const pc=p=>{ const l=MODULES.filter(m=>m.p===p); const dn=l.filter(modDone).length; return {l,dn,pct:l.length?Math.round(dn/l.length*100):0}; };
@@ -1508,7 +1647,9 @@ function renderDashboard(){
     '<div><div class="hero-kicker">Complete beginner → L1 operational curriculum</div>'+
     '<h1>MXDR L1 SOC<br>Crash Course</h1>'+
     '<p>'+total+' modules · '+granular+' study sections · '+totalQ+' quiz questions · '+simQ+' SOC simulator scenarios. Your progress is saved in this browser.</p>'+
-    '<div class="cont-wrap sim-wrap"><a class="btn primary" id="sim-btn" href="soc-analyst-simulator/" target="_blank" rel="noopener">Launch SOC Analyst Simulator ↗</a></div>'+
+    '<div class="cont-wrap sim-wrap"><a class="btn primary" id="sim-btn" href="soc-analyst-simulator/" target="_blank" rel="noopener">Launch SOC Analyst Simulator ↗</a>'+
+    (sim?'<span class="sim-quick">'+simShifts+' shift'+(simShifts===1?"":"s")+' worked · '+simDone+'/'+simQ+' scenarios bested'+(simBest!=null?' · best score '+simBest+'%':'')+'</span>':'')+
+    '</div>'+
     '</div>'+
     '<div class="hero-ring">'+
       '<svg width="132" height="132" viewBox="0 0 140 140">'+
@@ -1524,6 +1665,7 @@ function renderDashboard(){
     '<div class="stat"><div class="v p0">'+p0.dn+'</div><div class="l">P0 done</div></div>'+
     '<div class="stat"><div class="v p1">'+p1.dn+'</div><div class="l">P1 done</div></div>'+
     '<div class="stat"><div class="v p3">'+p3.dn+'</div><div class="l">P3 done</div></div>'+
+    '<div class="stat"><div class="v green">'+(simBest!=null?simBest+"%":"—")+'</div><div class="l">Sim best score</div></div>'+
   '</section>'+
   '<section class="prio-cards">'+
     prioCard(0,p0,"Foundation","Must-know for the L1 interview")+
@@ -1612,7 +1754,10 @@ function init(){
   window.addEventListener("resize",()=>{ if(innerWidth>900) closeSidebar(); });
   keybindings();
   renderAll();
-  if(prog._last!=null&&MODULES[prog._last]) showModule(prog._last);
+  const mRaw=new URLSearchParams(location.search).get("m");
+  const mParam=mRaw!=null?+mRaw:NaN;
+  if(!isNaN(mParam)&&MODULES[mParam]) showModule(mParam);
+  else if(prog._last!=null&&MODULES[prog._last]) showModule(prog._last);
   else showDashboard();
 }
 init();

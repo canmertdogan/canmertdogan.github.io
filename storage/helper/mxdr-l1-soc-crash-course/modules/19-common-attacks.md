@@ -376,7 +376,7 @@ ESCALATION: P1 → IR Team engaged
    - Successful sign-ins from geographically distant locations within impossible time window (speed > 1000 km/h).
 
 6. **What web attack patterns do you look for in proxy/WAF logs?**
-   - SQLi (UNION, SELECT, '), XSS (<script>, javascript:), SSRF (169.254.169.254, metadata), Web Shell (POST to .php/.asp with cmd=).
+   - SQLi (UNION, SELECT, '), XSS (`<script>`, javascript:), SSRF (169.254.169.254, metadata), Web Shell (POST to .php/.asp with cmd=).
 
 7. **How do you correlate a multi-stage attack chain?**
    - Same payload hash, same C2 infrastructure, same user/host, same timeframe, MITRE tactics in sequence (Initial Access → Execution → Persistence → Cred Access → Lateral → Impact).

@@ -23,6 +23,59 @@ try {
 } catch (e) { /* first run */ }
 function saveProg() { try { localStorage.setItem("socSimProg", JSON.stringify(PROG)); } catch (e) {} }
 
+/* ============================================================
+   COURSE CROSS-LINKS
+   Maps each scenario / quiz tag back to the crash-course module
+   that teaches it, so the simulator can point back into
+   ../index.html?m=<n> for further reading.
+   ============================================================ */
+const SCEN_MODULE = {
+  "brute-tor": { n: 2, t: "Alert Triage Methodology" },
+  "backup-benign": { n: 2, t: "Alert Triage Methodology" },
+  "pw-spray-vpn": { n: 2, t: "Alert Triage Methodology" },
+  "ransomware": { n: 3, t: "Incident Severity and Escalation" },
+  "admin-rdp-impossible": { n: 3, t: "Incident Severity and Escalation" },
+  "log-clear": { n: 4, t: "Windows Security & Event Logs" },
+  "lsass-dump": { n: 5, t: "Sysmon Telemetry" },
+  "runkey-persistence": { n: 5, t: "Sysmon Telemetry" },
+  "phish-ps-c2": { n: 6, t: "PowerShell Security" },
+  "powershell-dc": { n: 6, t: "PowerShell Security" },
+  "lolbin-download": { n: 6, t: "PowerShell Security" },
+  "kerberoast": { n: 7, t: "Active Directory" },
+  "pth-lateral": { n: 7, t: "Active Directory" },
+  "ntds-dump": { n: 7, t: "Active Directory" },
+  "vuln-scan": { n: 9, t: "Networking for SOC" },
+  "rdp-brute": { n: 9, t: "Networking for SOC" },
+  "dns-dga": { n: 10, t: "DNS Security" },
+  "dns-tunnel": { n: 10, t: "DNS Security" },
+  "sqli": { n: 20, t: "Web Security" },
+  "iis-webshell": { n: 20, t: "Web Security" },
+  "cloud-exfil": { n: 12, t: "Network Traffic Analysis" },
+  "usb-malware": { n: 13, t: "Endpoint Security" },
+  "linux-crypto": { n: 21, t: "Linux Security for SOC Analysts" },
+  "bec-invoice": { n: 16, t: "Phishing and Email Security" },
+  "cloud-iam": { n: 27, t: "Cloud Security Basics for L1" },
+  "mfa-fatigue": { n: 27, t: "Cloud Security Basics for L1" },
+  "legacy-auth": { n: 27, t: "Cloud Security Basics for L1" }
+};
+const TAG_MODULE = {
+  Events: { n: 4, t: "Windows Security & Event Logs" },
+  Sysmon: { n: 5, t: "Sysmon Telemetry" },
+  Triage: { n: 2, t: "Alert Triage Methodology" },
+  Concepts: { n: 0, t: "SOC and MXDR Fundamentals" },
+  MITRE: { n: 18, t: "MITRE ATT&CK" },
+  Severity: { n: 3, t: "Incident Severity and Escalation" },
+  Network: { n: 9, t: "Networking for SOC" },
+  Web: { n: 20, t: "Web Security" },
+  Linux: { n: 21, t: "Linux Security for SOC Analysts" },
+  Cloud: { n: 27, t: "Cloud Security Basics for L1" }
+};
+const courseModuleHref = n => "../index.html?m=" + n;
+function courseLinkHtml(mod, label) {
+  if (!mod) return "";
+  return `<a class="btn" href="${courseModuleHref(mod.n)}" target="_blank" rel="noopener">${esc(label || ("Read: " + mod.t))} ↗</a>`;
+}
+
 /* ---------------- state ---------------- */
 const S = {
   mode: null,            // 'single' | 'shift'
@@ -123,6 +176,25 @@ function go(id) {
   if (id === "debrief" && S.viewResult) showDebrief(S.viewResult);
   if (id === "ref") renderRef();
   if (id === "quiz" && !S.quiz) renderQuizSetup();
+}
+
+/* Lets course pages deep-link straight into a scenario or a pre-filtered
+   quiz round, e.g. index.html?...simulator/?scenario=kerberoast or
+   soc-analyst-simulator/?quiz=MITRE */
+function applyDeepLink() {
+  const params = new URLSearchParams(location.search);
+  const scenId = params.get("scenario");
+  const shiftReq = params.get("shift");
+  const quizTag = params.get("quiz");
+  if (!scenId && !shiftReq && !quizTag) return;
+  if ($("onboardModal")) dismissOnboarding(); // arriving with intent from the course — skip the tour
+  if (scenId && SCENARIOS.some(s => s.id === scenId)) { startSingle(scenId); return; }
+  if (shiftReq) { startShift(); return; }
+  if (quizTag && quizTags().includes(quizTag)) {
+    S.quizTopics = new Set([quizTag]);
+    renderQuizSetup();
+    go("quiz");
+  }
 }
 
 function renderHome() {
@@ -281,6 +353,7 @@ function renderScenarios() {
         <div class="meta">
           <span class="badge cat">${esc(sc.category)}</span>
           ${best ? `<span class="badge best">Best: ${best}%</span>` : ""}
+          ${SCEN_MODULE[sc.id] ? `<a class="badge course" href="${courseModuleHref(SCEN_MODULE[sc.id].n)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Read the course module first">📘 Module ${SCEN_MODULE[sc.id].n}</a>` : ""}
         </div>
         <div class="card-tasks">
           <span>&#128295; ${sc.keyEvidence.length} evidence steps</span>
@@ -1035,10 +1108,12 @@ function showDebrief(result) {
     focus.push(["MITRE mapping", "Re-check which ATT&CK techniques the alert really matches in the MITRE cheat sheet."]);
   if ((result.evMissed || []).length)
     focus.push(["Evidence", result.evMissed.map(k => "Try \u201c" + (k.keyword || k.id) + "\u201d").join(" · ") + " — build the timeline before deciding."]);
+  const courseMod = SCEN_MODULE[sc.id];
   const focusHtml = focus.length ? `<div class="reason mt-14"><div class="lbl">Learning focus</div>
     ${focus.map(([t, d]) => `<div class="row" style="margin:4px 0"><b>${t}:</b> ${esc(d)}</div>`).join("")}
-    <div class="small mt-8">Open <button class="btn" style="display:inline-block;padding:2px 10px;font-size:11px" onclick="go('ref')">Cheat Sheets</button> to review the gap.</div>
-  </div>` : "";
+    <div class="small mt-8">Open <button class="btn" style="display:inline-block;padding:2px 10px;font-size:11px" onclick="go('ref')">Cheat Sheets</button>
+    ${courseMod ? `or ${courseLinkHtml(courseMod).replace('class="btn"', 'class="btn" style="display:inline-block;padding:2px 10px;font-size:11px"')}` : ""} to review the gap.</div>
+  </div>` : (courseMod ? `<div class="reason mt-14"><div class="lbl">Go deeper</div>${courseLinkHtml(courseMod)}</div>` : "");
 
   $("debrief-content").innerHTML = `
     <div class="debrief-grid">
@@ -1291,9 +1366,11 @@ function answerQuiz(i) {
     else if (j === i) b.classList.add("wrong");
   });
   if (i === q.a) z.correct++;
+  const tagMod = TAG_MODULE[q.tag];
   $("quizExplain").innerHTML = `
     <div class="quiz-explain">
       <b>${i === q.a ? "Correct ✓" : "Incorrect ✗ (answer: " + esc(q.o[q.a]) + ")"}</b><br>${esc(q.e)}
+      ${tagMod ? `<div class="mt-8">${courseLinkHtml(tagMod, "Study: " + tagMod.t)}</div>` : ""}
     </div>
     <button class="btn primary mt-8" onclick="${z.idx + 1 < z.list.length ? "nextQuiz()" : "finishQuiz()"}">${z.idx + 1 < z.list.length ? "Next" : "Finish"}</button>`;
 }
