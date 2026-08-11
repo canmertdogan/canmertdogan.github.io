@@ -254,6 +254,22 @@
 
   .nav-row{display:flex; justify-content:space-between; gap:10px; margin-top:34px; padding-top:18px; border-top:1px solid var(--border);}
 
+  /* ── Guided (wizard) mode ────────────────── */
+  .seg{display:inline-flex; border:1px solid var(--border); border-radius:9px; overflow:hidden; align-self:flex-start;}
+  .seg button{background:var(--bg2); border:none; color:var(--muted); padding:8px 14px; font-size:12px; font-weight:650;
+    cursor:pointer; letter-spacing:.02em; transition:background .12s,color .12s;}
+  .seg button+.seg button{border-left:1px solid var(--border);}
+  .seg button:hover{color:var(--text);}
+  .seg button.on{background:var(--accent); color:#0b1020;}
+  .wz-top{margin-bottom:18px; padding:16px 18px; border:1px solid var(--border); border-radius:var(--radius-s); background:var(--bg2);}
+  .wz-meta{display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted); font-family:var(--mono);}
+  .wz-meta b{color:var(--accent);}
+  .wz-track{height:6px; background:var(--bg3); border-radius:4px; overflow:hidden; margin:10px 0 0;}
+  .wz-track i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--green)); border-radius:4px; transition:width .25s ease;}
+  .wz-title{font-size:19px; letter-spacing:-.015em; color:var(--text); margin:0 0 6px; padding-bottom:8px; border-bottom:1px solid var(--border);}
+  .wz-nav{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:28px; padding-top:16px; border-top:1px solid var(--border);}
+  .wz-nav .spacer{flex:1;}
+
   .md-loading{display:flex; align-items:center; gap:12px; color:var(--muted); font-size:13.5px; padding:26px 4px;}
   .spinner{width:18px; height:18px; border-radius:50%; border:2px solid var(--bg3); border-top-color:var(--accent);
     animation:spin .8s linear infinite;}
@@ -475,7 +491,7 @@ const MODULES=[
  s:["27.1 Why Cloud Security for L1?","27.2 Cloud Identity — The Critical Layer","27.3 Cloud Audit Logs — L1 Primary Data Source","27.4 Common Cloud Alerts L1 Will Investigate","27.5 Cloud Investigation Workflow for L1","27.6 Cloud Containment Actions (L1 Authority)","27.7 Key Cloud Security Concepts for Interviews","27.8 Cloud-Specific MITRE ATT&CK","27.9 L1 Cloud Investigation Cheat Sheet","27.10 Common L1 Mistakes with Cloud","27.11 Summary: What L1 Must Know"]},
 {n:28,file:"modules/28-real-soc-case-studies.md",title:"Real SOC Case Studies",p:0,
  desc:"19 realistic walkthroughs — brute force, password spray, PowerShell, phishing, LOLBin, C2 beaconing, ransomware, RDP, lateral movement, PtH, Kerberoasting, golden ticket, DNS tunneling, exfiltration, impossible travel and more.",
- s:["How to Approach Any Case (The Framework)","Case 1: Brute Force → Successful Login","Case 2: Password Spraying","Case 3: Suspicious PowerShell","Case 4: Malicious Office Document","Case 5: Phishing Email (No Click)","Case 6: Malware Execution (LOLBin)","Case 7: C2 Beaconing","Case 8: Ransomware Behavior","Case 9: Suspicious RDP","Case 10: Lateral Movement","Case 11: Pass-the-Hash","Case 12: Kerberoasting","Case 13: Golden Ticket","Case 14: DNS Tunneling","Case 15: Data Exfiltration","Case 16: Suspicious Privileged Account Activity","Case 17: Impossible Travel","Case 18: Endpoint Compromise (Full Chain)","Case 19: Web Attack (SQL Injection)"]},
+ s:["How to Approach Any Case (The Framework)","Case 1: Brute Force → Successful Login","Case 2: Password Spraying","Case 3: Suspicious PowerShell","Case 4: Malicious Office Document","Case 5: Phishing Email (No Click)","Case 6: Malware Execution (LOLBin)","Case 7: C2 Beaconing","Case 8: Ransomware Behavior","Case 9: Suspicious RDP","Case 10: Lateral Movement","Case 11: Pass-the-Hash","Case 12: Kerberoasting","Case 13: Golden Ticket","Case 14: DNS Tunneling","Case 15: Data Exfiltration","Case 16: Suspicious Privileged Account Activity","Case 17: Impossible Travel","Case 18: Endpoint Compromise (Full Chain)","Case 19: Web Attack (SQL Injection)","Case 20: False Positive (The Crucial One)","Case Study Cheat Sheet: Quick Reference","Study Tips for Case Studies","Summary: What L1 Must Know"]},
 {n:29,file:"modules/29-interview-preparation.md",title:"L1 SOC / MXDR Interview Preparation",p:0,
  desc:"Fundamental and technical questions, 50+ scenario questions, STAR answer framework, trick questions, questions to ask the interviewer, and a pre-interview checklist.",
  s:["29.1 Fundamental Questions (Must Know Cold)","29.2 Technical Questions (Must Explain Clearly)","29.3 Scenario Questions (50+ Realistic)","29.4 Interview Answer Framework (STAR Method)","29.5 Common \"Trick\" Questions","29.6 Questions to Ask THE Interviewer","29.7 Pre-Interview Checklist","Summary: What L1 Must Know for Interview"]},
@@ -492,53 +508,53 @@ const MODULES=[
 
 const QUIZZES={
 0:[
-{q:"What does a SOC primarily provide?",type:"mc",o:["Network firewall management","24/7 security monitoring, detection, triage and response","Software development and QA","Cloud infrastructure provisioning"],a:1,e:"A Security Operations Center monitors systems around the clock to detect, analyze and respond to security events and alerts."},
+{q:"What does a SOC primarily provide?",type:"mc",o:["24/7 security monitoring, detection, triage and response","Software development and QA","Cloud infrastructure provisioning","Network firewall management"],a:0,e:"A Security Operations Center monitors systems around the clock to detect, analyze and respond to security events and alerts."},
 {q:"Put the event pipeline in the correct order:",type:"mc",o:["Incident → Case → Alert → Event","Event → Alert → Incident → Case","Alert → Event → Case → Incident","Case → Incident → Event → Alert"],a:1,e:"Raw events are aggregated into alerts; a confirmed malicious alert becomes an incident; major incidents are tracked as cases."},
-{q:"Who performs the initial alert triage in a typical SOC?",type:"mc",o:["Tier 3 threat hunter","Tier 1 (L1) analyst","SIEM administrator","Incident commander"],a:1,e:"Tier 1 / L1 analysts are the first line: they validate alerts, triage and escalate."},
-{q:"A scanner fires against a honeypot deliberately deployed to attract attackers. The alert is best classified as:",type:"mc",o:["True positive","False positive","Benign positive","Unknown"],a:0,e:"The detection correctly fired on real (attack-like) activity, but the activity is expected/decoy — a true positive that is benign in context."},
+{q:"Who performs the initial alert triage in a typical SOC?",type:"mc",o:["Incident commander","Tier 3 threat hunter","Tier 1 (L1) analyst","SIEM administrator"],a:2,e:"Tier 1 / L1 analysts are the first line: they validate alerts, triage and escalate."},
+{q:"A scanner fires against a honeypot deliberately deployed to attract attackers. The alert is best classified as:",type:"mc",o:["False positive","Benign positive","Unknown","True positive"],a:3,e:"The detection correctly fired on real (attack-like) activity, but the activity is expected/decoy — a true positive that is benign in context."},
 {q:"What is the metric called that measures how long an attacker was present before detection?",type:"input",a:["dwell time","dwell-time","dwell"],e:"Dwell time = time from compromise to detection; reducing it is a core SOC goal."},
-{q:"What does 24/7 coverage in a SOC mean?",type:"mc",o:["Monitoring only during business hours","Around-the-clock monitoring with shift-based staffing","Only weekends","Only when alerts are critical"],a:1,e:"SOCs run shifts so detection never sleeps."},
-{q:"The \"People, Process, Technology\" model refers to:",type:"mc",o:["The three pillars a SOC needs to function effectively","A staffing contract","A hardware brand","A training plan"],a:0,e:"Trained people + defined processes + the right technology = SOC effectiveness."},
+{q:"What does 24/7 coverage in a SOC mean?",type:"mc",o:["Around-the-clock monitoring with shift-based staffing","Only weekends","Only when alerts are critical","Monitoring only during business hours"],a:0,e:"SOCs run shifts so detection never sleeps."},
+{q:"The \"People, Process, Technology\" model refers to:",type:"mc",o:["A training plan","The three pillars a SOC needs to function effectively","A staffing contract","A hardware brand"],a:1,e:"Trained people + defined processes + the right technology = SOC effectiveness."},
 {q:"What is the two-word term for an alert that fires on activity that is actually benign/expected?",type:"input",a:["false positive","false-positive","fp"],e:"A false positive is an alert with no real malicious activity behind it."},
-{q:"What is the name for a missed attack that generated NO alert?",type:"mc",o:["False negative","False positive","True positive","Benign positive"],a:0,e:"A false negative is the worst case — real malicious activity slipped past detection."},
-{q:"A SOC's core KPI pair for response speed is:",type:"mc",o:["MTTD (time to detect) and MTTR (time to respond)","Page load speed","Server uptime only","Ticket word count"],a:0,e:"MTTD/MTTR measure how fast the SOC detects and contains."}
+{q:"What is the name for a missed attack that generated NO alert?",type:"mc",o:["True positive","Benign positive","False negative","False positive"],a:2,e:"A false negative is the worst case — real malicious activity slipped past detection."},
+{q:"A SOC's core KPI pair for response speed is:",type:"mc",o:["Page load speed","Server uptime only","Ticket word count","MTTD (time to detect) and MTTR (time to respond)"],a:3,e:"MTTD/MTTR measure how fast the SOC detects and contains."}
 ],
 
 1:[
-{q:"What does XDR add beyond EDR?",type:"mc",o:["More endpoint memory dumps","Native correlation across endpoint, network, cloud, email and identity telemetry","Automatic firewall rules","A second antivirus engine"],a:1,e:"XDR (Extended Detection and Response) unifies multiple data domains, whereas EDR focuses on endpoint telemetry."},
-{q:"MDR stands for:",type:"mc",o:["Managed Detection and Response","Machine Detection and Response","Multi-layer Defense and Recovery","Managed Data Retention"],a:0,e:"MDR = Managed Detection and Response — a service that runs and monitors EDR/security tooling for you."},
+{q:"What does XDR add beyond EDR?",type:"mc",o:["Native correlation across endpoint, network, cloud, email and identity telemetry","Automatic firewall rules","A second antivirus engine","More endpoint memory dumps"],a:0,e:"XDR (Extended Detection and Response) unifies multiple data domains, whereas EDR focuses on endpoint telemetry."},
+{q:"MDR stands for:",type:"mc",o:["Managed Data Retention","Managed Detection and Response","Machine Detection and Response","Multi-layer Defense and Recovery"],a:1,e:"MDR = Managed Detection and Response — a service that runs and monitors EDR/security tooling for you."},
 {q:"MXDR = Managed ___ (the platform it extends).",type:"input",a:["xdr","extended detection and response"],e:"MXDR = Managed Extended Detection and Response — a vendor platform plus a managed SOC team."},
-{q:"Which is LEAST likely to be a native telemetry source for an XDR platform?",type:"mc",o:["Endpoint process activity","Network flow and DNS data","Email gateway logs","Paper-based visitor logs"],a:3,e:"XDR pulls from digital security sources (endpoints, network, email, cloud, identity) — physical visitor logs are not one."},
-{q:"A customer already has EDR but wants a vendor team to monitor and investigate 24/7. They typically buy:",type:"mc",o:["A SIEM license only","MDR (managed EDR)","A new firewall","A pentest"],a:1,e:"MDR manages the detection/response workload on top of the customer's EDR — that is the standard MDR model."},
+{q:"Which is LEAST likely to be a native telemetry source for an XDR platform?",type:"mc",o:["Network flow and DNS data","Email gateway logs","Paper-based visitor logs","Endpoint process activity"],a:2,e:"XDR pulls from digital security sources (endpoints, network, email, cloud, identity) — physical visitor logs are not one."},
+{q:"A customer already has EDR but wants a vendor team to monitor and investigate 24/7. They typically buy:",type:"mc",o:["A new firewall","A pentest","A SIEM license only","MDR (managed EDR)"],a:3,e:"MDR manages the detection/response workload on top of the customer's EDR — that is the standard MDR model."},
 {q:"Which component distinguishes MXDR from a standalone SIEM?",type:"mc",o:["A managed SOC team plus an integrated XDR platform","Just a bigger log store","Only firewall rules","A helpdesk"],a:0,e:"MXDR bundles the platform WITH a 24/7 managed analyst team."},
-{q:"In a typical MXDR offering, who owns detection rules and tuning?",type:"mc",o:["The vendor's detection engineering team","The customer's accounting department","Only the network team","The browser"],a:0,e:"Detection engineering and tuning are vendor-managed in the MXDR model."},
-{q:"A customer keeps their own SIEM but outsources 24/7 monitoring of EDR alerts. This is:",type:"mc",o:["MDR (managed detection and response)","IaaS","CSPM","A pen test"],a:0,e:"MDR typically manages the customer's EDR and triages alerts around the clock."},
-{q:"Which data source gives an XDR platform visibility into lateral movement?",type:"mc",o:["Network flow plus endpoint process correlation","Only email quarantine","HR records","Physical access badges"],a:0,e:"XDR correlates endpoint + network telemetry to see east-west movement."},
+{q:"In a typical MXDR offering, who owns detection rules and tuning?",type:"mc",o:["The browser","The vendor's detection engineering team","The customer's accounting department","Only the network team"],a:1,e:"Detection engineering and tuning are vendor-managed in the MXDR model."},
+{q:"A customer keeps their own SIEM but outsources 24/7 monitoring of EDR alerts. This is:",type:"mc",o:["CSPM","A pen test","MDR (managed detection and response)","IaaS"],a:2,e:"MDR typically manages the customer's EDR and triages alerts around the clock."},
+{q:"Which data source gives an XDR platform visibility into lateral movement?",type:"mc",o:["Only email quarantine","HR records","Physical access badges","Network flow plus endpoint process correlation"],a:3,e:"XDR correlates endpoint + network telemetry to see east-west movement."},
 {q:"Which statement about XDR vs SIEM is most accurate?",type:"mc",o:["XDR focuses on integrated detection/response; SIEM focuses on log collection and correlation","SIEM is always better","XDR replaces the firewall","They are identical"],a:0,e:"SIEM centralizes logs; XDR delivers integrated detection and response across domains."}
 ],
 
 2:[
 {q:"The FIRST thing an L1 should do when an alert fires:",type:"mc",o:["Immediately isolate the host","Validate the alert and gather context","Delete the alert","Call management"],a:1,e:"Triage golden rule: stay calm, validate, gather context — never take destructive action on assumption."},
 {q:"Roughly how many minutes is the typical time budget for triaging a P1 alert?",type:"input",a:["5","10","5-10","5 to 10","5-10 minutes"],e:"P1 budget ≈ 5–10 minutes; P2 ≈ 10–20, P3 ≈ 20–30, P4 = batched (≈60)."},
-{q:"Enrichment during triage means:",type:"mc",o:["Adding threat intel, user/asset context and related events to an alert","Increasing the alert severity","Running a port scan","Deleting old logs"],a:0,e:"Enrichment adds context (who, what, where, known intel) so you can decide if the alert matters."},
-{q:"When building a timeline around an alert, you should typically look:",type:"mc",o:["Only at the exact alert timestamp","One hour BEFORE and AFTER the event","Seven days after only","Never before the event"],a:1,e:"The framework uses a ±1 hour window to find the kill-chain steps that surround the alert."},
-{q:"An alert is confirmed malicious with solid evidence. Your next step is:",type:"mc",o:["Close the ticket","Contain if authorized, then escalate with evidence","Ignore it","Reinstall the OS"],a:1,e:"Follow the playbook: contain within your authority, collect evidence, escalate."},
+{q:"Enrichment during triage means:",type:"mc",o:["Running a port scan","Deleting old logs","Adding threat intel, user/asset context and related events to an alert","Increasing the alert severity"],a:2,e:"Enrichment adds context (who, what, where, known intel) so you can decide if the alert matters."},
+{q:"When building a timeline around an alert, you should typically look:",type:"mc",o:["Seven days after only","Never before the event","Only at the exact alert timestamp","One hour BEFORE and AFTER the event"],a:3,e:"The framework uses a ±1 hour window to find the kill-chain steps that surround the alert."},
+{q:"An alert is confirmed malicious with solid evidence. Your next step is:",type:"mc",o:["Contain if authorized, then escalate with evidence","Ignore it","Reinstall the OS","Close the ticket"],a:0,e:"Follow the playbook: contain within your authority, collect evidence, escalate."},
 {q:"The 20-question triage framework exists to:",type:"mc",o:["Slow triage down","Force a structured, repeatable investigation mindset","Replace the SIEM","Avoid documentation"],a:1,e:"It standardizes how every analyst investigates, reducing missed steps and inconsistent outcomes."},
-{q:"Which is a valid triage outcome classification?",type:"mc",o:["True positive","False positive","Benign / inconclusive","All of these"],a:3,e:"Every alert resolves to TP, FP, benign, or inconclusive."},
+{q:"Which is a valid triage outcome classification?",type:"mc",o:["False positive","Benign / inconclusive","All of these","True positive"],a:2,e:"Every alert resolves to TP, FP, benign, or inconclusive."},
 {q:"Gathering related events around an alert to see the bigger picture is called building a ___ (one word).",type:"input",a:["timeline","chronology"],e:"A timeline orders events before/after the alert to reconstruct the chain."},
-{q:"Which is a good triage HABIT?",type:"mc",o:["Document what you checked and found","Memorize every alert ID","Close alerts randomly","Skip enrichment"],a:0,e:"Documented triage = reproducible, handoff-ready work."},
+{q:"Which is a good triage HABIT?",type:"mc",o:["Memorize every alert ID","Close alerts randomly","Skip enrichment","Document what you checked and found"],a:3,e:"Documented triage = reproducible, handoff-ready work."},
 {q:"An alert about a known dev tool running in a dev environment with no sensitive data is most likely:",type:"mc",o:["A benign positive","A confirmed breach","Ransomware","A ticket deletion"],a:0,e:"Asset and environment context decides if activity is benign."}
 ],
 
 3:[
 {q:"Severity vs priority:",type:"mc",o:["They are the same thing","Severity = impact/urgency of the incident; priority = severity × asset criticality","Priority is always P1","Severity is only used in tickets"],a:1,e:"Priority combines severity with how critical the affected asset is (the priority matrix)."},
-{q:"Which BEST fits a P1 (critical) incident?",type:"mc",o:["A single user locked out","Active ransomware encryption or a confirmed data breach","A typo in a ticket","High disk usage on a server"],a:1,e:"P1 = active breach: ransomware encrypting data, data exfiltration, domain admin compromise, etc."},
+{q:"Which BEST fits a P1 (critical) incident?",type:"mc",o:["High disk usage on a server","A single user locked out","Active ransomware encryption or a confirmed data breach","A typo in a ticket"],a:2,e:"P1 = active breach: ransomware encrypting data, data exfiltration, domain admin compromise, etc."},
 {q:"In a typical MXDR SLA, how many minutes to ACKNOWLEDGE a P1 alert?",type:"input",a:["15","15 minutes","15 min"],e:"Typical: acknowledge within 15 minutes, contain within 1 hour."},
-{q:"You discover a domain admin account was compromised. You should:",type:"mc",o:["Wait for the next shift","Escalate IMMEDIATELY","Mark it benign","Only note it in the ticket"],a:1,e:"Privileged-account compromise / active breach is an immediate escalation criterion."},
+{q:"You discover a domain admin account was compromised. You should:",type:"mc",o:["Mark it benign","Only note it in the ticket","Wait for the next shift","Escalate IMMEDIATELY"],a:3,e:"Privileged-account compromise / active breach is an immediate escalation criterion."},
 {q:"An alert hits a customer's internet-facing web server vs an internal file server. The priority differs because of:",type:"mc",o:["Asset criticality","Log volume","The alert name","The time of day"],a:0,e:"The priority matrix multiplies severity by asset criticality — exposure and sensitivity change priority."},
-{q:"Urgency in severity means:",type:"mc",o:["How quickly the incident must be handled","How many users are affected","The cost of the asset","The alert count"],a:0,e:"Urgency = time sensitivity; impact = degree of harm."},
-{q:"Which is typically a P2 (high) incident?",type:"mc",o:["A single workstation ransomware","A user-account compromise without privilege","A minor email bounce","A disk-full warning"],a:1,e:"Non-privileged account compromise is usually P2; ransomware is usually P1."},
-{q:"When escalating, you should provide:",type:"mc",o:["Alert details, evidence, timeline and actions taken","Only the ticket number","A guess","Nothing"],a:0,e:"A complete escalation packet lets L2/L3 act immediately."},
+{q:"Urgency in severity means:",type:"mc",o:["The alert count","How quickly the incident must be handled","How many users are affected","The cost of the asset"],a:1,e:"Urgency = time sensitivity; impact = degree of harm."},
+{q:"Which is typically a P2 (high) incident?",type:"mc",o:["A disk-full warning","A single workstation ransomware","A user-account compromise without privilege","A minor email bounce"],a:2,e:"Non-privileged account compromise is usually P2; ransomware is usually P1."},
+{q:"When escalating, you should provide:",type:"mc",o:["Only the ticket number","A guess","Nothing","Alert details, evidence, timeline and actions taken"],a:3,e:"A complete escalation packet lets L2/L3 act immediately."},
 {q:"Which condition REQUIRES immediate escalation?",type:"mc",o:["Active exfiltration of customer data","A typo in a ticket","A printer error","A forgotten password"],a:0,e:"Confirmed data loss/theft is an immediate escalation trigger."},
 {q:"The containment SLA target for a P1 is typically 1 ___ (unit of time).",type:"input",a:["hour","hours","hr","hrs","1 hour"],e:"Typical: acknowledge in 15 minutes, contain in 1 hour."}
 ],
@@ -547,379 +563,383 @@ const QUIZZES={
 {q:"Event ID for a SUCCESSFUL logon?",type:"input",a:["4624"],e:"4624 = successful logon. Correlate it with 4625, 4672 and logon type."},
 {q:"Event ID for a FAILED logon?",type:"input",a:["4625"],e:"4625 = failed logon. Many from one source to one account = brute force pattern."},
 {q:"Event ID 4688 records:",type:"mc",o:["A user password change","Process creation (a new process started)","A firewall rule","USB insertion"],a:1,e:"4688 = process creation — key for execution and lateral-movement detection."},
-{q:"Event ID 4672 means:",type:"mc",o:["Special privileges were assigned to a new logon","The account was locked out","A service was installed","A DNS query was made"],a:0,e:"4672 accompanies privileged logons; look for it right after a 4624."},
+{q:"Event ID 4672 means:",type:"mc",o:["A service was installed","A DNS query was made","Special privileges were assigned to a new logon","The account was locked out"],a:2,e:"4672 accompanies privileged logons; look for it right after a 4624."},
 {q:"Remote interactive (RDP) logons use Logon Type:",type:"mc",o:["2","3","7","10"],a:3,e:"2=interactive, 3=network, 7=unlock, 10=remote interactive (RDP)."},
-{q:"Scheduled task creation is Event ID:",type:"mc",o:["4104","4698","4769","7036"],a:1,e:"4698 = scheduled task created — a common persistence/execution technique."},
+{q:"Scheduled task creation is Event ID:",type:"mc",o:["4698","4769","7036","4104"],a:0,e:"4698 = scheduled task created — a common persistence/execution technique."},
 {q:"Event ID for an account lockout?",type:"input",a:["4740"],e:"4740 = account locked out — correlate with 4625 brute force."},
-{q:"Event ID 7045 records:",type:"mc",o:["A new service installed","A user logon","A process exit","A DNS query"],a:0,e:"7045 = service installed — a common persistence technique."},
-{q:"Which logon type is used by a service/batch job with stored credentials?",type:"mc",o:["4 (batch)","3 (network)","2 (interactive)","10 (RDP)"],a:0,e:"Logon type 4 = batch/service; compare against scheduled-task and service activity."},
-{q:"Which authentication event is key for detecting pass-the-hash style activity?",type:"mc",o:["NTLM credential validation (4776) with network logons","Only HTTPS errors","Only 4688","Nothing"],a:0,e:"NTLM authentication via logon type 3 from odd sources = PtH detection point."}
+{q:"Event ID 7045 records:",type:"mc",o:["A DNS query","A new service installed","A user logon","A process exit"],a:1,e:"7045 = service installed — a common persistence technique."},
+{q:"Which logon type is used by a service/batch job with stored credentials?",type:"mc",o:["2 (interactive)","10 (RDP)","4 (batch)","3 (network)"],a:2,e:"Logon type 4 = batch/service; compare against scheduled-task and service activity."},
+{q:"Which authentication event is key for detecting pass-the-hash style activity?",type:"mc",o:["Only HTTPS errors","Only 4688","Nothing","NTLM credential validation (4776) with network logons"],a:3,e:"NTLM authentication via logon type 3 from odd sources = PtH detection point."}
 ],
 
 5:[
 {q:"Sysmon Event ID 1 =",type:"mc",o:["Process creation","Network connection","File creation","Registry change"],a:0,e:"EID 1 = ProcessCreate; it includes command line and hashes."},
 {q:"Sysmon Event ID 3 =",type:"mc",o:["Process creation","Network connection","Image loaded","DNS query"],a:1,e:"EID 3 = NetworkConnection — the connection the process made."},
 {q:"Sysmon Event ID for a DNS query?",type:"input",a:["22"],e:"EID 22 = DNS query (if enabled in the config) — great for C2/DGA hunting."},
-{q:"Sysmon logs are written to which channel?",type:"mc",o:["Security","Microsoft-Windows-Sysmon/Operational","System","Application"],a:1,e:"Sysmon writes to its own operational channel, separate from the Security log."},
-{q:"Which Sysmon Event ID catches file timestomping?",type:"mc",o:["1","2","11","19"],a:1,e:"EID 2 = File creation time changed (timestomping). EID 11 = file created."},
+{q:"Sysmon logs are written to which channel?",type:"mc",o:["Application","Security","Microsoft-Windows-Sysmon/Operational","System"],a:2,e:"Sysmon writes to its own operational channel, separate from the Security log."},
+{q:"Which Sysmon Event ID catches file timestomping?",type:"mc",o:["11","19","1","2"],a:3,e:"EID 2 = File creation time changed (timestomping). EID 11 = file created."},
 {q:"Which Sysmon Event ID records a service installed?",type:"mc",o:["4","7","17","21"],a:0,e:"EID 4 = Sysmon service state changed; service installation events appear via EID 7045 in Security or EID 7 in Sysmon image loads."},
-{q:"Sysmon Event ID 11 records:",type:"mc",o:["File creation","Process creation","Registry value set","Network connection"],a:0,e:"EID 11 = FileCreate — payload drops to temp/user dirs are a red flag."},
-{q:"Sysmon Event ID 13 records:",type:"mc",o:["Registry value set","A file renamed","A service started","A DNS query"],a:0,e:"EID 12/13/14 = registry object/value changes — persistence and autoruns."},
-{q:"Sysmon Event IDs 17/18 record:",type:"mc",o:["Named pipe creation/connection","File delete","User logon","Process exit"],a:0,e:"Named pipes (17 created / 18 connected) are used by lateral-movement tooling."},
+{q:"Sysmon Event ID 11 records:",type:"mc",o:["Network connection","File creation","Process creation","Registry value set"],a:1,e:"EID 11 = FileCreate — payload drops to temp/user dirs are a red flag."},
+{q:"Sysmon Event ID 13 records:",type:"mc",o:["A service started","A DNS query","Registry value set","A file renamed"],a:2,e:"EID 12/13/14 = registry object/value changes — persistence and autoruns."},
+{q:"Sysmon Event IDs 17/18 record:",type:"mc",o:["File delete","User logon","Process exit","Named pipe creation/connection"],a:3,e:"Named pipes (17 created / 18 connected) are used by lateral-movement tooling."},
 {q:"Which Sysmon Event ID logs command lines and hashes for processes?",type:"mc",o:["1 (ProcessCreate)","3","22","11"],a:0,e:"EID 1 includes Image, CommandLine, Hashes and ParentImage."}
 ],
 
 6:[
 {q:"Event ID for PowerShell Script Block Logging?",type:"input",a:["4104"],e:"4104 = script block logging — the closest thing to seeing the full script."},
 {q:"AMSI is designed to:",type:"mc",o:["Block all legitimate scripts","Inspect scripts and payloads in memory before execution","Encrypt PowerShell logs","Replace the antivirus"],a:1,e:"AMSI hands the content of scripts/obfuscated payloads to AV/EDR for inspection in memory."},
-{q:"An attacker runs \"powershell -version 2\" to:",type:"mc",o:["Improve performance","Bypass script block logging (v2 has no 4104)","Run on Linux","Connect to Azure"],a:1,e:"Downgrade to PS v2 avoids 4104 script block logging entirely."},
-{q:"Event ID 4103 records:",type:"mc",o:["Script block logging","Module logging (cmdlet invocation)","PowerShell startup","Cmdlet exit codes"],a:1,e:"4103 = module logging; 4104 = script block logging. Both belong to the 'visibility triad'."},
-{q:"Constrained Language Mode (CLM):",type:"mc",o:["Restricts scripts to allowed APIs, blocking .NET abuse","Speeds up scripts","Disables all logging","Only works on Linux"],a:1,e:"CLM limits what PowerShell code can do, disrupting many attack patterns."},
-{q:"Why is PowerShell so heavily abused?",type:"mc",o:["It is Linux-only","It is built into Windows, powerful, and can run from memory (fileless)","It is unencrypted","It only runs in the cloud"],a:0,e:"Present by default, scriptable, and executable in-memory — a perfect blend for attackers."},
-{q:"Which PowerShell logging must be ENABLED via GPO to capture script blocks?",type:"mc",o:["Script Block Logging (4104)","Module logging only","Nothing is ever logged","Audit policy is off"],a:0,e:"4104 is off by default on older Windows — enable it via GPO."},
-{q:"A Base64-encoded PowerShell payload shows up in 4104 as:",type:"mc",o:["A long encoded command string","Nothing","A logoff event","A DNS query"],a:0,e:"The -enc / base64 pattern is a top PowerShell detection cue."},
+{q:"An attacker runs \"powershell -version 2\" to:",type:"mc",o:["Connect to Azure","Improve performance","Bypass script block logging (v2 has no 4104)","Run on Linux"],a:2,e:"Downgrade to PS v2 avoids 4104 script block logging entirely."},
+{q:"Event ID 4103 records:",type:"mc",o:["PowerShell startup","Cmdlet exit codes","Script block logging","Module logging (cmdlet invocation)"],a:3,e:"4103 = module logging; 4104 = script block logging. Both belong to the 'visibility triad'."},
+{q:"Constrained Language Mode (CLM):",type:"mc",o:["Restricts scripts to allowed APIs, blocking .NET abuse","Speeds up scripts","Disables all logging","Only works on Linux"],a:0,e:"CLM limits what PowerShell code can do, disrupting many attack patterns."},
+{q:"Why is PowerShell so heavily abused?",type:"mc",o:["It is Linux-only","It is built into Windows, powerful, and can run from memory (fileless)","It is unencrypted","It only runs in the cloud"],a:1,e:"Present by default, scriptable, and executable in-memory — a perfect blend for attackers."},
+{q:"Which PowerShell logging must be ENABLED via GPO to capture script blocks?",type:"mc",o:["Nothing is ever logged","Audit policy is off","Script Block Logging (4104)","Module logging only"],a:2,e:"4104 is off by default on older Windows — enable it via GPO."},
+{q:"A Base64-encoded PowerShell payload shows up in 4104 as:",type:"mc",o:["Nothing","A logoff event","A DNS query","A long encoded command string"],a:3,e:"The -enc / base64 pattern is a top PowerShell detection cue."},
 {q:"Which event shows the FULL script text an attacker ran?",type:"mc",o:["4104 Script Block Logging","4625","7045","4720"],a:0,e:"4104 logs the script block content (some decoded) — closest to seeing the script."},
-{q:"AMSI bypass attempts matter because they:",type:"mc",o:["Try to avoid in-memory inspection by AV/EDR","Speed up execution","Encrypt disks","Block the internet"],a:0,e:"Bypasses target AMSI so malicious scripts evade in-memory scanning."}
+{q:"AMSI bypass attempts matter because they:",type:"mc",o:["Block the internet","Try to avoid in-memory inspection by AV/EDR","Speed up execution","Encrypt disks"],a:1,e:"Bypasses target AMSI so malicious scripts evade in-memory scanning."}
 ],
 
 7:[
 {q:"The Active Directory security boundary is the:",type:"mc",o:["OU","Domain controller","Forest","Site"],a:2,e:"The forest is the security boundary; trust between forests must be explicit."},
-{q:"Tier 0 accounts include:",type:"mc",o:["Standard workstation users","Domain / enterprise admins","Helpdesk accounts","Guest accounts"],a:1,e:"T0 = domain admin, enterprise admin, schema admin and DC accounts."},
+{q:"Tier 0 accounts include:",type:"mc",o:["Helpdesk accounts","Guest accounts","Standard workstation users","Domain / enterprise admins"],a:3,e:"T0 = domain admin, enterprise admin, schema admin and DC accounts."},
 {q:"GPO stands for:",type:"mc",o:["Group Policy Object","Global Password Option","General Proxy Output","Grant Permission Object"],a:0,e:"GPOs apply configuration and security settings to users/computers in OUs."},
 {q:"Service accounts are high-value targets because they often:",type:"mc",o:["Have no password","Are over-privileged, lack MFA, and have SPNs that enable Kerberoasting","Cannot log in","Are deleted automatically"],a:1,e:"SPNs + weak passwords = Kerberoasting; plus they rarely have MFA."},
-{q:"Which event fires on a Kerberos service-ticket request (relevant for Kerberoasting)?",type:"mc",o:["4769","4662","4740","5156"],a:0,e:"4769 = Kerberos service ticket requested. Watch for RC4/old etypes on SPN accounts."},
-{q:"A UserPrincipalName (UPN) is typically formatted as:",type:"mc",o:["DOMAIN\\\\username","user@domain.com","user.001","CN=user"],a:1,e:"UPN uses email-style format (user@domain); sAMAccountName uses DOMAIN\\\\username."},
+{q:"Which event fires on a Kerberos service-ticket request (relevant for Kerberoasting)?",type:"mc",o:["4740","5156","4769","4662"],a:2,e:"4769 = Kerberos service ticket requested. Watch for RC4/old etypes on SPN accounts."},
+{q:"A UserPrincipalName (UPN) is typically formatted as:",type:"mc",o:["user.001","CN=user","DOMAIN\\\\username","user@domain.com"],a:3,e:"UPN uses email-style format (user@domain); sAMAccountName uses DOMAIN\\\\username."},
 {q:"Group-membership changes to Domain Admins should be monitored via which event?",type:"mc",o:["4728/4732 (member added to a security group)","4104","7045","5156"],a:0,e:"4728 (global) / 4732 (local) member added = privilege-escalation indicator."},
-{q:"Which accounts belong to Tier 1 in the AD tier model?",type:"mc",o:["Local admins on member servers","Domain Admins","Regular users","Guests"],a:0,e:"Tier 1 = server administrators; T0 = domain/enterprise admins; T2 = workstations."},
-{q:"A service account requesting tickets with RC4 encryption is suspicious because:",type:"mc",o:["RC4 is weak and enables offline cracking (Kerberoasting)","RC4 is the newest encryption","RC4 is always legit","RC4 is unsupported"],a:0,e:"RC4 (etype 0x17) service tickets are crackable — a Kerberoasting cue."},
-{q:"Which event indicates a Kerberos pre-authentication failure (often password guessing)?",type:"mc",o:["4771","4624","4720","7045"],a:0,e:"4771 = Kerberos pre-auth failed — a brute-force indicator."}
+{q:"Which accounts belong to Tier 1 in the AD tier model?",type:"mc",o:["Guests","Local admins on member servers","Domain Admins","Regular users"],a:1,e:"Tier 1 = server administrators; T0 = domain/enterprise admins; T2 = workstations."},
+{q:"A service account requesting tickets with RC4 encryption is suspicious because:",type:"mc",o:["RC4 is always legit","RC4 is unsupported","RC4 is weak and enables offline cracking (Kerberoasting)","RC4 is the newest encryption"],a:2,e:"RC4 (etype 0x17) service tickets are crackable — a Kerberoasting cue."},
+{q:"Which event indicates a Kerberos pre-authentication failure (often password guessing)?",type:"mc",o:["4624","4720","7045","4771"],a:3,e:"4771 = Kerberos pre-auth failed — a brute-force indicator."}
 ],
 
 8:[
 {q:"The KDC runs which two services?",type:"mc",o:["AS and TGS","SMTP and POP3","DNS and DHCP","HTTP and FTP"],a:0,e:"KDC = Key Distribution Center, hosting the Authentication Service (AS) and Ticket-Granting Service (TGS)."},
 {q:"In Kerberos, the TGT is obtained from:",type:"mc",o:["The TGS","The AS (Authentication Service)","The file server","The DHCP server"],a:1,e:"You get a TGT from the AS first, then exchange it at the TGS for service tickets (STs)."},
-{q:"Kerberoasting targets accounts that:",type:"mc",o:["Have a SPN registered (service accounts)","Are domain guests","Never log on","Use NTLM only"],a:1,e:"The attacker requests STs (4769) for SPN accounts and cracks them offline."},
-{q:"A Golden Ticket is forged using the password hash of:",type:"mc",o:["A normal user","krbtgt","The domain controller's IP","The root password"],a:1,e:"krbtgt's hash signs forged TGTs — reset krbtgt twice after a compromise."},
+{q:"Kerberoasting targets accounts that:",type:"mc",o:["Never log on","Use NTLM only","Have a SPN registered (service accounts)","Are domain guests"],a:2,e:"The attacker requests STs (4769) for SPN accounts and cracks them offline."},
+{q:"A Golden Ticket is forged using the password hash of:",type:"mc",o:["The domain controller's IP","The root password","A normal user","krbtgt"],a:3,e:"krbtgt's hash signs forged TGTs — reset krbtgt twice after a compromise."},
 {q:"Event ID for a Kerberos TGT request?",type:"input",a:["4768"],e:"4768 = TGT issued by the AS."},
-{q:"Which is a LEGACY protocol that sends challenge/response (NTLM hashes)?",type:"mc",o:["Kerberos","NTLM","LDAPS","TLS"],a:1,e:"NTLM is legacy; attackers target it with pass-the-hash and relay attacks."},
-{q:"Pass-the-Hash (PtH) abuses:",type:"mc",o:["NTLM — authenticating with the password hash instead of the plaintext","Kerberos tickets only","SMTP relays","DNS queries"],a:0,e:"PtH uses NTLM hashes to authenticate without knowing the password."},
-{q:"A Silver Ticket is forged for:",type:"mc",o:["A specific service (SPN)","Any user in the forest","The DNS zone","A DHCP scope"],a:0,e:"Silver = fake service ticket; Golden = fake TGT for the whole domain."},
+{q:"Which is a LEGACY protocol that sends challenge/response (NTLM hashes)?",type:"mc",o:["NTLM","LDAPS","TLS","Kerberos"],a:0,e:"NTLM is legacy; attackers target it with pass-the-hash and relay attacks."},
+{q:"Pass-the-Hash (PtH) abuses:",type:"mc",o:["DNS queries","NTLM — authenticating with the password hash instead of the plaintext","Kerberos tickets only","SMTP relays"],a:1,e:"PtH uses NTLM hashes to authenticate without knowing the password."},
+{q:"A Silver Ticket is forged for:",type:"mc",o:["The DNS zone","A DHCP scope","A specific service (SPN)","Any user in the forest"],a:2,e:"Silver = fake service ticket; Golden = fake TGT for the whole domain."},
 {q:"Which Kerberos encryption type is weak/legacy and tied to Kerberoasting?",type:"input",a:["rc4","rc4-hmac","0x17","rc4 hmac"],e:"RC4-HMAC (etype 0x17) — disable it to mitigate Kerberoasting."},
-{q:"To detect AS-REP Roasting, look for:",type:"mc",o:["4768 TGT requests without pre-authentication","4625 failed logons","4688 process starts","7045 service installs"],a:0,e:"AS-REP roast = TGT requests for accounts with pre-authentication disabled."}
+{q:"To detect AS-REP Roasting, look for:",type:"mc",o:["4625 failed logons","4688 process starts","7045 service installs","4768 TGT requests without pre-authentication"],a:3,e:"AS-REP roast = TGT requests for accounts with pre-authentication disabled."}
 ],
 
 9:[
 {q:"IP protocol number for TCP?",type:"input",a:["6"],e:"TCP=6, UDP=17, ICMP=1."},
-{q:"Port 445 =",type:"mc",o:["SSH","SMB","RDP","DNS"],a:1,e:"445 = SMB file sharing; heavily abused for lateral movement."},
+{q:"Port 445 =",type:"mc",o:["SMB","RDP","DNS","SSH"],a:0,e:"445 = SMB file sharing; heavily abused for lateral movement."},
 {q:"Routing happens at OSI Layer:",type:"mc",o:["2 (Data Link)","3 (Network)","4 (Transport)","7 (Application)"],a:1,e:"Layer 3 = Network — IP addressing and routing."},
-{q:"Port 3389 =",type:"mc",o:["Telnet","RDP","HTTPS","MySQL"],a:0,e:"3389 = RDP. Watch for exposed 3389 and impossible-travel + RDP brute force."},
+{q:"Port 3389 =",type:"mc",o:["MySQL","Telnet","RDP","HTTPS"],a:2,e:"3389 = RDP. Watch for exposed 3389 and impossible-travel + RDP brute force."},
 {q:"Port number for DNS?",type:"input",a:["53"],e:"DNS uses UDP/53 (TCP/53 for large responses and zone transfers)."},
-{q:"HTTP operates at which OSI layer?",type:"mc",o:["Transport (4)","Network (3)","Application (7)","Session (5)"],a:2,e:"HTTP is a Layer 7 (Application) protocol."},
+{q:"HTTP operates at which OSI layer?",type:"mc",o:["Session (5)","Transport (4)","Network (3)","Application (7)"],a:3,e:"HTTP is a Layer 7 (Application) protocol."},
 {q:"IP protocol number for UDP?",type:"input",a:["17"],e:"UDP = 17; also remember ICMP = 1."},
 {q:"Port 22 =",type:"mc",o:["SSH","HTTP","FTP","SMTP"],a:0,e:"22 = SSH remote administration — a brute-force magnet when exposed."},
-{q:"Which port pair is used by WinRM for PowerShell remoting?",type:"mc",o:["5985/5986","443/80","1433/3306","21/22"],a:0,e:"WinRM = 5985 (HTTP) / 5986 (HTTPS) — PowerShell remoting and lateral movement."},
-{q:"A SYN flood primarily targets which layer's mechanism?",type:"mc",o:["Transport (TCP handshake)","Physical","Presentation","Data link"],a:0,e:"SYN floods exhaust TCP handshake resources at Layer 4."}
+{q:"Which port pair is used by WinRM for PowerShell remoting?",type:"mc",o:["21/22","5985/5986","443/80","1433/3306"],a:1,e:"WinRM = 5985 (HTTP) / 5986 (HTTPS) — PowerShell remoting and lateral movement."},
+{q:"A SYN flood primarily targets which layer's mechanism?",type:"mc",o:["Presentation","Data link","Transport (TCP handshake)","Physical"],a:2,e:"SYN floods exhaust TCP handshake resources at Layer 4."}
 ],
 
 10:[
-{q:"An A record maps:",type:"mc",o:["A domain to an IPv4 address","A domain to another domain","A domain to an IPv6 address","Mail routing"],a:0,e:"A = host to IPv4; AAAA = host to IPv6."},
+{q:"An A record maps:",type:"mc",o:["A domain to another domain","A domain to an IPv6 address","Mail routing","A domain to an IPv4 address"],a:3,e:"A = host to IPv4; AAAA = host to IPv6."},
 {q:"MX records specify:",type:"mc",o:["The mail servers for a domain","The primary web server","The DNS root servers","Proxy settings"],a:0,e:"MX = mail exchange — where mail for the domain is delivered."},
 {q:"DNS tunneling is:",type:"mc",o:["A legitimate backup mechanism","Encoding data inside DNS queries/responses to exfiltrate data or relay C2","A faster resolution method","A DDoS-only technique"],a:1,e:"Data is hidden in DNS queries/responses — often to low-volume, low-reputation domains."},
-{q:"CNAME stands for:",type:"mc",o:["Canonical name (an alias)","Classified name","Client name","Counter name"],a:0,e:"CNAME points a name to another name (alias), not directly to an IP."},
+{q:"CNAME stands for:",type:"mc",o:["Client name","Counter name","Canonical name (an alias)","Classified name"],a:2,e:"CNAME points a name to another name (alias), not directly to an IP."},
 {q:"How many DNS root server clusters exist globally?",type:"input",a:["13"],e:"13 root server identities (clusters with many mirrors), letters A–M."},
-{q:"A TXT record is commonly used for:",type:"mc",o:["SPF/DKIM verification and arbitrary text","Encrypted traffic","IPv6 addresses","Binary files"],a:0,e:"TXT carries verification text (SPF, DKIM, domain verification) — also abused for C2/exfil."},
+{q:"A TXT record is commonly used for:",type:"mc",o:["Encrypted traffic","IPv6 addresses","Binary files","SPF/DKIM verification and arbitrary text"],a:3,e:"TXT carries verification text (SPF, DKIM, domain verification) — also abused for C2/exfil."},
 {q:"An AAAA record maps a name to:",type:"mc",o:["An IPv6 address","An IPv4 address","A mail server","A name server"],a:0,e:"AAAA = IPv6; A = IPv4."},
-{q:"A PTR record provides:",type:"mc",o:["Reverse DNS (IP → name)","Forward resolution","Mail priority","TTL"],a:0,e:"PTR maps IPs back to names — useful in flow/beacon correlation."},
-{q:"NXDOMAIN means:",type:"mc",o:["The queried name does not exist","The server is slow","The query was blocked","An IP mismatch"],a:0,e:"NXDOMAIN floods are a DGA (domain generation algorithm) clue."},
-{q:"Which query pattern hints at DNS tunneling?",type:"mc",o:["Long subdomain labels with base64/hex content to a single domain","Normal A lookups","NTP queries","SRV for SIP"],a:0,e:"Long, encoded subdomains = data hidden in DNS — a tunneling classic."}
+{q:"A PTR record provides:",type:"mc",o:["TTL","Reverse DNS (IP → name)","Forward resolution","Mail priority"],a:1,e:"PTR maps IPs back to names — useful in flow/beacon correlation."},
+{q:"NXDOMAIN means:",type:"mc",o:["The query was blocked","An IP mismatch","The queried name does not exist","The server is slow"],a:2,e:"NXDOMAIN floods are a DGA (domain generation algorithm) clue."},
+{q:"Which query pattern hints at DNS tunneling?",type:"mc",o:["Normal A lookups","NTP queries","SRV for SIP","Long subdomain labels with base64/hex content to a single domain"],a:3,e:"Long, encoded subdomains = data hidden in DNS — a tunneling classic."}
 ],
 
 11:[
-{q:"An attacker uses GET requests with encoded data in the URL to call home. Why GET?",type:"mc",o:["GET is always encrypted","URL parameters are easy to log/exfil and blend into proxy logs","GET carries the request body","GET is faster"],a:1,e:"GET puts data in the URL — convenient for beacons/exfil and looks normal in proxy logs."},
+{q:"An attacker uses GET requests with encoded data in the URL to call home. Why GET?",type:"mc",o:["URL parameters are easy to log/exfil and blend into proxy logs","GET carries the request body","GET is faster","GET is always encrypted"],a:0,e:"GET puts data in the URL — convenient for beacons/exfil and looks normal in proxy logs."},
 {q:"The HTTP method most commonly used by web shells to accept commands is:",type:"mc",o:["GET","POST","CONNECT","HEAD"],a:1,e:"POST carries a body — web shells typically accept commands via POST parameters."},
-{q:"The CONNECT method is used to:",type:"mc",o:["Download files","Establish a tunnel (e.g., HTTPS through a proxy)","Delete resources","Renew certificates"],a:0,e:"CONNECT creates a tunnel — attackers abuse it to bypass egress filtering."},
-{q:"HTTP status 404 means:",type:"mc",o:["OK","Not Found","Forbidden","Unauthorized"],a:1,e:"404 = Not Found; a flood of 404s can indicate scanning."},
-{q:"Proxy logs are a \"gold mine\" for SOC because they:",type:"mc",o:["Contain plaintext credentials","Capture HTTP/HTTPS metadata (URLs, destinations) fleet-wide","Replace the firewall","Only log internal traffic"],a:1,e:"Proxy logs show every web destination and URL — central to web-browser compromise detection."},
+{q:"The CONNECT method is used to:",type:"mc",o:["Renew certificates","Download files","Establish a tunnel (e.g., HTTPS through a proxy)","Delete resources"],a:2,e:"CONNECT creates a tunnel — attackers abuse it to bypass egress filtering."},
+{q:"HTTP status 404 means:",type:"mc",o:["Forbidden","Unauthorized","OK","Not Found"],a:3,e:"404 = Not Found; a flood of 404s can indicate scanning."},
+{q:"Proxy logs are a \"gold mine\" for SOC because they:",type:"mc",o:["Capture HTTP/HTTPS metadata (URLs, destinations) fleet-wide","Replace the firewall","Only log internal traffic","Contain plaintext credentials"],a:0,e:"Proxy logs show every web destination and URL — central to web-browser compromise detection."},
 {q:"During a TLS handshake, the FIRST message sent is:",type:"mc",o:["ServerHello","ClientHello","Certificate","Finished"],a:1,e:"The client starts with ClientHello; the server replies with ServerHello + certificate."},
-{q:"HTTP status 200 means:",type:"mc",o:["OK","Redirect","Unauthorized","Server error"],a:0,e:"200 = success. Watch for 200s to unusual files."},
-{q:"HTTP status 403 means:",type:"mc",o:["Forbidden","Not found","OK","Redirect"],a:1,e:"403 = forbidden; repeated 403s can indicate probing restricted paths."},
+{q:"HTTP status 200 means:",type:"mc",o:["Unauthorized","Server error","OK","Redirect"],a:2,e:"200 = success. Watch for 200s to unusual files."},
+{q:"HTTP status 403 means:",type:"mc",o:["Not found","OK","Redirect","Forbidden"],a:3,e:"403 = forbidden; repeated 403s can indicate probing restricted paths."},
 {q:"Which header commonly carries secrets that analysts should protect in logs?",type:"mc",o:["Authorization","User-Agent","Accept-Language","Server"],a:0,e:"Authorization (Bearer/API keys) leaks secrets if over-logged."},
-{q:"A sudden burst of 5xx responses from a web server may indicate:",type:"mc",o:["Server-side errors or an exploitation attempt","A happy user","A DNS change","Nothing"],a:0,e:"5xx bursts can follow exploitation (failed payloads) or DoS."}
+{q:"A sudden burst of 5xx responses from a web server may indicate:",type:"mc",o:["Nothing","Server-side errors or an exploitation attempt","A happy user","A DNS change"],a:1,e:"5xx bursts can follow exploitation (failed payloads) or DoS."}
 ],
 
 12:[
-{q:"The network flow \"5-tuple\" is:",type:"mc",o:["MAC, hostname, OS, user, port","srcIP, srcPort, dstIP, dstPort, protocol","Time, source, destination, size, flag","User, process, file, registry, memory"],a:1,e:"The 5-tuple identifies a flow: source IP/port, destination IP/port, protocol."},
-{q:"Beaconing is characterized by:",type:"mc",o:["Random one-time connections","Regular, periodic outbound connections to the same destination","Large inbound downloads","UDP only"],a:1,e:"A beacon is a C2 heartbeat — same destination, regular interval."},
+{q:"The network flow \"5-tuple\" is:",type:"mc",o:["User, process, file, registry, memory","MAC, hostname, OS, user, port","srcIP, srcPort, dstIP, dstPort, protocol","Time, source, destination, size, flag"],a:2,e:"The 5-tuple identifies a flow: source IP/port, destination IP/port, protocol."},
+{q:"Beaconing is characterized by:",type:"mc",o:["Large inbound downloads","UDP only","Random one-time connections","Regular, periodic outbound connections to the same destination"],a:3,e:"A beacon is a C2 heartbeat — same destination, regular interval."},
 {q:"Lateral movement on the network often appears as:",type:"mc",o:["Connections from one internal host to many other internal hosts/services","Traffic to public DNS","Email to external recipients","Large CDN downloads"],a:0,e:"One host touching many internal peers (SMB/RDP/PS-Remoting) = east-west spread."},
 {q:"A strong exfiltration indicator is:",type:"mc",o:["Small periodic outbound traffic","Large outbound data volume to an unusual destination, often at odd hours","Internal DNS queries","SSL certificate expiry"],a:1,e:"Big data leaving to a rare destination at 3 AM is a classic exfil signature."},
-{q:"In flow terminology, a full \"session\" usually equals:",type:"mc",o:["One packet","Two unidirectional flows (request + response)","Ten flows","One DNS query"],a:1,e:"Each direction is its own flow; together they make a session."},
-{q:"A SYN scan (half-open) is best detected by:",type:"mc",o:["Many SYN packets without completed handshakes to multiple ports","Only DNS logs","Only web logs","User reports"],a:0,e:"Incomplete handshakes = port scanning."},
+{q:"In flow terminology, a full \"session\" usually equals:",type:"mc",o:["One DNS query","One packet","Two unidirectional flows (request + response)","Ten flows"],a:2,e:"Each direction is its own flow; together they make a session."},
+{q:"A SYN scan (half-open) is best detected by:",type:"mc",o:["Only DNS logs","Only web logs","User reports","Many SYN packets without completed handshakes to multiple ports"],a:3,e:"Incomplete handshakes = port scanning."},
 {q:"Which tool is typically used for PCAP-level analysis?",type:"mc",o:["Wireshark","Excel","A calculator","A web browser"],a:0,e:"Wireshark/tcpdump inspect raw packets when flow data isn't enough."},
-{q:"An internal host suddenly generating traffic to a country it never touches is:",type:"mc",o:["An anomaly worth investigating","Normal","Benign","Expected"],a:0,e:"Rare geodestinations = possible C2 or exfiltration."},
-{q:"Flow data (NetFlow/IPFIX) typically does NOT include:",type:"mc",o:["Packet payloads","Source and destination IPs","Ports and protocol","Timestamps"],a:0,e:"Flow = metadata only; payloads require PCAP or EDR."},
-{q:"Beacon intervals that suddenly speed up (e.g., 60s → 5s) often indicate:",type:"mc",o:["A human driving the C2 session","A power outage","A DNS failure","A reboot"],a:0,e:"Interactive C2 speeds up the beacon cadence."}
+{q:"An internal host suddenly generating traffic to a country it never touches is:",type:"mc",o:["Expected","An anomaly worth investigating","Normal","Benign"],a:1,e:"Rare geodestinations = possible C2 or exfiltration."},
+{q:"Flow data (NetFlow/IPFIX) typically does NOT include:",type:"mc",o:["Ports and protocol","Timestamps","Packet payloads","Source and destination IPs"],a:2,e:"Flow = metadata only; payloads require PCAP or EDR."},
+{q:"Beacon intervals that suddenly speed up (e.g., 60s → 5s) often indicate:",type:"mc",o:["A power outage","A DNS failure","A reboot","A human driving the C2 session"],a:3,e:"Interactive C2 speeds up the beacon cadence."}
 ],
 
 13:[
-{q:"The key difference between EPP (antivirus) and EDR is:",type:"mc",o:["EPP is cloud-only","EDR adds continuous monitoring, behavioral detection and response","EDR removes the agent","There is no difference"],a:1,e:"EDR = continuous telemetry + behavioral detection + response actions; EPP is largely signature-based protection."},
-{q:"Which is NOT typical EDR telemetry?",type:"mc",o:["Process creation","Network connections","Registry changes","Wi-Fi SSID passwords"],a:3,e:"EDR sees process, network, file, registry and memory events — not saved Wi-Fi passwords."},
-{q:"A quick containment action an analyst can take via EDR is:",type:"mc",o:["Rebuilding Active Directory","Isolating the endpoint from the network","Deleting the user's profile","Reinstalling the OS"],a:1,e:"Endpoint isolation is the primary fast containment action in EDR consoles."},
-{q:"EDR flagging behavior \"not seen before on this host\" is an example of:",type:"mc",o:["Signature matching","Behavioral / anomaly-based detection","Rule-based firewall","Static hashing"],a:1,e:"EDR's core value is behavioral and anomaly detection, not just signatures."},
-{q:"EDR and XDR are typically associated with which generations?",type:"mc",o:["1st and 2nd","3rd and 4th","4th (EDR) and 5th (XDR)","None"],a:2,e:"Endpoint-centric EDR is considered the 4th generation; XDR the 5th."},
-{q:"Which is a typical EDR response action?",type:"mc",o:["Kill a process","Quarantine a file","Isolate a host","All of these"],a:3,e:"EDR consoles offer process kill, file quarantine and host isolation."},
-{q:"A persistent scheduled task created by malware would be flagged by EDR as:",type:"mc",o:["Persistence behavior","A network beacon","A false positive","A logon"],a:0,e:"Persistence = scheduled tasks, services, run keys."},
-{q:"Why does parent-process context matter (e.g., Word spawning PowerShell)?",type:"mc",o:["Attackers use document macros to launch shells","It shows CPU usage","It's always Excel","It's irrelevant"],a:0,e:"Parent-child chains expose macro → shell → payload sequences."},
+{q:"The key difference between EPP (antivirus) and EDR is:",type:"mc",o:["EDR adds continuous monitoring, behavioral detection and response","EDR removes the agent","There is no difference","EPP is cloud-only"],a:0,e:"EDR = continuous telemetry + behavioral detection + response actions; EPP is largely signature-based protection."},
+{q:"Which is NOT typical EDR telemetry?",type:"mc",o:["Registry changes","Wi-Fi SSID passwords","Process creation","Network connections"],a:1,e:"EDR sees process, network, file, registry and memory events — not saved Wi-Fi passwords."},
+{q:"A quick containment action an analyst can take via EDR is:",type:"mc",o:["Reinstalling the OS","Rebuilding Active Directory","Isolating the endpoint from the network","Deleting the user's profile"],a:2,e:"Endpoint isolation is the primary fast containment action in EDR consoles."},
+{q:"EDR flagging behavior \"not seen before on this host\" is an example of:",type:"mc",o:["Rule-based firewall","Static hashing","Signature matching","Behavioral / anomaly-based detection"],a:3,e:"EDR's core value is behavioral and anomaly detection, not just signatures."},
+{q:"EDR and XDR are typically associated with which generations?",type:"mc",o:["4th (EDR) and 5th (XDR)","None","1st and 2nd","3rd and 4th"],a:0,e:"Endpoint-centric EDR is considered the 4th generation; XDR the 5th."},
+{q:"Which is a typical EDR response action?",type:"mc",o:["Isolate a host","All of these","Kill a process","Quarantine a file"],a:1,e:"EDR consoles offer process kill, file quarantine and host isolation."},
+{q:"A persistent scheduled task created by malware would be flagged by EDR as:",type:"mc",o:["A false positive","A logon","Persistence behavior","A network beacon"],a:2,e:"Persistence = scheduled tasks, services, run keys."},
+{q:"Why does parent-process context matter (e.g., Word spawning PowerShell)?",type:"mc",o:["It shows CPU usage","It's always Excel","It's irrelevant","Attackers use document macros to launch shells"],a:3,e:"Parent-child chains expose macro → shell → payload sequences."},
 {q:"An EDR agent that suddenly stops reporting is:",type:"mc",o:["A critical health/alarm issue — the attacker may have killed it","Normal","An upgrade","Ignored"],a:0,e:"Agent heartbeat loss = possible tampering — investigate immediately."},
-{q:"Which is an EDR evasion technique?",type:"mc",o:["Living-off-the-land (LOLBins)","Using only disk logs","Plain-text scripts","Simple signatures"],a:0,e:"LOLBins abuse built-in tools to evade endpoint detection."}
+{q:"Which is an EDR evasion technique?",type:"mc",o:["Simple signatures","Living-off-the-land (LOLBins)","Using only disk logs","Plain-text scripts"],a:1,e:"LOLBins abuse built-in tools to evade endpoint detection."}
 ],
 
 14:[
-{q:"A trojan is:",type:"mc",o:["Self-replicating software","Malware disguised as legitimate software","A network scanner","A firewall tool"],a:1,e:"Trojans masquerade as something benign to trick the user."},
-{q:"A worm differs from a virus by:",type:"mc",o:["Spreading on its own over the network without needing a host file","Being harmless","Requiring USB only","Being encrypted"],a:0,e:"Worms self-propagate across the network; viruses need a host file or user action."},
-{q:"RAT stands for:",type:"mc",o:["Rapid Authentication Token","Remote Access Trojan","Rate and Threshold","Random Access Test"],a:1,e:"A RAT gives the attacker interactive remote control of the machine."},
+{q:"A trojan is:",type:"mc",o:["A firewall tool","Self-replicating software","Malware disguised as legitimate software","A network scanner"],a:2,e:"Trojans masquerade as something benign to trick the user."},
+{q:"A worm differs from a virus by:",type:"mc",o:["Being harmless","Requiring USB only","Being encrypted","Spreading on its own over the network without needing a host file"],a:3,e:"Worms self-propagate across the network; viruses need a host file or user action."},
+{q:"RAT stands for:",type:"mc",o:["Remote Access Trojan","Rate and Threshold","Random Access Test","Rapid Authentication Token"],a:0,e:"A RAT gives the attacker interactive remote control of the machine."},
 {q:"A \"loader\" (or dropper) malware:",type:"mc",o:["Only deletes logs","Delivers/fetches and executes the next stage","Encrypts files permanently","Monitors keystrokes only"],a:1,e:"Loaders fetch and run the main payload — often in memory (fileless)."},
-{q:"Ransomware's defining behavior is:",type:"mc",o:["Slow network","Encrypting victim files and demanding payment for the key","Stealing browser history","Mining crypto silently"],a:1,e:"Encryption + ransom note are the tell-tale ransomware pattern."},
-{q:"Static analysis of a file means:",type:"mc",o:["Running it in a sandbox","Inspecting it without executing (strings, hashes, imports)","Only watching network traffic","Deleting it"],a:1,e:"Static = examine without running; dynamic = execute in a sandbox and observe."},
+{q:"Ransomware's defining behavior is:",type:"mc",o:["Mining crypto silently","Slow network","Encrypting victim files and demanding payment for the key","Stealing browser history"],a:2,e:"Encryption + ransom note are the tell-tale ransomware pattern."},
+{q:"Static analysis of a file means:",type:"mc",o:["Only watching network traffic","Deleting it","Running it in a sandbox","Inspecting it without executing (strings, hashes, imports)"],a:3,e:"Static = examine without running; dynamic = execute in a sandbox and observe."},
 {q:"An infostealer specializes in:",type:"mc",o:["Harvesting credentials and browser data","Encrypting files","Self-replication","Network scanning"],a:0,e:"Infostealers exfil credentials, cookies and wallets."},
-{q:"A rootkit's main goal is:",type:"mc",o:["Hiding itself/other malware and persistence","Showing ads","Speeding up the PC","Encrypting files"],a:0,e:"Rootkits operate at a low level to stay hidden."},
-{q:"Dynamic (behavioral) analysis of malware means:",type:"mc",o:["Executing it in a sandbox and observing behavior","Only reading strings","Hashing it","Renaming it"],a:0,e:"Sandbox execution reveals network, file and registry behavior."},
-{q:"Which is a common malware persistence mechanism?",type:"mc",o:["Run keys / startup folder / scheduled tasks","Only browser history","Only email","Nothing"],a:0,e:"Persistence = autorun locations that survive reboot."}
+{q:"A rootkit's main goal is:",type:"mc",o:["Encrypting files","Hiding itself/other malware and persistence","Showing ads","Speeding up the PC"],a:1,e:"Rootkits operate at a low level to stay hidden."},
+{q:"Dynamic (behavioral) analysis of malware means:",type:"mc",o:["Hashing it","Renaming it","Executing it in a sandbox and observing behavior","Only reading strings"],a:2,e:"Sandbox execution reveals network, file and registry behavior."},
+{q:"Which is a common malware persistence mechanism?",type:"mc",o:["Only browser history","Only email","Nothing","Run keys / startup folder / scheduled tasks"],a:3,e:"Persistence = autorun locations that survive reboot."}
 ],
 
 15:[
-{q:"The most common C2 channel by far is:",type:"mc",o:["ICMP only","HTTP/HTTPS (web)","Raw UDP","Bluetooth"],a:1,e:"Web traffic is ubiquitous, so HTTP/HTTPS C2 blends in."},
-{q:"Beaconing to a C2 server usually uses:",type:"mc",o:["GET requests on a fixed interval","Random POSTs to different servers","Only DNS","No network traffic at all"],a:0,e:"GET beacons on a schedule = a heartbeat you can visualize in flow data."},
-{q:"Fast-flux DNS:",type:"mc",o:["Speeds up resolution","Rapidly rotates IPs behind a domain to evade blocking","Encrypts DNS","Disables recursion"],a:1,e:"Fast flux maps many short-lived IPs to one domain, defeating blocklists."},
-{q:"Domain fronting:",type:"mc",o:["Uses a legitimate high-reputation front domain/CDN while hiding the real destination","Changes TLDs","Is a DDoS technique","Only works on email"],a:0,e:"The connection looks like it targets a trusted CDN domain but actually reaches C2."},
-{q:"P2P C2 means:",type:"mc",o:["A centralized server","Malware nodes talk to each other in a decentralized mesh","Phone-only control","Single IP beacon"],a:1,e:"Peer-to-peer C2 removes a single point of failure — hard to take down."},
-{q:"Which framework is the most famous commercial C2 tool?",type:"mc",o:["Cobalt Strike","Photoshop","Nmap","Wireshark"],a:0,e:"Cobalt Strike beacons dominate post-exploitation (also Metasploit/Empire)."},
-{q:"A \"dead drop\" C2 resolver uses:",type:"mc",o:["A public service (e.g., GitHub/cloud) to store the next C2 address","A USB key","A printer","A DHCP server"],a:0,e:"Dead-drop resolvers hide C2 addresses in legitimate-looking public places."},
-{q:"Which channel is rarest and usually a last-resort C2 fallback?",type:"mc",o:["ICMP","HTTP","HTTPS","DNS"],a:0,e:"ICMP tunneling is loud and unusual — used when web egress is blocked."},
+{q:"The most common C2 channel by far is:",type:"mc",o:["HTTP/HTTPS (web)","Raw UDP","Bluetooth","ICMP only"],a:0,e:"Web traffic is ubiquitous, so HTTP/HTTPS C2 blends in."},
+{q:"Beaconing to a C2 server usually uses:",type:"mc",o:["No network traffic at all","GET requests on a fixed interval","Random POSTs to different servers","Only DNS"],a:1,e:"GET beacons on a schedule = a heartbeat you can visualize in flow data."},
+{q:"Fast-flux DNS:",type:"mc",o:["Disables recursion","Speeds up resolution","Rapidly rotates IPs behind a domain to evade blocking","Encrypts DNS"],a:2,e:"Fast flux maps many short-lived IPs to one domain, defeating blocklists."},
+{q:"Domain fronting:",type:"mc",o:["Changes TLDs","Is a DDoS technique","Only works on email","Uses a legitimate high-reputation front domain/CDN while hiding the real destination"],a:3,e:"The connection looks like it targets a trusted CDN domain but actually reaches C2."},
+{q:"P2P C2 means:",type:"mc",o:["Malware nodes talk to each other in a decentralized mesh","Phone-only control","Single IP beacon","A centralized server"],a:0,e:"Peer-to-peer C2 removes a single point of failure — hard to take down."},
+{q:"Which framework is the most famous commercial C2 tool?",type:"mc",o:["Wireshark","Cobalt Strike","Photoshop","Nmap"],a:1,e:"Cobalt Strike beacons dominate post-exploitation (also Metasploit/Empire)."},
+{q:"A \"dead drop\" C2 resolver uses:",type:"mc",o:["A printer","A DHCP server","A public service (e.g., GitHub/cloud) to store the next C2 address","A USB key"],a:2,e:"Dead-drop resolvers hide C2 addresses in legitimate-looking public places."},
+{q:"Which channel is rarest and usually a last-resort C2 fallback?",type:"mc",o:["HTTP","HTTPS","DNS","ICMP"],a:3,e:"ICMP tunneling is loud and unusual — used when web egress is blocked."},
 {q:"High entropy (random-looking) domains or user-agents are:",type:"mc",o:["A C2/DGA indicator worth correlating","Normal","A typo","A DNS record type"],a:0,e:"Entropy is a strong statistical signal for C2/DGA."},
-{q:"Beacon \"jitter\" refers to:",type:"mc",o:["Randomized timing variation to evade pattern detection","The beacon's IP","A DNS TTL","A packet size"],a:0,e:"Jitter breaks the fixed-interval pattern that detectors look for."}
+{q:"Beacon \"jitter\" refers to:",type:"mc",o:["A packet size","Randomized timing variation to evade pattern detection","The beacon's IP","A DNS TTL"],a:1,e:"Jitter breaks the fixed-interval pattern that detectors look for."}
 ],
 
 16:[
-{q:"Spear phishing is:",type:"mc",o:["Random mass email","Targeted phishing at specific individuals/organizations with personalized content","A phone call scam","A vishing attempt"],a:1,e:"Spear phishing is tailored to a target; bulk phishing is mass and generic."},
-{q:"BEC (Business Email Compromise) typically involves:",type:"mc",o:["Encrypting files","Impersonating an executive/vendor to request a fraudulent wire transfer or gift cards","Sending malicious attachments","DNS poisoning"],a:1,e:"BEC = social fraud via email — invoice changes, gift cards, fake approvals."},
+{q:"Spear phishing is:",type:"mc",o:["A vishing attempt","Random mass email","Targeted phishing at specific individuals/organizations with personalized content","A phone call scam"],a:2,e:"Spear phishing is tailored to a target; bulk phishing is mass and generic."},
+{q:"BEC (Business Email Compromise) typically involves:",type:"mc",o:["Sending malicious attachments","DNS poisoning","Encrypting files","Impersonating an executive/vendor to request a fraudulent wire transfer or gift cards"],a:3,e:"BEC = social fraud via email — invoice changes, gift cards, fake approvals."},
 {q:"SPF validates:",type:"mc",o:["Whether the sending IP is authorized to send for the domain","The email content","The attachment hash","Whether the user opened the email"],a:0,e:"SPF checks the envelope sender against the domain's authorized IPs."},
 {q:"DKIM provides:",type:"mc",o:["Encryption of the body","A digital signature verifying the email wasn't altered in transit","Malware scanning","IP reputation only"],a:1,e:"DKIM signs the message; receivers verify the signature with the public key."},
-{q:"DMARC tells receivers:",type:"mc",o:["What to do when SPF/DKIM fail (none/quarantine/reject)","How to encrypt email","Which port to use","The sender's name"],a:0,e:"DMARC is the policy layer on top of SPF and DKIM."},
-{q:"In email headers, which field shows where a REPLY would go and is frequently attacker-controlled?",type:"mc",o:["Received","Reply-To","Message-ID","Date"],a:1,e:"Reply-To overrides the From address for replies — a favorite BEC trick."},
+{q:"DMARC tells receivers:",type:"mc",o:["Which port to use","The sender's name","What to do when SPF/DKIM fail (none/quarantine/reject)","How to encrypt email"],a:2,e:"DMARC is the policy layer on top of SPF and DKIM."},
+{q:"In email headers, which field shows where a REPLY would go and is frequently attacker-controlled?",type:"mc",o:["Message-ID","Date","Received","Reply-To"],a:3,e:"Reply-To overrides the From address for replies — a favorite BEC trick."},
 {q:"Quishing refers to phishing via:",type:"mc",o:["QR codes","Phone calls","SMS","Fax"],a:0,e:"Quishing = QR-code phishing, increasingly common."},
-{q:"Vishing is phishing over:",type:"mc",o:["Voice calls","Email","SMS","Web"],a:0,e:"Vishing = voice; smishing = SMS."},
-{q:"When an email fails DMARC alignment, a SOC typically:",type:"mc",o:["Quarantines/rejects per policy and investigates","Ignores it","Replies to it","Deletes the domain"],a:0,e:"DMARC policy decides handling; failures are suspicious."},
-{q:"The FIRST step in analyzing a malicious attachment is:",type:"mc",o:["Get its hash and check reputation (VT/sandbox)","Open it in Word","Forward it to the CEO","Print it"],a:0,e:"Hash reputation + sandboxing before any execution."}
+{q:"Vishing is phishing over:",type:"mc",o:["Web","Voice calls","Email","SMS"],a:1,e:"Vishing = voice; smishing = SMS."},
+{q:"When an email fails DMARC alignment, a SOC typically:",type:"mc",o:["Replies to it","Deletes the domain","Quarantines/rejects per policy and investigates","Ignores it"],a:2,e:"DMARC policy decides handling; failures are suspicious."},
+{q:"The FIRST step in analyzing a malicious attachment is:",type:"mc",o:["Open it in Word","Forward it to the CEO","Print it","Get its hash and check reputation (VT/sandbox)"],a:3,e:"Hash reputation + sandboxing before any execution."}
 ],
 
 17:[
 {q:"IOC stands for:",type:"mc",o:["Indicator of Compromise","Incident of Concern","Indicator of Control","Impact of Compromise"],a:0,e:"IOC = observable evidence (hash, IP, domain) that a compromise happened."},
 {q:"A file hash, IP or domain used to detect a known threat is a(n):",type:"mc",o:["TTP","IOC","IOA","SIEM"],a:1,e:"IOCs are concrete artifacts; TTPs are the behaviors/techniques."},
 {q:"L1 analysts primarily work with which intel level?",type:"mc",o:["Strategic only","Operational","Tactical and technical (IOCs, detection)","Only geopolitical"],a:2,e:"L1 works with tactical/technical intel: indicators, detection, enrichment."},
-{q:"TLP:RED means the information:",type:"mc",o:["Can be shared publicly","Is restricted to named individuals with no further sharing","Can be shared with partners freely","Is encrypted"],a:1,e:"TLP:RED = for the original recipients only, no further disclosure."},
-{q:"STIX/TAXII are:",type:"mc",o:["Firewall brands","Standards for sharing structured threat intel (STIX) and its transport (TAXII)","Windows services","Malware families"],a:1,e:"STIX defines the intel data model; TAXII is the protocol to move it between TIPs."},
-{q:"IOA stands for:",type:"mc",o:["Indicator of Attack","Indicator of Alert","Institute of Analysis","Impact of Attack"],a:0,e:"IOAs detect intent/behavior; IOCs are artifacts of compromise."},
-{q:"Which is an IOC type?",type:"mc",o:["SHA256 hash","SQL query","HTTP status","CPU model"],a:0,e:"Hashes, IPs, domains, URLs and filenames are IOCs."},
-{q:"TLP:AMBER means:",type:"mc",o:["Share within the organization and partners with a need to know","Share publicly","Never share","Encrypt"],a:0,e:"AMBER = limited sharing; GREEN = community; CLEAR = public."},
+{q:"TLP:RED means the information:",type:"mc",o:["Can be shared with partners freely","Is encrypted","Can be shared publicly","Is restricted to named individuals with no further sharing"],a:3,e:"TLP:RED = for the original recipients only, no further disclosure."},
+{q:"STIX/TAXII are:",type:"mc",o:["Standards for sharing structured threat intel (STIX) and its transport (TAXII)","Windows services","Malware families","Firewall brands"],a:0,e:"STIX defines the intel data model; TAXII is the protocol to move it between TIPs."},
+{q:"IOA stands for:",type:"mc",o:["Impact of Attack","Indicator of Attack","Indicator of Alert","Institute of Analysis"],a:1,e:"IOAs detect intent/behavior; IOCs are artifacts of compromise."},
+{q:"Which is an IOC type?",type:"mc",o:["HTTP status","CPU model","SHA256 hash","SQL query"],a:2,e:"Hashes, IPs, domains, URLs and filenames are IOCs."},
+{q:"TLP:AMBER means:",type:"mc",o:["Share publicly","Never share","Encrypt","Share within the organization and partners with a need to know"],a:3,e:"AMBER = limited sharing; GREEN = community; CLEAR = public."},
 {q:"\"Tactical intelligence\" for an L1 typically means:",type:"mc",o:["Detection-oriented data (IOCs, hashes, TTPs)","Long-term geopolitical analysis","Vendor pricing","Employee morale"],a:0,e:"Tactical intel supports detection and triage decisions now."},
 {q:"Which standard defines the structured threat-intel data model (objects and relationships)?",type:"input",a:["stix","stix/taxii"],e:"STIX is the data model; TAXII is the transport protocol."}
 ],
 
 18:[
 {q:"In MITRE ATT&CK, a \"tactic\" answers:",type:"mc",o:["How the attacker did it","WHY / the strategic goal of the step","Which tool was used","The victim's OS"],a:1,e:"Tactic = the objective (why). Technique = how it's done."},
-{q:"A \"technique\" answers:",type:"mc",o:["Why the attacker did it","HOW the step was performed","The password hash","The SIEM name"],a:1,e:"Technique = the method; a procedure is the specific tool/code implementation."},
-{q:"ATT&CK technique T1078 refers to:",type:"mc",o:["Phishing","Valid Accounts","Drive-by compromise","SQL injection"],a:1,e:"T1078 = valid accounts — using legitimate credentials to bypass controls."},
-{q:"In the enterprise attack chain, the FIRST tactic is:",type:"mc",o:["Exfiltration","Reconnaissance","Impact","Persistence"],a:1,e:"The chain opens with Reconnaissance (TA0043), then Resource Development and Initial Access."},
-{q:"ATT&CK Navigator is used to:",type:"mc",o:["Visualize techniques and detection coverage on the matrix","Write email rules","Block IPs","Parse YARA rules"],a:0,e:"Navigator lets you annotate the matrix — mapping detections and gaps."},
-{q:"ATT&CK technique T1566 is:",type:"mc",o:["Exploit public-facing application","Phishing","Valid accounts","Taint shared content"],a:1,e:"T1566 = Phishing — the #1 initial-access vector."},
-{q:"Which tactic follows Initial Access in the attack chain?",type:"mc",o:["Execution","Exfiltration","Impact","Reconnaissance"],a:0,e:"Order: Recon → Resource Dev → Initial Access → Execution → Persistence..."},
+{q:"A \"technique\" answers:",type:"mc",o:["The SIEM name","Why the attacker did it","HOW the step was performed","The password hash"],a:2,e:"Technique = the method; a procedure is the specific tool/code implementation."},
+{q:"ATT&CK technique T1078 refers to:",type:"mc",o:["Drive-by compromise","SQL injection","Phishing","Valid Accounts"],a:3,e:"T1078 = valid accounts — using legitimate credentials to bypass controls."},
+{q:"In the enterprise attack chain, the FIRST tactic is:",type:"mc",o:["Reconnaissance","Impact","Persistence","Exfiltration"],a:0,e:"The chain opens with Reconnaissance (TA0043), then Resource Development and Initial Access."},
+{q:"ATT&CK Navigator is used to:",type:"mc",o:["Parse YARA rules","Visualize techniques and detection coverage on the matrix","Write email rules","Block IPs"],a:1,e:"Navigator lets you annotate the matrix — mapping detections and gaps."},
+{q:"ATT&CK technique T1566 is:",type:"mc",o:["Taint shared content","Exploit public-facing application","Phishing","Valid accounts"],a:2,e:"T1566 = Phishing — the #1 initial-access vector."},
+{q:"Which tactic follows Initial Access in the attack chain?",type:"mc",o:["Exfiltration","Impact","Reconnaissance","Execution"],a:3,e:"Order: Recon → Resource Dev → Initial Access → Execution → Persistence..."},
 {q:"ATT&CK technique T1059 refers to:",type:"mc",o:["Command and Scripting Interpreter","Phishing","Valid accounts","Exfiltration"],a:0,e:"T1059 = command/scripting (PowerShell, cmd, bash, etc.)."},
-{q:"Mapping detections to ATT&CK is useful because it:",type:"mc",o:["Shows coverage and gaps across the kill chain","Increases log volume","Replaces the SIEM","Speeds up the network"],a:0,e:"Coverage mapping highlights blind spots (gap analysis)."},
-{q:"Persistence techniques aim to:",type:"mc",o:["Maintain access across reboots","Steal data in one shot","Scan networks","Phish users"],a:0,e:"Persistence = stay installed (scheduled tasks, services, run keys)."}
+{q:"Mapping detections to ATT&CK is useful because it:",type:"mc",o:["Speeds up the network","Shows coverage and gaps across the kill chain","Increases log volume","Replaces the SIEM"],a:1,e:"Coverage mapping highlights blind spots (gap analysis)."},
+{q:"Persistence techniques aim to:",type:"mc",o:["Scan networks","Phish users","Maintain access across reboots","Steal data in one shot"],a:2,e:"Persistence = stay installed (scheduled tasks, services, run keys)."}
 ],
 
 19:[
-{q:"A brute force attack typically shows up as:",type:"mc",o:["Many failed logons (4625) for one account from one source, sometimes followed by a success (4624)","A single failed logon","DNS errors","A port scan from the internet"],a:0,e:"Many 4625 → one 4624 from the same source = brute force that succeeded."},
+{q:"A brute force attack typically shows up as:",type:"mc",o:["A single failed logon","DNS errors","A port scan from the internet","Many failed logons (4625) for one account from one source, sometimes followed by a success (4624)"],a:3,e:"Many 4625 → one 4624 from the same source = brute force that succeeded."},
 {q:"Password spraying differs from brute force by:",type:"mc",o:["Using one common password against many accounts (low-and-slow)","Trying every password on one account","Always succeeding","Using no passwords"],a:0,e:"Spraying is slow and distributed to avoid lockouts and detection."},
-{q:"Kerberoasting detection centers on:",type:"mc",o:["Event 4769 service-ticket requests with RC4/old encryption for SPN accounts","Event 4624","Web logs","Email logs"],a:1,e:"Watch 4769 with RC4 (etype 0x17) from odd users for many SPNs."},
-{q:"Impossible travel is when:",type:"mc",o:["A user logs in from two locations too far apart in too short a time","A user changes their password","An account is locked","DNS fails"],a:1,e:"Two logins that no aircraft could connect in the time window = impossible travel."},
-{q:"Ransomware triage typically starts from:",type:"mc",o:["Many file writes/renames + an EDR ransomware alert + encryption extensions","A DNS lookup","A printer job","An email bounce"],a:1,e:"Look for EDR ransomware alerts correlated with mass file-extension changes."},
-{q:"MFA bypass indicators often involve:",type:"mc",o:["Push-notification fatigue and repeated 4624 + 4771 anomalies","Longer passwords","Higher CPU usage","New certificates only"],a:1,e:"MFA fatigue = attackers spamming pushes until the user approves."},
-{q:"Credential stuffing differs from password spraying by:",type:"mc",o:["Reusing known breached username/password pairs","Using one password on many accounts","Never succeeding","Using no users"],a:0,e:"Stuffing = breached credential lists; spraying = common passwords across users."},
-{q:"Web application attacks (SQLi/XSS) are best seen in:",type:"mc",o:["WAF and web server logs","Only DNS","Only DHCP","Memory dumps"],a:0,e:"Web-tier logs capture injection and scanner patterns."},
-{q:"LOLBin abuse detection relies on:",type:"mc",o:["Process command lines (4688/Sysmon 1) matching known tools","Only email logs","Physical access","Only firewall rules"],a:0,e:"Command-line telemetry catches living-off-the-land."},
+{q:"Kerberoasting detection centers on:",type:"mc",o:["Email logs","Event 4769 service-ticket requests with RC4/old encryption for SPN accounts","Event 4624","Web logs"],a:1,e:"Watch 4769 with RC4 (etype 0x17) from odd users for many SPNs."},
+{q:"Impossible travel is when:",type:"mc",o:["An account is locked","DNS fails","A user logs in from two locations too far apart in too short a time","A user changes their password"],a:2,e:"Two logins that no aircraft could connect in the time window = impossible travel."},
+{q:"Ransomware triage typically starts from:",type:"mc",o:["A DNS lookup","A printer job","An email bounce","Many file writes/renames + an EDR ransomware alert + encryption extensions"],a:3,e:"Look for EDR ransomware alerts correlated with mass file-extension changes."},
+{q:"MFA bypass indicators often involve:",type:"mc",o:["Push-notification fatigue and repeated 4624 + 4771 anomalies","Longer passwords","Higher CPU usage","New certificates only"],a:0,e:"MFA fatigue = attackers spamming pushes until the user approves."},
+{q:"Credential stuffing differs from password spraying by:",type:"mc",o:["Using no users","Reusing known breached username/password pairs","Using one password on many accounts","Never succeeding"],a:1,e:"Stuffing = breached credential lists; spraying = common passwords across users."},
+{q:"Web application attacks (SQLi/XSS) are best seen in:",type:"mc",o:["Only DHCP","Memory dumps","WAF and web server logs","Only DNS"],a:2,e:"Web-tier logs capture injection and scanner patterns."},
+{q:"LOLBin abuse detection relies on:",type:"mc",o:["Only email logs","Physical access","Only firewall rules","Process command lines (4688/Sysmon 1) matching known tools"],a:3,e:"Command-line telemetry catches living-off-the-land."},
 {q:"Golden/silver ticket detection focuses on:",type:"mc",o:["4768/4769 anomalies, unusual encryption types and long ticket lifetimes","4625 failed logons","4688 processes","7045 services"],a:0,e:"Forged tickets show unusual encryption, long lifetimes and anomalous requests."}
 ],
 
 20:[
-{q:"SQL injection works because:",type:"mc",o:["The server trusts user input and concatenates it into SQL queries","The database is offline","The WAF is disabled","Cookies are encrypted"],a:0,e:"Unsanitized input reaching a query = injection. WAF and parameterized queries mitigate."},
-{q:"Stored XSS means:",type:"mc",o:["An attacker's script is stored on the server and executes in other users' browsers","The server crashes","SQL is injected","TLS fails"],a:1,e:"Stored/persistent XSS executes for every visitor — high-impact."},
-{q:"IDOR/BOLA is a failure of:",type:"mc",o:["Access control — changing an ID parameter to access another user's data","Encryption","Rate limiting","Caching"],a:1,e:"Object-level authorization lets users touch objects they shouldn't by tampering with IDs."},
-{q:"SSRF lets an attacker:",type:"mc",o:["Make the server issue requests to internal resources","Steal the TLS certificate","Infect the browser","Read email headers"],a:1,e:"SSRF turns the server into a proxy to reach internal services."},
-{q:"The primary web defense/visibility layer for L1 on web attacks is:",type:"mc",o:["WAF logs","The DHCP server","Only the database","DNS logs"],a:1,e:"WAF blocks and logs injection/XSS/scanner traffic; pair it with web/app server logs."},
-{q:"Which is an example of Broken Access Control?",type:"mc",o:["Accessing another user's order by changing an ID in the URL","A slow database","A CSS typo","A TLS error"],a:0,e:"Horizontal/vertical privilege abuse = broken access control (IDOR)."},
-{q:"Reflected XSS differs from stored XSS by:",type:"mc",o:["Not being persisted — the payload echoes back in the same response","Being persistent","Only working offline","Using DNS"],a:0,e:"Reflected = one-time echo; stored = saved on the server."},
+{q:"SQL injection works because:",type:"mc",o:["Cookies are encrypted","The server trusts user input and concatenates it into SQL queries","The database is offline","The WAF is disabled"],a:1,e:"Unsanitized input reaching a query = injection. WAF and parameterized queries mitigate."},
+{q:"Stored XSS means:",type:"mc",o:["SQL is injected","TLS fails","An attacker's script is stored on the server and executes in other users' browsers","The server crashes"],a:2,e:"Stored/persistent XSS executes for every visitor — high-impact."},
+{q:"IDOR/BOLA is a failure of:",type:"mc",o:["Encryption","Rate limiting","Caching","Access control — changing an ID parameter to access another user's data"],a:3,e:"Object-level authorization lets users touch objects they shouldn't by tampering with IDs."},
+{q:"SSRF lets an attacker:",type:"mc",o:["Make the server issue requests to internal resources","Steal the TLS certificate","Infect the browser","Read email headers"],a:0,e:"SSRF turns the server into a proxy to reach internal services."},
+{q:"The primary web defense/visibility layer for L1 on web attacks is:",type:"mc",o:["DNS logs","WAF logs","The DHCP server","Only the database"],a:1,e:"WAF blocks and logs injection/XSS/scanner traffic; pair it with web/app server logs."},
+{q:"Which is an example of Broken Access Control?",type:"mc",o:["A CSS typo","A TLS error","Accessing another user's order by changing an ID in the URL","A slow database"],a:2,e:"Horizontal/vertical privilege abuse = broken access control (IDOR)."},
+{q:"Reflected XSS differs from stored XSS by:",type:"mc",o:["Being persistent","Only working offline","Using DNS","Not being persisted — the payload echoes back in the same response"],a:3,e:"Reflected = one-time echo; stored = saved on the server."},
 {q:"Security headers like CSP, HSTS and X-Frame-Options:",type:"mc",o:["Harden the app against XSS/clickjacking/downgrade","Encrypt disks","Block all users","Replace the WAF"],a:0,e:"Headers are cheap, effective hardening controls."},
-{q:"RCE in a web app often shows up as:",type:"mc",o:["Child processes (cmd/powershell) spawned by the web server","Only DNS lookups","No logs","Nothing"],a:0,e:"Look for command shells under w3wp/apache/nginx."},
-{q:"A webshell dropped on a server is often detected by:",type:"mc",o:["Suspicious .aspx/.php/.jsp files in web roots plus WAF/web logs","Only email logs","Only DHCP","Memory dumps"],a:0,e:"Webshell = script file in the web root + HTTP requests to it."}
+{q:"RCE in a web app often shows up as:",type:"mc",o:["Nothing","Child processes (cmd/powershell) spawned by the web server","Only DNS lookups","No logs"],a:1,e:"Look for command shells under w3wp/apache/nginx."},
+{q:"A webshell dropped on a server is often detected by:",type:"mc",o:["Only DHCP","Memory dumps","Suspicious .aspx/.php/.jsp files in web roots plus WAF/web logs","Only email logs"],a:2,e:"Webshell = script file in the web root + HTTP requests to it."}
 ],
 
 21:[
 {q:"The UID of the root user?",type:"input",a:["0","root"],e:"UID 0 = root; 1–999 = system accounts; 1000+ = regular users."},
-{q:"Which file stores password HASHES and is readable only by root?",type:"mc",o:["/etc/passwd","/etc/shadow","/etc/hosts","/etc/resolv.conf"],a:1,e:"/etc/passwd holds user metadata; /etc/shadow holds the hashes (root-only)."},
+{q:"Which file stores password HASHES and is readable only by root?",type:"mc",o:["/etc/hosts","/etc/resolv.conf","/etc/passwd","/etc/shadow"],a:3,e:"/etc/passwd holds user metadata; /etc/shadow holds the hashes (root-only)."},
 {q:"SSH authentication failures on Debian/Ubuntu are logged to:",type:"mc",o:["/var/log/auth.log","/var/log/wtmp","/var/log/kern.log","/var/log/cron"],a:0,e:"auth.log (or secure.log on RHEL) is where SSH auth events live."},
-{q:"An attacker adds a cron job for persistence. This shows up in:",type:"mc",o:["crontab files / /etc/cron* and cron logs","/etc/passwd only","Browser history","DHCP leases"],a:0,e:"Check user crontabs, /etc/crontab and /etc/cron.d for persistence."},
-{q:"A SUID-bit binary owned by root is dangerous because:",type:"mc",o:["It runs as root regardless of who invokes it — a privilege-escalation vector","It runs as nobody","It cannot execute","It only reads"],a:1,e:"An attacker can execute root-owned SUID binaries to elevate privileges."},
-{q:"auditd provides:",type:"mc",o:["Kernel-level auditing (file access, syscalls, exec)","Web server hosting","Firewall NAT rules","DHCP services"],a:1,e:"auditd records system calls and file access — Linux's Sysmon-like telemetry."},
+{q:"An attacker adds a cron job for persistence. This shows up in:",type:"mc",o:["DHCP leases","crontab files / /etc/cron* and cron logs","/etc/passwd only","Browser history"],a:1,e:"Check user crontabs, /etc/crontab and /etc/cron.d for persistence."},
+{q:"A SUID-bit binary owned by root is dangerous because:",type:"mc",o:["It cannot execute","It only reads","It runs as root regardless of who invokes it — a privilege-escalation vector","It runs as nobody"],a:2,e:"An attacker can execute root-owned SUID binaries to elevate privileges."},
+{q:"auditd provides:",type:"mc",o:["Web server hosting","Firewall NAT rules","DHCP services","Kernel-level auditing (file access, syscalls, exec)"],a:3,e:"auditd records system calls and file access — Linux's Sysmon-like telemetry."},
 {q:"Which file maps usernames to UIDs and home dirs (world-readable)?",type:"mc",o:["/etc/passwd","/etc/shadow","/etc/hosts","/var/log/auth.log"],a:0,e:"/etc/passwd is world-readable metadata; hashes live in /etc/shadow."},
-{q:"A process running with EUID 0 is:",type:"mc",o:["Running with root privileges","Blocked","A normal user process","Ignored"],a:0,e:"EUID 0 = root-level execution — flag odd root processes."},
-{q:"Which is a standard Linux persistence location?",type:"mc",o:["/etc/rc.local and systemd units","C:\\Windows\\run32","The MBR only","The recycle bin"],a:0,e:"Init/rc/systemd units, crontabs, .bashrc and authorized_keys are common."},
-{q:"To see which users logged in via SSH, check:",type:"mc",o:["/var/log/auth.log and last/lastlog","/etc/passwd","/var/log/dmesg","/proc/cpuinfo"],a:0,e:"auth.log + last/lastlog show SSH and login history."}
+{q:"A process running with EUID 0 is:",type:"mc",o:["Ignored","Running with root privileges","Blocked","A normal user process"],a:1,e:"EUID 0 = root-level execution — flag odd root processes."},
+{q:"Which is a standard Linux persistence location?",type:"mc",o:["The MBR only","The recycle bin","/etc/rc.local and systemd units","C:\\Windows\\run32"],a:2,e:"Init/rc/systemd units, crontabs, .bashrc and authorized_keys are common."},
+{q:"To see which users logged in via SSH, check:",type:"mc",o:["/etc/passwd","/var/log/dmesg","/proc/cpuinfo","/var/log/auth.log and last/lastlog"],a:3,e:"auth.log + last/lastlog show SSH and login history."}
 ],
 
 22:[
 {q:"SOAR = Security Orchestration, ___ and Response (middle word).",type:"input",a:["automation"],e:"SOAR = Security Orchestration, Automation and Response, plus case management."},
-{q:"A SOAR playbook is:",type:"mc",o:["A predefined, automated workflow of steps for a given alert type","A firewall rule","A training video","A SIEM query"],a:1,e:"Playbooks encode investigation/response steps so they run consistently."},
+{q:"A SOAR playbook is:",type:"mc",o:["A predefined, automated workflow of steps for a given alert type","A firewall rule","A training video","A SIEM query"],a:0,e:"Playbooks encode investigation/response steps so they run consistently."},
 {q:"Automation is SAFEST for:",type:"mc",o:["Isolating any host on a whim","Well-defined, deterministic, low-risk tasks (hash enrichment, blocklist updates)","Shutting down production databases","Deleting user accounts"],a:1,e:"Save high-risk actions (isolation, block, delete) for human approval."},
-{q:"A key problem SOAR solves is:",type:"mc",o:["Alert fatigue and slow MTTR","Faster page loads","Bigger disks","More email"],a:1,e:"Automation filters noise and speeds up repetitive L1 tasks."},
-{q:"Case management in SOAR is for:",type:"mc",o:["Tracking investigations from alert to closure with a shared timeline","Billing","DNS records","Asset backups"],a:1,e:"Shared case timelines keep investigations coherent across shifts."},
+{q:"A key problem SOAR solves is:",type:"mc",o:["Bigger disks","More email","Alert fatigue and slow MTTR","Faster page loads"],a:2,e:"Automation filters noise and speeds up repetitive L1 tasks."},
+{q:"Case management in SOAR is for:",type:"mc",o:["Billing","DNS records","Asset backups","Tracking investigations from alert to closure with a shared timeline"],a:3,e:"Shared case timelines keep investigations coherent across shifts."},
 {q:"Which task is a good SOAR automation candidate?",type:"mc",o:["Reputation lookups (hash/IP) and enrichment","Deleting production databases","Bypassing approvals","Ignoring alerts"],a:0,e:"Enrichment is deterministic and safe to automate."},
-{q:"Orchestration in SOAR refers to:",type:"mc",o:["Integrating APIs/tools so workflows can act across them","Hiring more staff","Buying hardware","Scheduling vacations"],a:0,e:"Orchestration = tool/API integration; automation = scripted actions."},
-{q:"A key SOAR metric is:",type:"mc",o:["Mean time to respond (MTTR)","Lines of code","Number of meetings","Coffee consumed"],a:0,e:"MTTR and alert reduction show SOAR impact."},
-{q:"Which action should a playbook NEVER take without approval?",type:"mc",o:["Isolate a production host or block critical traffic","Look up a hash","Fetch a whois record","Append a note"],a:0,e:"High-impact actions stay human-gated."},
+{q:"Orchestration in SOAR refers to:",type:"mc",o:["Scheduling vacations","Integrating APIs/tools so workflows can act across them","Hiring more staff","Buying hardware"],a:1,e:"Orchestration = tool/API integration; automation = scripted actions."},
+{q:"A key SOAR metric is:",type:"mc",o:["Number of meetings","Coffee consumed","Mean time to respond (MTTR)","Lines of code"],a:2,e:"MTTR and alert reduction show SOAR impact."},
+{q:"Which action should a playbook NEVER take without approval?",type:"mc",o:["Look up a hash","Fetch a whois record","Append a note","Isolate a production host or block critical traffic"],a:3,e:"High-impact actions stay human-gated."},
 {q:"When a playbook can't classify an alert, the correct outcome is:",type:"mc",o:["Escalate to a human","Delete it","Auto-close it","Mark it complete"],a:0,e:"Automation hands ambiguous cases off to analysts."}
 ],
 
 23:[
-{q:"In KQL, `where` is used to:",type:"mc",o:["Filter rows by a condition","Sort results","Create a variable","Render charts"],a:0,e:"where = row filter; project = column selection."},
-{q:"In KQL, `project` is used to:",type:"mc",o:["Select only specific columns","Join tables","Delete data","Create tables"],a:1,e:"project keeps just the fields you need — leaner, faster queries."},
-{q:"In Splunk, the primary command to filter/search events is:",type:"mc",o:["select","search","lookup","rex"],a:1,e:"Every SPL query starts with search (often implicit at the pipe start)."},
-{q:"When querying for an alert, the time range matters because:",type:"mc",o:["Logs only exist for 24 hours","Events are meaningless outside the correct window — a wrong range gives false negatives","It changes the data source","It costs money"],a:1,e:"SOC queries must cover the event window; too narrow = you miss the evidence."},
+{q:"In KQL, `where` is used to:",type:"mc",o:["Render charts","Filter rows by a condition","Sort results","Create a variable"],a:1,e:"where = row filter; project = column selection."},
+{q:"In KQL, `project` is used to:",type:"mc",o:["Delete data","Create tables","Select only specific columns","Join tables"],a:2,e:"project keeps just the fields you need — leaner, faster queries."},
+{q:"In Splunk, the primary command to filter/search events is:",type:"mc",o:["lookup","rex","select","search"],a:3,e:"Every SPL query starts with search (often implicit at the pipe start)."},
+{q:"When querying for an alert, the time range matters because:",type:"mc",o:["Events are meaningless outside the correct window — a wrong range gives false negatives","It changes the data source","It costs money","Logs only exist for 24 hours"],a:0,e:"SOC queries must cover the event window; too narrow = you miss the evidence."},
 {q:"In KQL, which keyword declares a variable/table (e.g., let foo = ...)?",type:"input",a:["let"],e:"`let` defines variables and reusable subqueries in KQL."},
-{q:"In KQL, `summarize count()` by user will:",type:"mc",o:["Group rows by user and count them (aggregation)","Turn columns into strings","Ignore timestamps","Return nothing"],a:0,e:"summarize = aggregation, the heart of statistical queries."},
-{q:"In Splunk, to extract a field from raw text you use:",type:"mc",o:["rex","lookup","sort","stats"],a:0,e:"rex extracts fields via regex; also spath/fields."},
+{q:"In KQL, `summarize count()` by user will:",type:"mc",o:["Return nothing","Group rows by user and count them (aggregation)","Turn columns into strings","Ignore timestamps"],a:1,e:"summarize = aggregation, the heart of statistical queries."},
+{q:"In Splunk, to extract a field from raw text you use:",type:"mc",o:["sort","stats","rex","lookup"],a:2,e:"rex extracts fields via regex; also spath/fields."},
 {q:"In KQL, which operator sorts results?",type:"input",a:["order by","sort","order"],e:"KQL: `order by` (alias `sort`) — Splunk uses `sort`."},
-{q:"Splunk's `stats count by user` maps to which KQL?",type:"mc",o:["summarize count() by user","where user=...","project user","take 5"],a:0,e:"Cross-platform query patterns map 1:1."},
+{q:"Splunk's `stats count by user` maps to which KQL?",type:"mc",o:["where user=...","project user","take 5","summarize count() by user"],a:3,e:"Cross-platform query patterns map 1:1."},
 {q:"A query with no time bound can:",type:"mc",o:["Return stale/huge results and miss the incident window","Always be fast","Never miss events","Only fail"],a:0,e:"Always scope time to the alert window."}
 ],
 
 24:[
 {q:"Per NIST SP 800-61, the FIRST lifecycle phase is:",type:"mc",o:["Eradication","Preparation","Recovery","Lessons learned"],a:1,e:"Preparation comes first; lessons learned wraps the loop back into preparation."},
-{q:"Containment is meant to:",type:"mc",o:["Stop the spread / prevent damage IMMEDIATELY while preserving evidence","Rebuild servers","Attribute the attacker","Train staff"],a:1,e:"Containment is the immediate brake — isolate before the blast radius grows."},
-{q:"An L1 should NOT act independently when:",type:"mc",o:["The action is destructive or impacts multiple customers/critical systems and needs approval","They want to close the ticket","It's a known false positive","The user asks politely"],a:0,e:"Destructive/wide-scope actions require the incident response lead's approval."},
+{q:"Containment is meant to:",type:"mc",o:["Attribute the attacker","Train staff","Stop the spread / prevent damage IMMEDIATELY while preserving evidence","Rebuild servers"],a:2,e:"Containment is the immediate brake — isolate before the blast radius grows."},
+{q:"An L1 should NOT act independently when:",type:"mc",o:["They want to close the ticket","It's a known false positive","The user asks politely","The action is destructive or impacts multiple customers/critical systems and needs approval"],a:3,e:"Destructive/wide-scope actions require the incident response lead's approval."},
 {q:"Eradication is:",type:"mc",o:["Removing the root cause and attacker presence from the environment","Sending emails","Restoring from backup","Logging the incident"],a:0,e:"Eradication removes the adversary; recovery then returns systems to normal."},
-{q:"Recovery focuses on:",type:"mc",o:["Returning systems to normal operation and validating they are clean","Deleting logs","Attribution","Buying new hardware"],a:1,e:"Recovery = restore + verify integrity before resuming normal service."},
-{q:"Lessons Learned produces:",type:"mc",o:["A postmortem that improves detection and process","New passwords only","A ransom payment","New malware"],a:1,e:"The postmortem drives detection/process improvements back into Preparation."},
-{q:"During Detection & Alerting, L1's main job is to:",type:"mc",o:["Triage alerts and confirm or dismiss them","Rebuild domain controllers","Negotiate with attackers","Buy new tools"],a:0,e:"Triage is the core Detection & Alerting task for L1."},
+{q:"Recovery focuses on:",type:"mc",o:["Buying new hardware","Returning systems to normal operation and validating they are clean","Deleting logs","Attribution"],a:1,e:"Recovery = restore + verify integrity before resuming normal service."},
+{q:"Lessons Learned produces:",type:"mc",o:["A ransom payment","New malware","A postmortem that improves detection and process","New passwords only"],a:2,e:"The postmortem drives detection/process improvements back into Preparation."},
+{q:"During Detection & Alerting, L1's main job is to:",type:"mc",o:["Rebuild domain controllers","Negotiate with attackers","Buy new tools","Triage alerts and confirm or dismiss them"],a:3,e:"Triage is the core Detection & Alerting task for L1."},
 {q:"Evidence collection during an incident should:",type:"mc",o:["Happen early and be documented","Wait until the end","Be skipped","Only involve email"],a:0,e:"Early, documented evidence preserves the case."},
-{q:"A playbook that tells L1 exactly what to do for a phish is an example of:",type:"mc",o:["Preparation","Containment","Eradication","Lessons learned"],a:0,e:"Playbooks are built during the Preparation phase."},
-{q:"Communication during a major incident should be:",type:"mc",o:["Structured and timely to stakeholders","Silent until the end","Only via social media","Unstructured"],a:0,e:"Clear, structured communication prevents chaos."}
+{q:"A playbook that tells L1 exactly what to do for a phish is an example of:",type:"mc",o:["Lessons learned","Preparation","Containment","Eradication"],a:1,e:"Playbooks are built during the Preparation phase."},
+{q:"Communication during a major incident should be:",type:"mc",o:["Only via social media","Unstructured","Structured and timely to stakeholders","Silent until the end"],a:2,e:"Clear, structured communication prevents chaos."}
 ],
 
 25:[
-{q:"Chain of custody requires:",type:"mc",o:["Evidence to be documented and traceable at all times","Evidence to be deleted","Only one copy of everything","No documentation"],a:0,e:"Every handoff must be logged: who, when, where, and how evidence was handled."},
-{q:"Before containment/isolating a machine, an L1 should try to:",type:"mc",o:["Reboot the machine first","Preserve volatile evidence (running processes, memory, active sessions)","Run Windows Update","Delete suspicious files"],a:1,e:"Isolation/reboot destroys volatile data — preserve it first, then contain."},
-{q:"Which is OUT of scope for an L1 analyst?",type:"mc",o:["Preserving evidence","Documenting artifacts","Reverse-engineering custom malware / memory and disk forensics","Handing off evidence"],a:2,e:"Deep forensics (memory/drive imaging, malware RE) is Tier 3 / forensics' job."},
-{q:"On Windows, Prefetch files indicate:",type:"mc",o:["Which applications executed on the host","Installed printers","Network shares","Email rules"],a:0,e:"*.pf files show app execution history — a simple execution artifact."},
-{q:"The safest first step when a critical server is compromised:",type:"mc",o:["Preserve evidence, then follow the containment playbook with approval","Reboot immediately","Unplug the power","Reimage from scratch"],a:0,e:"Preserve first, contain deliberately — never nuke evidence on a guess."},
+{q:"Chain of custody requires:",type:"mc",o:["Evidence to be deleted","Only one copy of everything","No documentation","Evidence to be documented and traceable at all times"],a:3,e:"Every handoff must be logged: who, when, where, and how evidence was handled."},
+{q:"Before containment/isolating a machine, an L1 should try to:",type:"mc",o:["Preserve volatile evidence (running processes, memory, active sessions)","Run Windows Update","Delete suspicious files","Reboot the machine first"],a:0,e:"Isolation/reboot destroys volatile data — preserve it first, then contain."},
+{q:"Which is OUT of scope for an L1 analyst?",type:"mc",o:["Documenting artifacts","Reverse-engineering custom malware / memory and disk forensics","Handing off evidence","Preserving evidence"],a:1,e:"Deep forensics (memory/drive imaging, malware RE) is Tier 3 / forensics' job."},
+{q:"On Windows, Prefetch files indicate:",type:"mc",o:["Network shares","Email rules","Which applications executed on the host","Installed printers"],a:2,e:"*.pf files show app execution history — a simple execution artifact."},
+{q:"The safest first step when a critical server is compromised:",type:"mc",o:["Reboot immediately","Unplug the power","Reimage from scratch","Preserve evidence, then follow the containment playbook with approval"],a:3,e:"Preserve first, contain deliberately — never nuke evidence on a guess."},
 {q:"RAM/memory is considered:",type:"mc",o:["Volatile evidence — lost on power-off","Permanent evidence","Non-evidence","A backup"],a:0,e:"Memory dies with power — capture it first."},
-{q:"The NTFS $MFT records:",type:"mc",o:["Filesystem metadata (file creation/access/deletion)","Email rules","Wi-Fi passwords","Browser themes"],a:0,e:"MFT tracks file activity — useful for deletion/creation timelines."},
-{q:"Browser artifacts include:",type:"mc",o:["History, downloads, cache and cookies","DNS root hints","BIOS settings","Printers"],a:0,e:"Browser data shows attacker browsing/downloads on a compromised host."},
-{q:"Which document records every evidence handoff?",type:"mc",o:["Chain of custody form","The marketing plan","The budget","The holiday calendar"],a:0,e:"CoC logs who/when/where for each transfer."},
+{q:"The NTFS $MFT records:",type:"mc",o:["Browser themes","Filesystem metadata (file creation/access/deletion)","Email rules","Wi-Fi passwords"],a:1,e:"MFT tracks file activity — useful for deletion/creation timelines."},
+{q:"Browser artifacts include:",type:"mc",o:["BIOS settings","Printers","History, downloads, cache and cookies","DNS root hints"],a:2,e:"Browser data shows attacker browsing/downloads on a compromised host."},
+{q:"Which document records every evidence handoff?",type:"mc",o:["The marketing plan","The budget","The holiday calendar","Chain of custody form"],a:3,e:"CoC logs who/when/where for each transfer."},
 {q:"You spot suspicious artifacts on a host. Best practice:",type:"mc",o:["Screenshot/record findings, preserve, then hand off","Delete them","Reboot","Ignore"],a:0,e:"Document and preserve — never destroy potential evidence."}
 ],
 
 26:[
-{q:"Which product monitors and detects threats IN network traffic (flows, behavior, PCAP)?",type:"mc",o:["NDR","SIEM only","CSPM","Patch tool"],a:0,e:"NDR (Network Detection and Response) analyzes network traffic for attacks."},
-{q:"A SIEM's core function is:",type:"mc",o:["Collecting, normalizing and correlating logs from many sources","Replacing the firewall","Scanning for CVEs","Managing WAF rules"],a:0,e:"SIEM = centralized log collection, normalization, correlation and alerting."},
-{q:"CSPM helps with:",type:"mc",o:["Cloud security posture (misconfig detection, compliance)","On-prem printing","USB encryption","Malware analysis"],a:0,e:"CSPM continuously checks cloud configs against best practice/compliance."},
+{q:"Which product monitors and detects threats IN network traffic (flows, behavior, PCAP)?",type:"mc",o:["Patch tool","NDR","SIEM only","CSPM"],a:1,e:"NDR (Network Detection and Response) analyzes network traffic for attacks."},
+{q:"A SIEM's core function is:",type:"mc",o:["Scanning for CVEs","Managing WAF rules","Collecting, normalizing and correlating logs from many sources","Replacing the firewall"],a:2,e:"SIEM = centralized log collection, normalization, correlation and alerting."},
+{q:"CSPM helps with:",type:"mc",o:["On-prem printing","USB encryption","Malware analysis","Cloud security posture (misconfig detection, compliance)"],a:3,e:"CSPM continuously checks cloud configs against best practice/compliance."},
 {q:"To answer \"what processes ran on host X in the last hour\", use:",type:"mc",o:["EDR/endpoint telemetry plus the SIEM","The mail gateway","A WAF","DNS logs only"],a:0,e:"Process data comes from the endpoint agent; query it via SIEM/EDR."},
-{q:"Which data answers \"which external IPs did we talk to\"?",type:"mc",o:["Network flow / proxy data","AD logs","Patch management","Asset inventory only"],a:1,e:"Flow and proxy logs show outbound connections fleet-wide."},
-{q:"Which product stops malicious attachments before they reach users?",type:"mc",o:["Email security gateway","The SIEM","A patch tool","A printer"],a:0,e:"Email gateways sandbox attachments and URLs."},
-{q:"A firewall with application awareness inspecting traffic is also called:",type:"mc",o:["Next-Generation Firewall (NGFW)","SIEM","EDR","CSPM"],a:0,e:"NGFW = application-level filtering beyond port rules."},
+{q:"Which data answers \"which external IPs did we talk to\"?",type:"mc",o:["Asset inventory only","Network flow / proxy data","AD logs","Patch management"],a:1,e:"Flow and proxy logs show outbound connections fleet-wide."},
+{q:"Which product stops malicious attachments before they reach users?",type:"mc",o:["A patch tool","A printer","Email security gateway","The SIEM"],a:2,e:"Email gateways sandbox attachments and URLs."},
+{q:"A firewall with application awareness inspecting traffic is also called:",type:"mc",o:["SIEM","EDR","CSPM","Next-Generation Firewall (NGFW)"],a:3,e:"NGFW = application-level filtering beyond port rules."},
 {q:"Vulnerability management products focus on:",type:"mc",o:["Identifying and tracking unpatched weaknesses (CVEs)","Blocking phishing","Watching endpoints","Cloud posture"],a:0,e:"Vuln mgmt = CVE detection, prioritization and remediation."},
-{q:"Which product would detect a misconfigured public S3 bucket?",type:"mc",o:["CSPM","EDR","Firewall","DNS"],a:0,e:"CSPM scans cloud configs for misconfigurations."},
-{q:"SIEM vs SOAR differ in that:",type:"mc",o:["SIEM correlates/detects; SOAR automates responses","SOAR correlates; SIEM automates","They are identical","Neither detects"],a:0,e:"SIEM = detection layer; SOAR = automation/response layer."}
+{q:"Which product would detect a misconfigured public S3 bucket?",type:"mc",o:["DNS","CSPM","EDR","Firewall"],a:1,e:"CSPM scans cloud configs for misconfigurations."},
+{q:"SIEM vs SOAR differ in that:",type:"mc",o:["They are identical","Neither detects","SIEM correlates/detects; SOAR automates responses","SOAR correlates; SIEM automates"],a:2,e:"SIEM = detection layer; SOAR = automation/response layer."}
 ],
 
 27:[
-{q:"In the shared responsibility model:",type:"mc",o:["The provider secures OF the cloud; the customer secures IN the cloud","The customer secures everything","The provider secures the customer's data","Security is undefined"],a:0,e:"Provider handles the physical/host layer; the customer owns data, identity and workloads."},
+{q:"In the shared responsibility model:",type:"mc",o:["The customer secures everything","The provider secures the customer's data","Security is undefined","The provider secures OF the cloud; the customer secures IN the cloud"],a:3,e:"Provider handles the physical/host layer; the customer owns data, identity and workloads."},
 {q:"The PRIMARY log source for cloud account activity is:",type:"mc",o:["Cloud audit logs (CloudTrail / Activity Log / Audit Logs)","Printer logs","DNS","The guest OS only"],a:0,e:"Audit logs capture who did what and with what API in the cloud."},
-{q:"A user logs in from the US and 10 minutes later from a country 8,000 km away — this is:",type:"mc",o:["Impossible travel","MFA fatigue","Credential stuffing","DNS tunneling"],a:1,e:"Physical travel can't cover that distance — stolen session/creds are likely."},
-{q:"An unencrypted, publicly readable S3 bucket is a:",type:"mc",o:["Misconfiguration / data exposure","Normal configuration","Required setting","Compliance win"],a:1,e:"Public buckets are a top cloud leak; check bucket ACLs/policies."},
-{q:"Which has become the new security \"perimeter\"?",type:"mc",o:["The firewall","Identity","The VPN concentrator","The physical badge"],a:1,e:"With cloud and remote work, identity is the control point attackers target."},
+{q:"A user logs in from the US and 10 minutes later from a country 8,000 km away — this is:",type:"mc",o:["DNS tunneling","Impossible travel","MFA fatigue","Credential stuffing"],a:1,e:"Physical travel can't cover that distance — stolen session/creds are likely."},
+{q:"An unencrypted, publicly readable S3 bucket is a:",type:"mc",o:["Required setting","Compliance win","Misconfiguration / data exposure","Normal configuration"],a:2,e:"Public buckets are a top cloud leak; check bucket ACLs/policies."},
+{q:"Which has become the new security \"perimeter\"?",type:"mc",o:["The VPN concentrator","The physical badge","The firewall","Identity"],a:3,e:"With cloud and remote work, identity is the control point attackers target."},
 {q:"A cryptominer in a cloud workload is often discovered by:",type:"mc",o:["Unexpected CPU cost spikes and crypto-pool traffic","A slower printer","An email","A DNS change"],a:0,e:"Mining = compute spikes + known pool domains."},
-{q:"Excessive permissions on a cloud role are a:",type:"mc",o:["Privilege risk (over-permissioned identity)","Normal","Best practice","Compliance requirement"],a:0,e:"Least privilege should apply; over-permissioned = larger attack surface."},
-{q:"A first containment step for a compromised cloud account (with authority) is:",type:"mc",o:["Disable/force-reset credentials","Reboot the internet","Ignore it","Delete the account permanently"],a:0,e:"Credential revocation stops further use of the account."},
-{q:"Cloud audit logs capture:",type:"mc",o:["API calls and identity actions (who did what)","Only costs","Only VM uptime","Nothing"],a:0,e:"Audit logs are the cloud SIEM's main feed."},
+{q:"Excessive permissions on a cloud role are a:",type:"mc",o:["Compliance requirement","Privilege risk (over-permissioned identity)","Normal","Best practice"],a:1,e:"Least privilege should apply; over-permissioned = larger attack surface."},
+{q:"A first containment step for a compromised cloud account (with authority) is:",type:"mc",o:["Ignore it","Delete the account permanently","Disable/force-reset credentials","Reboot the internet"],a:2,e:"Credential revocation stops further use of the account."},
+{q:"Cloud audit logs capture:",type:"mc",o:["Only costs","Only VM uptime","Nothing","API calls and identity actions (who did what)"],a:3,e:"Audit logs are the cloud SIEM's main feed."},
 {q:"A key difference in cloud vs on-prem incidents is:",type:"mc",o:["Speed — cloud resources can be created/exposed in minutes","Nothing differs","Cloud never has incidents","There is no logging"],a:0,e:"Fast, dynamic resource churn demands faster detection and containment."}
 ],
 
 28:[
-{q:"The FIRST step in the \"How to approach any case\" framework is:",type:"mc",o:["Read/validate the alert and identify the entities","Isolate the host","Write the final report","Call the customer"],a:1,e:"Understand the alert and name the entities (host, user, IP, process, file) first."},
-{q:"In Case 1 (brute force), the chain was:",type:"mc",o:["Many 4625 failures → a 4624 success with special privileges","One 4624","Many 4720 events","A 7045 service install"],a:0,e:"38× failed logons from a Tor exit node, then a successful 4624 + 4672."},
-{q:"The attacking source in Case 1 was a:",type:"mc",o:["Tor exit node","Corporate office IP","DNS server","Private range only"],a:1,e:"Tor exit node 185.220.101.34 — a strong suspicious-source signal."},
+{q:"The FIRST step in the \"How to approach any case\" framework is:",type:"mc",o:["Call the customer","Read/validate the alert and identify the entities","Isolate the host","Write the final report"],a:1,e:"Understand the alert and name the entities (host, user, IP, process, file) first."},
+{q:"In Case 1 (brute force), the chain was:",type:"mc",o:["Many 4720 events","A 7045 service install","Many 4625 failures → a 4624 success with special privileges","One 4624"],a:2,e:"38× failed logons from a Tor exit node, then a successful 4624 + 4672."},
+{q:"The attacking source in Case 1 was a:",type:"mc",o:["Corporate office IP","DNS server","Private range only","Tor exit node"],a:3,e:"Tor exit node 185.220.101.34 — a strong suspicious-source signal."},
 {q:"When documenting a case you should record:",type:"mc",o:["Timeline, entities, MITRE mapping and actions taken","Only the alert name","Only the ticket number","Nothing at all"],a:0,e:"Solid documentation is what makes the case defensible and handoff-friendly."},
-{q:"In Case 16, the suspicious pattern was:",type:"mc",o:["A service account doing an interactive logon + PowerShell + RDP","Only a DNS query","Only a logoff","An MFA push"],a:1,e:"Service accounts shouldn't log on interactively — that's a red flag."},
-{q:"In Case 2 (password spraying), the pattern is:",type:"mc",o:["One password tried across many accounts slowly","Many passwords on one account","One failed logon","A single success"],a:0,e:"Spray = few passwords × many accounts at a low rate."},
-{q:"In the PowerShell case (Case 3), the key evidence was:",type:"mc",o:["Script block logging 4104 showing encoded/malicious content","Only email","A printer log","Nothing"],a:0,e:"4104 exposed the malicious script."},
+{q:"In Case 16, the suspicious pattern was:",type:"mc",o:["An MFA push","A service account doing an interactive logon + PowerShell + RDP","Only a DNS query","Only a logoff"],a:1,e:"Service accounts shouldn't log on interactively — that's a red flag."},
+{q:"In Case 2 (password spraying), the pattern is:",type:"mc",o:["One failed logon","A single success","One password tried across many accounts slowly","Many passwords on one account"],a:2,e:"Spray = few passwords × many accounts at a low rate."},
+{q:"In the PowerShell case (Case 3), the key evidence was:",type:"mc",o:["Only email","A printer log","Nothing","Script block logging 4104 showing encoded/malicious content"],a:3,e:"4104 exposed the malicious script."},
 {q:"In the phishing case, analysts confirmed the URL was malicious by:",type:"mc",o:["Sandboxing and reputation lookup of the URL","Reading the email twice","Calling the user","Ignoring it"],a:0,e:"Reputation + sandbox = verdict."},
-{q:"When ransomware was confirmed in a case, the FIRST action was:",type:"mc",o:["Containment (isolate affected hosts)","Paying the ransom","Reimaging everything","Sending emails"],a:0,e:"Contain before anything else."},
-{q:"Across the cases, the shared framework ends with:",type:"mc",o:["Documenting the outcome (evidence, MITRE, actions)","Deleting the alert","Paying the attacker","Closing without notes"],a:0,e:"Every case closes with documentation for handoff and metrics."}
+{q:"When ransomware was confirmed in a case, the FIRST action was:",type:"mc",o:["Sending emails","Containment (isolate affected hosts)","Paying the ransom","Reimaging everything"],a:1,e:"Contain before anything else."},
+{q:"Across the cases, the shared framework ends with:",type:"mc",o:["Paying the attacker","Closing without notes","Documenting the outcome (evidence, MITRE, actions)","Deleting the alert"],a:2,e:"Every case closes with documentation for handoff and metrics."}
 ],
 
 29:[
-{q:"SIEM stands for:",type:"mc",o:["Security Information and Event Management","Security Incident and Event Monitoring","System Information and Event Management","Secure Internet Email Monitor"],a:0,e:"SIEM = Security Information and Event Management."},
+{q:"SIEM stands for:",type:"mc",o:["Security Incident and Event Monitoring","System Information and Event Management","Secure Internet Email Monitor","Security Information and Event Management"],a:3,e:"SIEM = Security Information and Event Management."},
 {q:"The difference between EDR and XDR:",type:"mc",o:["XDR covers more data domains; EDR is endpoint-focused","EDR is cloud-only","They are identical","XDR has no console"],a:0,e:"XDR extends EDR with network, cloud, email and identity telemetry."},
-{q:"STAR stands for:",type:"mc",o:["Situation, Task, Action, Result","Start, Time, Action, Review","Severity, Task, Analysis, Response","Sample, Test, Answer, Run"],a:0,e:"STAR structures behavioral-interview answers with concrete examples."},
-{q:"\"Tell me about a time you...\" questions are best answered with:",type:"mc",o:["The STAR method and a concrete example","A list of tools","\"I don't know\"","A long technical monologue"],a:0,e:"Concrete, structured stories beat vague tool lists."},
-{q:"The first thing you'd do with an incoming alert:",type:"mc",o:["Validate it, gather context and triage","Isolate immediately","Mark it done","Escalate with no data"],a:0,e:"Triage first — validate and enrich before any action."},
+{q:"STAR stands for:",type:"mc",o:["Sample, Test, Answer, Run","Situation, Task, Action, Result","Start, Time, Action, Review","Severity, Task, Analysis, Response"],a:1,e:"STAR structures behavioral-interview answers with concrete examples."},
+{q:"\"Tell me about a time you...\" questions are best answered with:",type:"mc",o:["\"I don't know\"","A long technical monologue","The STAR method and a concrete example","A list of tools"],a:2,e:"Concrete, structured stories beat vague tool lists."},
+{q:"The first thing you'd do with an incoming alert:",type:"mc",o:["Isolate immediately","Mark it done","Escalate with no data","Validate it, gather context and triage"],a:3,e:"Triage first — validate and enrich before any action."},
 {q:"What's the difference between a vulnerability and an exploit?",type:"mc",o:["A vulnerability is a weakness; an exploit is code that takes advantage of it","They are identical","A vulnerability is software","An exploit is a patch"],a:0,e:"Classic interview question — weakness vs weapon."},
-{q:"How would you investigate a failed-login spike?",type:"mc",o:["Group 4625 by user/source/time; check for a success after","Reboot the server","Call the ISP","Check email"],a:0,e:"Brute-force triage pattern."},
-{q:"What would you do if an alert is a confirmed false positive?",type:"mc",o:["Document it, note tuning suggestions, close accordingly","Reopen it repeatedly","Escalate as critical","Ignore it"],a:0,e:"FP handling = document + suggest tuning."},
-{q:"A good question to ask YOUR interviewer:",type:"mc",o:["How does the team handle shift handoffs and escalation?","What is the WiFi password?","When is lunch?","Do you like my shoes?"],a:0,e:"Asking about process shows engagement."},
+{q:"How would you investigate a failed-login spike?",type:"mc",o:["Check email","Group 4625 by user/source/time; check for a success after","Reboot the server","Call the ISP"],a:1,e:"Brute-force triage pattern."},
+{q:"What would you do if an alert is a confirmed false positive?",type:"mc",o:["Escalate as critical","Ignore it","Document it, note tuning suggestions, close accordingly","Reopen it repeatedly"],a:2,e:"FP handling = document + suggest tuning."},
+{q:"A good question to ask YOUR interviewer:",type:"mc",o:["What is the WiFi password?","When is lunch?","Do you like my shoes?","How does the team handle shift handoffs and escalation?"],a:3,e:"Asking about process shows engagement."},
 {q:"Why do you want to work in a SOC?",type:"mc",o:["A solid answer ties your skills to detection and response","A blank stare","A shrug","Reading from your phone"],a:0,e:"Purpose + fit = the winning answer."}
 ],
 
 30:[
 {q:"In Lab 1's CSV, which Event ID indicates a FAILED logon?",type:"input",a:["4625"],e:"4625 = failed logon — count them per user/source to spot brute force."},
 {q:"Which Event ID indicates special privileges were assigned to a logon?",type:"input",a:["4672"],e:"4672 accompanies privileged logons."},
-{q:"A scheduled task created pointing to C:\\Temp\\updater.exe is Event ID:",type:"mc",o:["4698","4625","4104","7045"],a:0,e:"4698 = scheduled task creation — suspicious paths = red flag."},
-{q:"PowerShell with \"-enc\" in a 4688 command line means:",type:"mc",o:["An encoded command was executed — suspicious","A normal update","A print job","A DNS request"],a:1,e:"Encoded commands hide payloads from casual log review."},
-{q:"The best way to spot a brute force in the lab CSV is to:",type:"mc",o:["Count 4625 events per user per source","Count total rows","Sort by file size","Only look at 4698"],a:0,e:"Group failed logons by user+source; spikes = brute force."},
+{q:"A scheduled task created pointing to C:\\Temp\\updater.exe is Event ID:",type:"mc",o:["7045","4698","4625","4104"],a:1,e:"4698 = scheduled task creation — suspicious paths = red flag."},
+{q:"PowerShell with \"-enc\" in a 4688 command line means:",type:"mc",o:["A print job","A DNS request","An encoded command was executed — suspicious","A normal update"],a:2,e:"Encoded commands hide payloads from casual log review."},
+{q:"The best way to spot a brute force in the lab CSV is to:",type:"mc",o:["Count total rows","Sort by file size","Only look at 4698","Count 4625 events per user per source"],a:3,e:"Group failed logons by user+source; spikes = brute force."},
 {q:"In Lab 3 (PowerShell analysis), which event reveals the command line?",type:"input",a:["4688","1"],e:"4688 (or Sysmon EID 1) carries CommandLine."},
 {q:"In Lab 5 (DNS log analysis), a tunnel signature is:",type:"mc",o:["Long encoded subdomains to one domain","Normal A records","Only MX records","Empty logs"],a:0,e:"Entropy + length = DNS tunneling."},
-{q:"In Lab 6 (HTTP logs), a web shell request is often:",type:"mc",o:["POST to a .aspx/.php file with unusual parameters","A GET to the homepage","A 200 on the root","A TLS failure"],a:0,e:"Web shells = odd POSTs to script files."},
-{q:"In Lab 8 (hash investigation), the first step is:",type:"mc",o:["Look up the hash in reputation sources (VT, etc.)","Execute the file","Email it","Hash the email"],a:0,e:"Reputation first — never execute."},
-{q:"In Lab 10 (ticket writing), a complete ticket includes:",type:"mc",o:["Summary, evidence, timeline, actions and next steps","Only a title","Only a user name","Nothing"],a:0,e:"The five-part ticket skeleton."}
+{q:"In Lab 6 (HTTP logs), a web shell request is often:",type:"mc",o:["A TLS failure","POST to a .aspx/.php file with unusual parameters","A GET to the homepage","A 200 on the root"],a:1,e:"Web shells = odd POSTs to script files."},
+{q:"In Lab 8 (hash investigation), the first step is:",type:"mc",o:["Email it","Hash the email","Look up the hash in reputation sources (VT, etc.)","Execute the file"],a:2,e:"Reputation first — never execute."},
+{q:"In Lab 10 (ticket writing), a complete ticket includes:",type:"mc",o:["Only a title","Only a user name","Nothing","Summary, evidence, timeline, actions and next steps"],a:3,e:"The five-part ticket skeleton."}
 ],
 
 31:[
 {q:"A SOC ticket serves as:",type:"mc",o:["A work product, legal record, handoff and metrics source","A chat log","A backup","An invoice"],a:0,e:"Tickets are auditable records — they survive the investigation."},
-{q:"A GOOD ticket includes:",type:"mc",o:["Timeline, evidence, actions taken, next steps and a clear conclusion","Only the alert name","Only the user's name","Nothing but a status"],a:0,e:"Detail + chronology is what makes a ticket useful and professional."},
-{q:"Typical SLA to ACKNOWLEDGE a HIGH/SEV-1 alert:",type:"mc",o:["15 minutes","24 hours","1 week","Never"],a:0,e:"Acknowledge ≈ 15 min, contain ≈ 1 hour for the highest severity."},
-{q:"When handing off to the next shift you should:",type:"mc",o:["Summarize status, evidence and open questions in the ticket","Delete the ticket","Wait for a phone call","Only email yourself"],a:0,e:"A clean handoff summary lets the next analyst pick up instantly."},
+{q:"A GOOD ticket includes:",type:"mc",o:["Nothing but a status","Timeline, evidence, actions taken, next steps and a clear conclusion","Only the alert name","Only the user's name"],a:1,e:"Detail + chronology is what makes a ticket useful and professional."},
+{q:"Typical SLA to ACKNOWLEDGE a HIGH/SEV-1 alert:",type:"mc",o:["1 week","Never","15 minutes","24 hours"],a:2,e:"Acknowledge ≈ 15 min, contain ≈ 1 hour for the highest severity."},
+{q:"When handing off to the next shift you should:",type:"mc",o:["Delete the ticket","Wait for a phone call","Only email yourself","Summarize status, evidence and open questions in the ticket"],a:3,e:"A clean handoff summary lets the next analyst pick up instantly."},
 {q:"Contain SLA (vs acknowledge) is:",type:"mc",o:["Longer, and means an action taken to stop the threat","Shorter than acknowledge","The same as acknowledge","Not applicable"],a:0,e:"Acknowledge is fast (15 min); contain gives time to act (1 hour)."},
-{q:"Ticket \"status\" fields commonly include states like:",type:"mc",o:["New → In Progress → Escalated → Closed","Red → Green → Blue","Alpha → Beta → Gamma","1 → 2 → 3"],a:0,e:"Lifecycle states track the case."},
-{q:"Tickets feed SOC metrics like:",type:"mc",o:["MTTA, MTTR and alert volumes","Page views","Coffee stock","Room temperature"],a:0,e:"Tickets are the metric source."},
-{q:"A ticket with a vague title (\"Something happened\") is:",type:"mc",o:["Poor practice — titles should be specific","Fine","Best practice","Required"],a:0,e:"Specific titles make search and triage fast."},
+{q:"Ticket \"status\" fields commonly include states like:",type:"mc",o:["1 → 2 → 3","New → In Progress → Escalated → Closed","Red → Green → Blue","Alpha → Beta → Gamma"],a:1,e:"Lifecycle states track the case."},
+{q:"Tickets feed SOC metrics like:",type:"mc",o:["Coffee stock","Room temperature","MTTA, MTTR and alert volumes","Page views"],a:2,e:"Tickets are the metric source."},
+{q:"A ticket with a vague title (\"Something happened\") is:",type:"mc",o:["Fine","Best practice","Required","Poor practice — titles should be specific"],a:3,e:"Specific titles make search and triage fast."},
 {q:"When closing a ticket, you should include:",type:"mc",o:["Final verdict, evidence, and follow-ups/recommendations","Nothing","Only your name","Only the date"],a:0,e:"Closure = conclusion + lessons/follow-ups."},
-{q:"SLA tracking matters because:",type:"mc",o:["It proves response timeliness to customers","It slows work down","It's decorative","It replaces the SIEM"],a:0,e:"SLAs are contractual — missed SLAs = customer impact."}
+{q:"SLA tracking matters because:",type:"mc",o:["It replaces the SIEM","It proves response timeliness to customers","It slows work down","It's decorative"],a:1,e:"SLAs are contractual — missed SLAs = customer impact."}
 ],
 
 32:[
-{q:"When an APT is suspected, an L1 should:",type:"mc",o:["Attribute the group immediately","Detect IOCs, document and escalate — do NOT attribute","Disable the domain","Go silent"],a:1,e:"Attribution is threat-intel's job; L1's job is detection, evidence and escalation."},
+{q:"When an APT is suspected, an L1 should:",type:"mc",o:["Go silent","Attribute the group immediately","Detect IOCs, document and escalate — do NOT attribute","Disable the domain"],a:2,e:"Attribution is threat-intel's job; L1's job is detection, evidence and escalation."},
 {q:"Which is a valid threat-hunting approach?",type:"mc",o:["Intel-led","Hypothesis-led","Anomaly-led","All of these"],a:3,e:"Hunting is driven by intel, hypotheses, or anomalies."},
 {q:"Volatility is a tool for:",type:"mc",o:["Memory forensics","Email filtering","DNS caching","WAF rules"],a:0,e:"Volatility analyzes memory dumps — an advanced/forensics capability."},
-{q:"YARA rules are used to:",type:"mc",o:["Detect files/malware by content patterns","Patch servers","Route traffic","Sign certificates"],a:0,e:"YARA matches strings/bytes to classify and hunt malware."},
-{q:"Sigma rules describe:",type:"mc",o:["Detection logic that can be converted into SIEM queries","Firewall policies","SSL certificates","Malware payloads"],a:0,e:"Sigma = generic detection rules; tools convert them to KQL/SPL/etc."},
-{q:"Threat hunting is BEST described as:",type:"mc",o:["Proactively searching for threats not yet flagged by alerts","Waiting for alerts","Tuning the firewall","Writing docs"],a:0,e:"Hunting = proactive, alert-agnostic search."},
+{q:"YARA rules are used to:",type:"mc",o:["Sign certificates","Detect files/malware by content patterns","Patch servers","Route traffic"],a:1,e:"YARA matches strings/bytes to classify and hunt malware."},
+{q:"Sigma rules describe:",type:"mc",o:["SSL certificates","Malware payloads","Detection logic that can be converted into SIEM queries","Firewall policies"],a:2,e:"Sigma = generic detection rules; tools convert them to KQL/SPL/etc."},
+{q:"Threat hunting is BEST described as:",type:"mc",o:["Waiting for alerts","Tuning the firewall","Writing docs","Proactively searching for threats not yet flagged by alerts"],a:3,e:"Hunting = proactive, alert-agnostic search."},
 {q:"Detection engineering means:",type:"mc",o:["Building and tuning detection logic/rules","Buying hardware","Doing HR","Writing emails"],a:0,e:"Detection engineering turns TTPs into detections."},
-{q:"Suricata/Snort are:",type:"mc",o:["IDS/IPS engines that match network traffic against rules","SIEM platforms","EDR agents","CSPM tools"],a:0,e:"Signature-based network detection."},
-{q:"A common post-L1 career step is:",type:"mc",o:["Tier 2/3 analyst, threat hunter, or detection engineer","Retirement","Nothing","Only management"],a:0,e:"L1 → L2/L3/hunting/detection is the natural progression."},
-{q:"Advanced KQL/SPL skills matter because:",type:"mc",o:["Complex investigations require complex, efficient queries","They replace the SOC","They are only for managers","They are optional"],a:0,e:"Efficiency and depth = better triage and hunting."}
+{q:"Suricata/Snort are:",type:"mc",o:["CSPM tools","IDS/IPS engines that match network traffic against rules","SIEM platforms","EDR agents"],a:1,e:"Signature-based network detection."},
+{q:"A common post-L1 career step is:",type:"mc",o:["Nothing","Only management","Tier 2/3 analyst, threat hunter, or detection engineer","Retirement"],a:2,e:"L1 → L2/L3/hunting/detection is the natural progression."},
+{q:"Advanced KQL/SPL skills matter because:",type:"mc",o:["They replace the SOC","They are only for managers","They are optional","Complex investigations require complex, efficient queries"],a:3,e:"Efficiency and depth = better triage and hunting."}
 ]
 };
+
+const granular=MODULES.reduce((t,m)=>t+m.s.length,0);
+const totalQ=Object.values(QUIZZES).reduce((t,q)=>t+q.length,0);
+const simQ=15;
 
 const KEY="mxdr-l1-progress";
 const store={ get(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return{};}}, set(o){try{localStorage.setItem(KEY,JSON.stringify(o));}catch(e){}} };
@@ -1004,7 +1024,24 @@ function renderMd(m,text){
     h.id=slugify(h.textContent);
     toc.push({level:+h.tagName[1],text:h.textContent,id:h.id});
   });
-  return {html:w.innerHTML,toc};
+  const sections=splitSections(w);
+  return {html:w.innerHTML,toc,sections};
+}
+function splitSections(w){
+  const secs=[]; let cur=null; const intro=[];
+  Array.from(w.childNodes).forEach(n=>{
+    if(n.nodeType===1&&n.tagName==="H2"){
+      if(cur) secs.push(cur);
+      cur={title:n.textContent.trim(),html:""};
+      return;
+    }
+    const s=n.outerHTML!=null?n.outerHTML:(n.textContent||"");
+    if(!cur) intro.push(s); else cur.html+=s;
+  });
+  if(cur) secs.push(cur);
+  const introHtml=intro.join("");
+  if(secs.length&&introHtml) secs[0].html=introHtml+secs[0].html;
+  return secs;
 }
 
 const LANG_LABEL={kql:"KQL",spl:"SPL",bash:"Bash",sh:"Shell",shell:"Shell",powershell:"PowerShell",sql:"SQL",python:"Python",yaml:"YAML",json:"JSON",xml:"XML",csv:"CSV",text:"text",plaintext:"text",zeek:"Zeek",yara:"YARA",wireshark:"Wireshark",markdown:"Markdown",javascript:"JS",html:"HTML",php:"PHP",java:"Java",csharp:"C#",ini:"INI",diff:"diff"};
@@ -1024,6 +1061,90 @@ function insertMd(box,md,m){
   if(nx&&m.n<MODULES.length-1) nx.onclick=()=>showModule(m.n+1);
   addCopyButtons(box);
   observeToc(box,md.toc);
+}
+
+function insertWizard(box,md,m){
+  const secs=md.sections;
+  if(!secs||!secs.length){ insertMd(box,md,m); return; }
+  const step=Math.max(0,Math.min(WIZ.step||0,secs.length-1));
+  const sec=secs[step];
+  const pct=Math.round((step+1)/secs.length*100);
+  const first=step===0,last=step===secs.length-1;
+  box.innerHTML='<div class="md-wrap"><div class="md-main">'+
+    '<div class="wz-top">'+
+      '<div class="wz-meta"><span>Step <b>'+(step+1)+'</b> of <b>'+secs.length+'</b></span><span>'+pct+'% complete</span></div>'+
+      '<div class="wz-track"><i style="width:'+pct+'%"></i></div>'+
+    '</div>'+
+    '<h2 class="wz-title">'+esc(sec.title)+'</h2>'+
+    sec.html+
+    '<div class="wz-nav">'+
+      '<button class="btn ghost" id="wz-prev"'+(first?' disabled':'')+'>← Previous</button>'+
+      '<span class="spacer"></span>'+
+      '<button class="btn primary" id="wz-next">'+(last?'Finish — module quiz ↓':'Next section →')+'</button>'+
+    '</div>'+
+    '<div class="nav-row">'+
+      '<button class="btn ghost" id="nav-prev" '+(m.n>0?"":'disabled')+'>← '+(m.n>0?"Module "+fmt(m.n-1):"Previous")+'</button>'+
+      '<button class="btn ghost" id="nav-next" '+(m.n<MODULES.length-1?"":'disabled')+'>'+(m.n<MODULES.length-1?"Module "+fmt(m.n+1):"Next")+' →</button>'+
+    '</div>'+
+  '</div></div>';
+  const wp=$("#wz-prev"),wn=$("#wz-next");
+  if(wp&&!first) wp.onclick=()=>wzGo(m,-1);
+  if(wn) wn.onclick=()=>wzGo(m,1);
+  const mp=$("#nav-prev"),mn=$("#nav-next");
+  if(mp&&m.n>0) mp.onclick=()=>showModule(m.n-1);
+  if(mn&&m.n<MODULES.length-1) mn.onclick=()=>showModule(m.n+1);
+  addCopyButtons(box);
+}
+function wzGo(m,delta){
+  const md=mdCache[m.file];
+  if(!md||!md.sections||!md.sections.length) return;
+  const secs=md.sections;
+  const old=WIZ.step;
+  const last=secs.length-1;
+  if(delta>0&&old===last){
+    markSecDone(m,secs[old].title);
+    const q=document.querySelector(".quiz-card");
+    if(q) q.scrollIntoView({behavior:"smooth",block:"start"});
+    toast("Module "+fmt(m.n)+" content complete — try the quiz below");
+    return;
+  }
+  const nw=Math.min(Math.max(0,old+delta),last);
+  if(delta>0&&nw>old) markSecDone(m,secs[old].title);
+  WIZ.step=nw;
+  prog["m"+m.n+"_wz"]=nw; store.set(prog);
+  const box=$("#md-body");
+  if(!box) return;
+  insertWizard(box,md,m);
+  box.scrollIntoView({behavior:"smooth",block:"start"});
+}
+const normT=s=>String(s).toLowerCase().replace(/[^a-z0-9. ]/g,"").replace(/\.\s+/g,". ").replace(/\s+/g," ").trim();
+function mkKey(s){
+  const raw=String(s).replace(/ ?[—–-] .*$/,"").trim();
+  const exact=normT(raw);
+  const noParen=normT(raw.replace(/\([^)]*\)/g," ").replace(/\s+/g," ").trim());
+  return {pre:exact.match(/^(\d+(?:\.\d+)*)/)?.[1]||null, exact, noParen};
+}
+function matchSection(m,title){
+  const t=mkKey(title);
+  for(let i=0;i<m.s.length;i++){
+    const si=mkKey(m.s[i]);
+    if(t.pre&&si.exact.startsWith(t.pre)) return i;
+    if(si.exact===t.exact) return i;
+    if(t.noParen&&t.noParen===si.noParen&&t.noParen.length>3) return i;
+  }
+  return -1;
+}
+function markSecDone(m,title){
+  const idx=matchSection(m,title);
+  if(idx<0) return;
+  const arr=secArr(m);
+  if(arr.includes(m.s[idx])) return;
+  arr.push(m.s[idx]);
+  prog["m"+m.n+"_s"]=arr; store.set(prog);
+  const li=$("#sections li[data-i=\""+idx+"\"]");
+  if(li) li.classList.add("done");
+  updateSecUI(m);
+  renderAll();
 }
 
 function addCopyButtons(box){
@@ -1119,7 +1240,7 @@ function onPicked(e){
 async function renderMdContent(m,force){
   const box=$("#md-body"), btn=$("#read-btn");
   if(!box) return;
-  if(!force&&mdCache[m.file]){ box.style.display="block"; box.dataset.open="1"; insertMd(box,mdCache[m.file],m); if(btn)btn.textContent="Hide content"; return; }
+  if(!force&&mdCache[m.file]){ box.style.display="block"; box.dataset.open="1"; if(wizardOn()) insertWizard(box,mdCache[m.file],m); else insertMd(box,mdCache[m.file],m); if(btn)btn.textContent="Hide content"; return; }
   if(mdLoading[m.file]&&!force) return;
   mdLoading[m.file]=true;
   box.style.display="block"; box.dataset.open="1";
@@ -1132,7 +1253,7 @@ async function renderMdContent(m,force){
   const md=renderMd(m,text);
   mdCache[m.file]=md;
   box.style.display="block"; box.dataset.open="1";
-  insertMd(box,md,m);
+  if(wizardOn()) insertWizard(box,md,m); else insertMd(box,md,m);
   if(btn)btn.textContent="Hide content";
 }
 function toggleRead(m){
@@ -1140,11 +1261,12 @@ function toggleRead(m){
   if(!box) return;
   if(box.dataset.open==="1"){
     box.style.display="none"; box.dataset.open="0";
-    if(btn)btn.textContent="Read content";
+    if(btn)btn.textContent=wizardOn()?"Start guided":"Read content";
   }else{
     box.style.display="block"; box.dataset.open="1";
     if(btn)btn.textContent="Hide content";
     if(!mdCache[m.file]&&!mdLoading[m.file]) renderMdContent(m,false);
+    else if(mdCache[m.file]){ if(wizardOn()) insertWizard(box,mdCache[m.file],m); else insertMd(box,mdCache[m.file],m); }
   }
 }
 function prefetch(m){
@@ -1245,6 +1367,8 @@ function resetQuiz(m){
 
 /* ────────────────────────── UI ────────────────────────── */
 let CUR=-1;
+let WIZ={step:0};
+const wizardOn=()=>prog._wiz!==0;
 
 function renderGroups(){
   const g=$("#groups"); g.innerHTML="";
@@ -1285,9 +1409,13 @@ function renderCard(m){
     '<h2>'+esc(m.title)+'</h2>'+
     '<p class="desc">'+esc(m.desc)+'</p>'+
     '<div class="actions">'+
-    '<button class="btn primary" id="read-btn">Read content</button>'+
+    '<button class="btn primary" id="read-btn">'+(wizardOn()?"Start guided":"Read content")+'</button>'+
     '<a class="btn ghost" href="'+m.file+'" target="_blank">Raw file ↗</a>'+
     '<button class="btn ghost" id="toggle-mod"></button>'+
+    '<span class="seg" id="mode-seg">'+
+      '<button data-w="1" class="'+(wizardOn()?"on":"")+'" title="Guided: one section at a time">Guided</button>'+
+      '<button data-w="0" class="'+(wizardOn()?"":"on")+'" title="Full page: whole module at once">Full page</button>'+
+    '</span>'+
     '</div>'+
     '<div class="mod-progress"><div class="track"><i id="sec-bar"></i></div><span id="sec-label"></span></div>'+
     '</div><div class="card-secs">'+
@@ -1299,6 +1427,21 @@ function renderCard(m){
   $("#toggle-mod").textContent=isDone(m)?"Mark incomplete":"Mark module complete";
   $("#read-btn").onclick=()=>toggleRead(m);
   $("#toggle-mod").onclick=()=>{ setDone(m,!isDone(m)); updateSecUI(m); renderAll(); };
+  $$("#mode-seg button").forEach(b=>{
+    b.onclick=()=>{
+      const w=+b.dataset.w;
+      if(!!w===wizardOn()) return;
+      const box=$("#md-body");
+      const wasOpen=box&&box.dataset.open==="1";
+      prog._wiz=w; store.set(prog);
+      renderCard(m);
+      renderAll();
+      const rb=$("#read-btn");
+      if(rb) rb.textContent=w?"Start guided":"Read content";
+      if(wasOpen) renderMdContent(m,true);
+      toast(w?"Guided mode: one section at a time — sections auto-mark as you go":"Full-page mode: whole module at once");
+    };
+  });
   $$("#sections li").forEach(li=>{ li.onclick=()=>toggleSection(m,+li.dataset.i,li); });
   renderQuiz(m);
   updateSecUI(m);
@@ -1330,6 +1473,7 @@ function showModule(n){
   if(n<0||n>=MODULES.length) return;
   const m=MODULES[n];
   CUR=n;
+  WIZ.step=prog["m"+m.n+"_wz"]||0;
   prog._last=n; store.set(prog);
   $("#dashboard").style.display="none";
   $("#module-view").style.display="block";
@@ -1363,7 +1507,9 @@ function renderDashboard(){
   '<section class="card hero">'+
     '<div><div class="hero-kicker">Complete beginner → L1 operational curriculum</div>'+
     '<h1>MXDR L1 SOC<br>Crash Course</h1>'+
-    '<p>'+total+' modules · '+MODULES.filter(m=>m.p===0).length+' must-know · '+MODULES.filter(m=>m.p===1).length+' core · '+MODULES.filter(m=>m.p===3).length+' optional. Your progress is saved in this browser.</p></div>'+
+    '<p>'+total+' modules · '+granular+' study sections · '+totalQ+' quiz questions · '+simQ+' SOC simulator scenarios. Your progress is saved in this browser.</p>'+
+    '<div class="cont-wrap sim-wrap"><a class="btn primary" id="sim-btn" href="soc-analyst-simulator/" target="_blank" rel="noopener">Launch SOC Analyst Simulator ↗</a></div>'+
+    '</div>'+
     '<div class="hero-ring">'+
       '<svg width="132" height="132" viewBox="0 0 140 140">'+
         '<circle class="ring-bg" cx="70" cy="70" r="'+R+'"/>'+
@@ -1443,6 +1589,10 @@ function keybindings(){
     if(e.key==="r"){ if(CUR>=0) toggleRead(MODULES[CUR]); return; }
     if(e.key==="["){ if(CUR>0) showModule(CUR-1); return; }
     if(e.key==="]"){ if(CUR<MODULES.length-1) showModule(CUR+1); return; }
+    if(CUR>=0&&wizardOn()&&$("#md-body")&&$("#md-body").dataset.open==="1"){
+      if(e.key==="ArrowRight"){ wzGo(MODULES[CUR],1); return; }
+      if(e.key==="ArrowLeft"){ wzGo(MODULES[CUR],-1); return; }
+    }
   });
 }
 

@@ -1237,7 +1237,7 @@ function renderQuizSetup() {
   if (!S.quizTopics.size) tags.forEach(t => S.quizTopics.add(t));
   $("quiz-topics").innerHTML = tags.map(t =>
     `<button class="chip-btn ${S.quizTopics.has(t) ? "active" : ""}" onclick="toggleQuizTopic('${esc(t)}')">${esc(t)}</button>`).join("");
-  const counts = [5, 10, 15, -1];
+  const counts = [10, 20, 50, -1];
   $("quiz-counts").innerHTML = counts.map(c =>
     `<button class="chip-btn ${S.quizCount === c ? "active" : ""}" onclick="S.quizCount=${c}; renderQuizSetup()">${c === -1 ? "All " + QUIZ.length : c}</button>`).join("");
 }

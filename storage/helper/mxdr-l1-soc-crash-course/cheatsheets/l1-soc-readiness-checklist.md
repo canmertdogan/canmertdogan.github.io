@@ -201,7 +201,7 @@
 - [ ] Case 17: Impossible Travel (MFA Fatigue)
 - [ ] Case 18: Endpoint Compromise (Full Chain)
 - [ ] Case 19: Web Attack (Blocked SQLi)
-- [ ] Case 20: False Positive (Windows Update PS)
+- [ ] Case 20: False Positive (The Crucial One)
 
 ### Module 29: Interview Preparation
 - [ ] 10 Fundamental definitions (SOC, SIEM, XDR, MXDR, EDR, MDR, SOAR, IOC/IOA/TTP, MITRE)
