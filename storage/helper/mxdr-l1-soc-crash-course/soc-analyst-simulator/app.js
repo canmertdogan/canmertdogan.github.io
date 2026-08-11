@@ -94,7 +94,9 @@ const S = {
   timelineFilter: "all",
   decision: null,        // live decision selections
   ref: "events",
-  lastTab: "overview"
+  lastTab: "overview",
+  mdFocus: true,       // one-section-at-a-time reader for markdown cheat sheets
+  mdSec: {}            // per-sheet current section index { sheetId: n }
 };
 
 const TIME_BUDGET = { Easy: 240, Medium: 360, Hard: 480 };
@@ -1468,7 +1470,7 @@ function refTableSearch() {
 
 function renderRefMd(md) {
   const panel = $("ref-panel");
-  if (mdCache[md.id]) { panel.innerHTML = `<div class="md-content">${mdCache[md.id]}</div>`; return; }
+  if (mdCache[md.id]) { renderMdDoc(md, mdCache[md.id]); return; }
   panel.innerHTML = `<div class="md-msg">Loading <code>${esc(md.file)}</code>&hellip;</div>`;
   fetch(md.file).then(r => {
     if (!r.ok) throw new Error("HTTP " + r.status);
@@ -1476,11 +1478,160 @@ function renderRefMd(md) {
   }).then(text => {
     if (typeof marked === "undefined" || typeof DOMPurify === "undefined") throw new Error("renderer missing");
     mdCache[md.id] = DOMPurify.sanitize(marked.parse(text));
-    if (S.ref === md.id) panel.innerHTML = `<div class="md-content">${mdCache[md.id]}</div>`;
+    if (S.ref === md.id) renderMdDoc(md, mdCache[md.id]);
   }).catch(err => {
     delete mdCache[md.id];
     if (S.ref === md.id) panel.innerHTML = mdNotice(md);
   });
+}
+
+/* ---- ADHD-friendly markdown reader (one section at a time) ---- */
+let MD_CUR = null;   // { id, total }
+
+function splitMdSections(html) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const model = { title: "", intro: "", sections: [] };
+  let sec = null, sub = null;
+  for (const el of Array.from(doc.body.childNodes)) {
+    const tag = (el.tagName || "").toLowerCase();
+    if (tag === "h1") { model.title = el.textContent.trim(); continue; }
+    if (tag === "h2") { sec = { title: el.textContent.trim(), html: "", subs: [] }; model.sections.push(sec); sub = null; continue; }
+    if (tag === "h3" && sec) { sub = { title: el.textContent.trim(), html: "" }; sec.subs.push(sub); continue; }
+    const chunk = el.outerHTML || "";
+    if (sec) { if (sub) sub.html += chunk; else sec.html += chunk; }
+    else model.intro += chunk;
+  }
+  return model;
+}
+
+function wrapTables(html) {
+  return html.replace(/<table>/g, '<div class="md-twrap"><table>').replace(/<\/table>/g, "</table></div>");
+}
+
+function injectChk(html, ctr, saved) {
+  return wrapTables(html.replace(/<input[^>]*type="checkbox"[^>]*>/g, m => {
+    const i = ctr.n++;
+    const on = saved ? saved.has(i) : /checked/.test(m);
+    return `<span class="chk${on ? " on" : ""}" data-i="${i}" role="checkbox" aria-checked="${on}" tabindex="0"></span>`;
+  }));
+}
+
+function renderMdDoc(md, html) {
+  const model = splitMdSections(html);
+  const total = model.sections.length;
+  if (!(md.id in S.mdSec)) S.mdSec[md.id] = 0;
+  if (S.mdSec[md.id] >= total) S.mdSec[md.id] = total ? 0 : -1;
+  const ctr = { n: 0 };
+  const saved = getChkSet(md.id);
+  model.sections.forEach(s => {
+    s.html = injectChk(s.html, ctr, saved);
+    s.subs.forEach(su => su.html = injectChk(su.html, ctr, saved));
+  });
+  MD_CUR = { id: md.id, total: total };
+
+  const chips = model.sections.map((s, i) =>
+    `<button class="md-chip" data-s="${i}" onclick="mdJump(${i})">${esc(s.title)}<span class="md-chip-done" data-cd="${i}"></span></button>`).join("");
+  const body = model.sections.map((s, i) => {
+    const subHtml = s.subs.length
+      ? s.subs.map(su => `<div class="md-sub open"><h3 class="md-sub-h">${esc(su.title)} <span class="chev">&#9660;</span></h3><div class="md-sub-b">${su.html}</div></div>`).join("")
+      : s.html;
+    return `<section class="md-sec" data-s="${i}">
+      <h2 class="md-sec-h">${esc(s.title)}<span class="md-sec-done" data-done="${i}"></span></h2>
+      ${subHtml}
+    </section>`;
+  }).join("");
+
+  $("ref-panel").innerHTML = `<div class="md-adhd">
+    <div class="md-ctrl">
+      <div class="md-ctrl-top">
+        <button class="btn ghost small" id="mdFocusBtn" onclick="toggleMdFocus()">Focus mode</button>
+        <div class="md-progress" title="Section progress"><div class="md-progress-fill" id="mdProgressFill"></div></div>
+        <span class="md-progress-txt" id="mdProgressTxt"></span>
+      </div>
+      <div class="md-chips">${chips}</div>
+    </div>
+    ${model.title ? `<div class="md-title">${esc(model.title)}</div>` : ""}
+    ${model.intro ? `<div class="md-intro md-content">${model.intro}</div>` : ""}
+    <div class="md-sections md-content">${body}</div>
+    <div class="md-navbtns">
+      <button class="btn" onclick="mdMove(-1)">&#8592; Prev</button>
+      <span class="md-nav-prog" id="mdNavProg"></span>
+      <button class="btn primary" onclick="mdMove(1)">Next &rarr;</button>
+    </div>
+  </div>`;
+  updateMdFocusUI();
+  mdShow(total ? S.mdSec[md.id] : -1);
+}
+
+function mdShow(i) {
+  if (!MD_CUR || !MD_CUR.total) return;
+  i = Math.max(0, Math.min(MD_CUR.total - 1, i));
+  S.mdSec[MD_CUR.id] = i;
+  document.querySelectorAll("#ref-panel .md-sec").forEach((sec, n) => sec.classList.toggle("on", n === i));
+  document.querySelectorAll("#ref-panel .md-chip").forEach((c, n) => c.classList.toggle("active", n === i));
+  const pct = Math.round(((i + 1) / MD_CUR.total) * 100);
+  const fill = $("mdProgressFill"), txt = $("mdProgressTxt"), nav = $("mdNavProg");
+  if (fill) fill.style.width = pct + "%";
+  if (txt) txt.textContent = "Section " + (i + 1) + " of " + MD_CUR.total;
+  if (nav) nav.textContent = (i + 1) + " / " + MD_CUR.total;
+  refreshMdProgress();
+  const cur = document.querySelector("#ref-panel .md-sec.on");
+  if (cur) cur.scrollIntoView({ block: "start", behavior: "smooth" });
+}
+
+function mdMove(step) {
+  if (!MD_CUR || !MD_CUR.total) return;
+  mdShow((S.mdSec[MD_CUR.id] || 0) + step);
+}
+
+function mdJump(i) {
+  if (!MD_CUR || !MD_CUR.total) return;
+  mdShow(i);
+}
+
+function toggleMdFocus() {
+  S.mdFocus = !S.mdFocus;
+  try { localStorage.setItem("adhdFocus", S.mdFocus ? "1" : "0"); } catch (e) {}
+  updateMdFocusUI();
+}
+
+function updateMdFocusUI() {
+  const panel = $("ref-panel");
+  if (panel) panel.classList.toggle("md-focus", S.mdFocus);
+  const b = $("mdFocusBtn");
+  if (b) b.textContent = S.mdFocus ? "Focus mode: on (one at a time)" : "Focus mode: off (full page)";
+}
+
+function refreshMdProgress() {
+  const panel = $("ref-panel");
+  if (!panel) return;
+  document.querySelectorAll("#ref-panel .md-sec").forEach(sec => {
+    const done = sec.querySelectorAll(".chk.on").length;
+    const total = sec.querySelectorAll(".chk").length;
+    const d = sec.querySelector("[data-done]");
+    if (d) d.textContent = total ? " " + done + "/" + total + " \u2713" : "";
+    const chip = panel.querySelector('.md-chip[data-s="' + sec.dataset.s + '"] .md-chip-done');
+    if (chip) chip.textContent = total ? " " + done + "/" + total : "";
+  });
+}
+
+function getChkSet(id) {
+  try {
+    const raw = localStorage.getItem("adhdChk." + id);
+    return raw === null ? null : new Set(JSON.parse(raw));
+  } catch (e) { return null; }
+}
+
+function toggleChkMd(el) {
+  const id = MD_CUR ? MD_CUR.id : S.ref;
+  const i = +el.dataset.i;
+  let set = getChkSet(id);
+  if (set === null) set = new Set();
+  if (set.has(i)) set.delete(i); else set.add(i);
+  try { localStorage.setItem("adhdChk." + id, JSON.stringify([...set])); } catch (e) {}
+  el.classList.toggle("on", set.has(i));
+  el.setAttribute("aria-checked", set.has(i));
+  refreshMdProgress();
 }
 
 function mdNotice(md) {
@@ -1571,6 +1722,12 @@ function bindShortcuts() {
       if (!S.quiz.answered && /^[1-4]$/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); answerQuiz(+e.key - 1); return; }
       if (S.quiz.answered && e.key === "Enter") { e.preventDefault(); nextQuiz(); return; }
     }
+    const refActive = $("ref") && $("ref").classList.contains("active");
+    if (refActive && MD_CUR && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (e.key === "f" || e.key === "F") { e.preventDefault(); toggleMdFocus(); return; }
+      if (e.key === "ArrowRight" || e.key === "n" || e.key === "N") { e.preventDefault(); mdMove(1); return; }
+      if (e.key === "ArrowLeft" || e.key === "p" || e.key === "P") { e.preventDefault(); mdMove(-1); return; }
+    }
     if (inv && !typing && /^[1-7]$/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const t = TAB_KEYS[+e.key - 1];
       if (t) switchTab(t);
@@ -1583,6 +1740,16 @@ function bindShortcuts() {
    ============================================================ */
 (function initUI() {
   if (PROG.lastRef) S.ref = PROG.lastRef;
+  S.mdFocus = (function () { try { return localStorage.getItem("adhdFocus") !== "0"; } catch (e) { return true; } })();
+  const rp = $("ref-panel");
+  if (rp) {
+    rp.addEventListener("click", e => {
+      const chk = e.target.closest(".chk");
+      if (chk) { toggleChkMd(chk); return; }
+      const sh = e.target.closest(".md-sub-h");
+      if (sh) { sh.parentElement.classList.toggle("open"); return; }
+    });
+  }
   const se = $("scenSearch");
   if (se) {
     se.addEventListener("input", () => {

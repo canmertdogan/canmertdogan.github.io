@@ -97,6 +97,20 @@
 
   /* ── Main ─────────────────────────────── */
   #main{flex:1; min-width:0; padding:30px 38px 60px;}
+
+  /* ── Focus Mode (ADHD-friendly reading) ───
+     Narrower measure, more air, fewer things on screen at once. */
+  body.focus-mode #sidebar{width:0; min-width:0; padding:0; border:none; overflow:hidden; opacity:0;}
+  body.focus-mode #main{max-width:740px; margin:0 auto; padding:34px 24px 100px;}
+  body.focus-mode .card-secs, body.focus-mode .quiz-card, body.focus-mode .sim-card{display:none;}
+  body.focus-mode .md-toc{display:none;}
+  body.focus-mode .md-main{font-size:17px; line-height:1.9; letter-spacing:.005em;}
+  body.focus-mode .md-main p, body.focus-mode .md-main ul, body.focus-mode .md-main ol{margin:18px 0; max-width:66ch;}
+  body.focus-mode .md-main h1, body.focus-mode .md-main h2, body.focus-mode .md-main h3{margin-top:42px; margin-bottom:16px;}
+  body.focus-mode .wz-title{font-size:28px; line-height:1.3;}
+  body.focus-mode .wz-top, body.focus-mode .wz-nav{max-width:66ch;}
+  .focus-btn{white-space:nowrap;}
+  .focus-btn.on{background:var(--accent); color:#0a0d14; border-color:var(--accent);}
   .inner{max-width:920px; margin:0 auto;}
 
   .card{background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius);}
@@ -1484,6 +1498,19 @@ function resetQuiz(m){
 let CUR=-1;
 let WIZ={step:0};
 const wizardOn=()=>prog._wiz!==0;
+const focusOn=()=>!!prog._focus;
+function toggleFocusMode(){
+  prog._focus=!prog._focus;
+  if(prog._focus) prog._wiz=1; // focus mode = one section at a time, always
+  store.set(prog);
+  document.body.classList.toggle("focus-mode",prog._focus);
+  if(CUR>=0){
+    renderCard(MODULES[CUR]);
+    const box=$("#md-body");
+    if(box&&box.dataset.open==="1") renderMdContent(MODULES[CUR],true);
+  }
+  toast(prog._focus?"Focus Mode on — narrower text, one section at a time":"Focus Mode off");
+}
 
 function renderGroups(){
   const g=$("#groups"); g.innerHTML="";
@@ -1551,6 +1578,7 @@ function renderCard(m){
       '<button data-w="1" class="'+(wizardOn()?"on":"")+'" title="Guided: one section at a time">Guided</button>'+
       '<button data-w="0" class="'+(wizardOn()?"":"on")+'" title="Full page: whole module at once">Full page</button>'+
     '</span>'+
+    '<button class="btn ghost focus-btn'+(focusOn()?" on":"")+'" id="focus-btn" title="Narrower text, fewer distractions, one section at a time">'+(focusOn()?"🎯 Focus: On":"🎯 Focus Mode")+'</button>'+
     '</div>'+
     '<div class="mod-progress"><div class="track"><i id="sec-bar"></i></div><span id="sec-label"></span></div>'+
     '</div><div class="card-secs">'+
@@ -1561,6 +1589,7 @@ function renderCard(m){
     '<div class="card quiz-card"><div class="quiz-head"><div><h3>Module Quiz</h3><div class="fine">Check your understanding</div></div><span class="q-best" id="quiz-best"></span></div><div class="quiz-body" id="quiz-body"></div></div>'+
     simLinksHtml(m);
   $("#home-btn").onclick=showDashboard;
+  $("#focus-btn").onclick=toggleFocusMode;
   $("#toggle-mod").textContent=isDone(m)?"Mark incomplete":"Mark module complete";
   $("#read-btn").onclick=()=>toggleRead(m);
   $("#toggle-mod").onclick=()=>{ setDone(m,!isDone(m)); updateSecUI(m); renderAll(); };
@@ -1745,6 +1774,7 @@ function keybindings(){
 }
 
 function init(){
+  document.body.classList.toggle("focus-mode",focusOn());
   $("#menu-btn").onclick=()=>{ $("#sidebar").classList.toggle("open"); $("#overlay").classList.toggle("show"); };
   $("#overlay").onclick=closeSidebar;
   $("#search").addEventListener("input",e=>filter(e.target.value));
