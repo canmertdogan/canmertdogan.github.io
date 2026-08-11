@@ -41,7 +41,10 @@
     height:100vh; position:sticky; top:0; overflow-y:auto; padding:18px 14px 22px;
     display:flex; flex-direction:column; gap:16px;
   }
-  .brand{display:flex; align-items:center; gap:10px; padding:2px 6px;}
+  .brand{display:flex; align-items:center; gap:10px; padding:2px 6px; cursor:pointer; border-radius:var(--radius-s);
+    border:1px solid transparent; transition:border-color .12s, background .12s; margin:-2px -6px; padding:4px 6px;}
+  .brand:hover{border-color:var(--border); background:var(--bg2);}
+  .brand:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
   .brand .logo{width:34px; height:34px; border-radius:9px; flex-shrink:0;
     background:linear-gradient(135deg,var(--accent),var(--accent2));
     display:flex; align-items:center; justify-content:center; color:#0a0d14; font-weight:800; font-size:16px;}
@@ -163,6 +166,7 @@
 
   /* ── Module view ───────────────────────── */
   #module-view .card-head{padding:24px 26px 20px;}
+  .home-btn{margin-bottom:12px; font-size:12.5px; padding:6px 12px;}
   .top-line{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:14px;}
   .num-chip{font-family:var(--mono); font-weight:700; font-size:12px; letter-spacing:.06em; padding:4px 11px;
     border-radius:20px; background:rgba(110,168,255,.12); color:var(--accent); border:1px solid rgba(110,168,255,.3);}
@@ -366,11 +370,11 @@
 
 <div id="mobilebar">
   <button id="menu-btn" aria-label="Menu">☰</button>
-  <div class="brand"><div class="logo">S</div><div><h1>MXDR L1 SOC</h1><div class="sub">Crash Course</div></div></div>
+  <div class="brand" role="button" tabindex="0" aria-label="Go to home dashboard" title="Home"><div class="logo">S</div><div><h1>MXDR L1 SOC</h1><div class="sub">Crash Course</div></div></div>
 </div>
 
 <aside id="sidebar">
-  <div class="brand">
+  <div class="brand" role="button" tabindex="0" aria-label="Go to home dashboard" title="Home">
     <div class="logo">S</div>
     <div>
       <h1>MXDR L1 SOC</h1>
@@ -1532,6 +1536,7 @@ function simLinksHtml(m){
 function renderCard(m){
   const c=$("#module-view");
   c.innerHTML='<div class="card"><div class="card-head">'+
+    '<button class="btn ghost home-btn" id="home-btn">← Home</button>'+
     '<div class="top-line"><span class="num-chip">Module '+fmt(m.n)+'</span>'+
     '<span class="badge p'+m.p+'">Priority '+PRIO[m.p]+'</span>'+
     '<span class="badge plain">'+m.s.length+' sections</span>'+
@@ -1555,6 +1560,7 @@ function renderCard(m){
     '<div id="md-body" class="md-content" style="display:none" data-open="0"></div>'+
     '<div class="card quiz-card"><div class="quiz-head"><div><h3>Module Quiz</h3><div class="fine">Check your understanding</div></div><span class="q-best" id="quiz-best"></span></div><div class="quiz-body" id="quiz-body"></div></div>'+
     simLinksHtml(m);
+  $("#home-btn").onclick=showDashboard;
   $("#toggle-mod").textContent=isDone(m)?"Mark incomplete":"Mark module complete";
   $("#read-btn").onclick=()=>toggleRead(m);
   $("#toggle-mod").onclick=()=>{ setDone(m,!isDone(m)); updateSecUI(m); renderAll(); };
@@ -1743,6 +1749,10 @@ function init(){
   $("#overlay").onclick=closeSidebar;
   $("#search").addEventListener("input",e=>filter(e.target.value));
   $("#pick-side").onclick=pickFolder;
+  $$(".brand").forEach(b=>{
+    b.onclick=()=>{ showDashboard(); closeSidebar(); };
+    b.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); showDashboard(); closeSidebar(); } };
+  });
   const mode=$("#mode-badge");
   const file=location.protocol==="file:";
   mode.textContent=file?"file:// mode":"http mode";
