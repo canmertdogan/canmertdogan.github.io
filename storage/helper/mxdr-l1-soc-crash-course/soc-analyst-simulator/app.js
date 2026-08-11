@@ -1429,7 +1429,9 @@ const MD_SHEETS = [
   { id: "md-mitre",            file: "../cheatsheets/mitre-attck-cheatsheet.md",           title: "MITRE ATT&CK" },
   { id: "md-siem-edr",         file: "../cheatsheets/siem-edr-xdr-mxdr-comparison.md",     title: "SIEM / EDR / XDR / MXDR" },
   { id: "md-escalation",       file: "../cheatsheets/soc-escalation-cheatsheet.md",       title: "SOC Escalation" },
-  { id: "md-windows-events",   file: "../cheatsheets/windows-event-id-cheatsheet.md",     title: "Windows Event IDs" }
+  { id: "md-windows-events",   file: "../cheatsheets/windows-event-id-cheatsheet.md",     title: "Windows Event IDs" },
+  { id: "md-linux-logs",       file: "../cheatsheets/linux-log-directories-cheatsheet.md", title: "Linux Log Directories" },
+  { id: "md-linux-commands",   file: "../cheatsheets/linux-commands-cheatsheet.md",       title: "Linux Commands (Intermediate)" }
 ];
 
 const mdCache = {};

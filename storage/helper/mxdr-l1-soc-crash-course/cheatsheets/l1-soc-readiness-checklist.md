@@ -253,6 +253,8 @@
 - [ ] SIEM/EDR/XDR/MXDR Comparison (Definitions, Capabilities, Data Flow, Vendors, L1 Workflow)
 - [ ] Incident Severity Cheat Sheet (5 Levels, Asset/Data/Velocity Modifiers, Decision Tree, Scenarios, SLA)
 - [ ] SOC Escalation Cheat Sheet (Authority Matrix, Pre-approved/Needs Approval/Never, Scenario Paths, Communication)
+- [ ] Linux Log Directories Cheat Sheet (/var/log map, auth vs system logs, journalctl, log tampering)
+- [ ] Linux Commands Cheat Sheet (grep/sed/awk, find, /proc, ss/tcpdump, log-analysis one-liners)
 
 ---
 
