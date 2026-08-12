@@ -255,6 +255,14 @@
 - [ ] SOC Escalation Cheat Sheet (Authority Matrix, Pre-approved/Needs Approval/Never, Scenario Paths, Communication)
 - [ ] Linux Log Directories Cheat Sheet (/var/log map, auth vs system logs, journalctl, log tampering)
 - [ ] Linux Commands Cheat Sheet (grep/sed/awk, find, /proc, ss/tcpdump, log-analysis one-liners)
+- [ ] Windows Commands Cheat Sheet (tasklist/Get-Process, netstat/Get-NetTCPConnection, Get-WinEvent, ADS)
+- [ ] KQL / SPL & Regex Cheat Sheet (Sentinel KQL operators, Splunk stats/rex, SOC regex patterns)
+- [ ] Phishing & Email Headers Cheat Sheet (SPF/DKIM/DMARC, header anatomy, payload hunting)
+- [ ] Malware Triage Cheat Sheet (hashing, VT reputation, sandbox behavior, IOC collection)
+- [ ] AD Attack Indicators Cheat Sheet (spraying, Kerberoasting, AS-REP, golden/silver, DCSync)
+- [ ] Network Traffic & PCAP Cheat Sheet (tcpdump/tshark filters, C2, DNS tunneling, exfiltration)
+- [ ] Cloud Security Cheat Sheet (Azure/M365 SigninLogs, AWS CloudTrail/GuardDuty, IAM)
+- [ ] SOC Ticketing & SLA Cheat Sheet (ticket anatomy, SLA clock, queue discipline, handoffs)
 
 ---
 

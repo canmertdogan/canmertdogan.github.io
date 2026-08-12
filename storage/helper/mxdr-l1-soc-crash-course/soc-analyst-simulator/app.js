@@ -1431,7 +1431,15 @@ const MD_SHEETS = [
   { id: "md-escalation",       file: "../cheatsheets/soc-escalation-cheatsheet.md",       title: "SOC Escalation" },
   { id: "md-windows-events",   file: "../cheatsheets/windows-event-id-cheatsheet.md",     title: "Windows Event IDs" },
   { id: "md-linux-logs",       file: "../cheatsheets/linux-log-directories-cheatsheet.md", title: "Linux Log Directories" },
-  { id: "md-linux-commands",   file: "../cheatsheets/linux-commands-cheatsheet.md",       title: "Linux Commands (Intermediate)" }
+  { id: "md-linux-commands",   file: "../cheatsheets/linux-commands-cheatsheet.md",       title: "Linux Commands (Intermediate)" },
+  { id: "md-windows-commands", file: "../cheatsheets/windows-commands-cheatsheet.md",     title: "Windows Endpoint Commands" },
+  { id: "md-kql-spl",          file: "../cheatsheets/kql-spl-regex-cheatsheet.md",        title: "KQL / SPL & Regex" },
+  { id: "md-phishing-email",   file: "../cheatsheets/phishing-email-header-cheatsheet.md", title: "Phishing & Email Headers" },
+  { id: "md-malware-triage",   file: "../cheatsheets/malware-triage-cheatsheet.md",       title: "Malware Triage" },
+  { id: "md-ad-attacks",       file: "../cheatsheets/ad-attack-indicators-cheatsheet.md", title: "AD Attack Indicators" },
+  { id: "md-net-traffic",      file: "../cheatsheets/network-traffic-pcap-cheatsheet.md", title: "Network Traffic & PCAP" },
+  { id: "md-cloud-sec",        file: "../cheatsheets/cloud-security-cheatsheet.md",       title: "Cloud Security (Azure/AWS)" },
+  { id: "md-ticketing",        file: "../cheatsheets/soc-ticketing-cheatsheet.md",        title: "SOC Ticketing & SLA" }
 ];
 
 const mdCache = {};
