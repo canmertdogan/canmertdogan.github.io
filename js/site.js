@@ -116,20 +116,20 @@
             ctx.beginPath();
             ctx.moveTo(ax, ay);
             ctx.lineTo(bx, by);
-            ctx.strokeStyle = `rgba(184,216,208,${(1 - distance / 145) * 0.085})`;
+            ctx.strokeStyle = `rgba(59,142,255,${(1 - distance / 145) * 0.085})`;
             ctx.stroke();
           }
         }
         const pulse = 0.18 + (Math.sin(time * 0.001 + a.phase) + 1) * 0.08;
         ctx.beginPath();
         ctx.arc(ax, ay, 1.1, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(184,216,208,${pulse})`;
+        ctx.fillStyle = `rgba(255,59,78,${pulse * 0.7})`;
         ctx.fill();
       }
 
       const glow = ctx.createRadialGradient(pointerX * width, pointerY * height, 0, pointerX * width, pointerY * height, Math.max(width, height) * .28);
-      glow.addColorStop(0, "rgba(184,216,208,.035)");
-      glow.addColorStop(1, "rgba(184,216,208,0)");
+      glow.addColorStop(0, "rgba(255,59,78,.035)");
+      glow.addColorStop(1, "rgba(255,59,78,0)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, width, height);
       window.requestAnimationFrame(render);
